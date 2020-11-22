@@ -1,0 +1,26 @@
+{
+    "go.useLanguageServer": true,
+    "go.autocompleteUnimportedPackages": true,
+    /*
+    "go.liveErrors": {
+        "enabled": true,
+        "delay": 500
+    },
+    */
+    "go.lintOnSave": "workspace",
+    "go.lintTool": "golangci-lint",
+    "go.lintFlags": ["--config", ".golangci.yml"],
+    "go.coverOnSave": true,
+    "go.coverageDecorator": {
+        "type": "gutter",
+        "coveredHighlightColor": "rgba(64,128,128,0.5)",
+        "uncoveredHighlightColor": "rgba(128,64,64,0.25)",
+        "coveredGutterStyle": "blockgreen",
+        "uncoveredGutterStyle": "blockred",
+        "coveredBorderColor": "",
+        "uncoveredBorderColor": ""
+    },
+    "go.coverOnSingleTest": true,
+    "go.coverOnTestPackage": true,
+
+}
