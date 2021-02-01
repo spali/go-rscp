@@ -4,8 +4,6 @@ import (
 	"fmt"
 )
 
-type Value struct{}
-
 type Message struct {
 	Tag      Tag
 	DataType DataType
