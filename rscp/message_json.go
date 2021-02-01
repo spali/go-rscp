@@ -1,11 +1,12 @@
 package rscp
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 )
 
-//nolint: funlen,gomnd
+//nolint: funlen
 func (m *Message) UnmarshalJSON(b []byte) (err error) {
 	switch isArray, isObject, isString := peekJSONType(b); {
 	case isString:
@@ -20,6 +21,7 @@ func (m *Message) UnmarshalJSON(b []byte) (err error) {
 			return fmt.Errorf("%w: %s", ErrJSONUnmarshal, err)
 		}
 		// TODO: there maybe a more efficient way to support optional tuple elements
+		//nolint: gomnd
 		switch len(tmp) {
 		case 1:
 			tmp := []interface{}{&m.Tag}
@@ -78,44 +80,48 @@ type JSONMessage struct {
 
 type JSONSimpleMessage map[Tag]interface{}
 
-func NewJSONSimpleMessage(messages []Message) JSONSimpleMessage {
+func NewJSONSimpleMessage(message Message) JSONSimpleMessage {
 	jm := JSONSimpleMessage{}
-	for _, message := range messages {
-		if sm, isMessages := message.Value.([]Message); isMessages {
-			jm[message.Tag] = NewJSONSimpleMessage(sm)
-		} else {
-			jm[message.Tag] = message.Value
-		}
+	if messages, isContainer := message.Value.([]Message); isContainer {
+		jm[message.Tag] = NewJSONSimpleMessages(messages)
+	} else {
+		jm[message.Tag] = message.Value
 	}
 	return jm
 }
 
+func NewJSONSimpleMessages(messages []Message) []JSONSimpleMessage {
+	jms := []JSONSimpleMessage{}
+	for _, message := range messages {
+		jms = append(jms, NewJSONSimpleMessage(message))
+	}
+	return jms
+}
+
 func (m JSONSimpleMessage) MarshalJSON() ([]byte, error) {
-	mb := []byte("{")
-	l := len(m)
-	cnt := 0
-	for t, v := range m {
-		cnt++
+	buffer := bytes.NewBufferString("{")
+	length := len(m)
+	count := 0
+	for key, value := range m {
+		count++
 		var (
 			b   []byte
 			vb  []byte
 			err error
 		)
-		if b, err = json.Marshal(t); err != nil {
+		if b, err = json.Marshal(key); err != nil {
 			return nil, err
 		}
-		if vb, err = json.Marshal(v); err != nil {
+		if vb, err = json.Marshal(value); err != nil {
 			return nil, err
 		}
-		mb = append(mb, b...)
-		mb = append(mb, []byte(":")...)
-		mb = append(mb, vb...)
-		if cnt < l {
-			mb = append(mb, []byte(",")...)
+		buffer.WriteString(fmt.Sprintf("%s:%s", b, vb))
+		if count < length {
+			buffer.WriteString(",")
 		}
 	}
-	mb = append(mb, []byte("}")...)
-	return mb, nil
+	buffer.WriteString("}")
+	return buffer.Bytes(), nil
 }
 
 func (j *JSONMessage) CopyTo(m *Message) {
