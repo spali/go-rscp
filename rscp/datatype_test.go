@@ -204,7 +204,7 @@ func TestDataType_DataTypeMeta_New(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := tt.d.NewEmpty(tt.size)
+			got := tt.d.newEmpty(tt.size)
 			if diff := deep.Equal(got, tt.want); diff != nil {
 				t.Errorf("New() = %v, want %v\n%s", got, tt.want, diff)
 			}

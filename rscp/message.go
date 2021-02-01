@@ -27,7 +27,7 @@ func (m Message) String() string {
 
 // valueSize returns actual the value size of a message
 func (m *Message) valueSize() uint16 {
-	if m.DataType.Length() == 0 && m.DataType != None {
+	if m.DataType.length() == 0 && m.DataType != None {
 		switch v := m.Value.(type) {
 		default:
 			panic("not implemented")
@@ -41,7 +41,7 @@ func (m *Message) valueSize() uint16 {
 			return messagesSize(v)
 		}
 	} else {
-		return m.DataType.Length()
+		return m.DataType.length()
 	}
 }
 
@@ -71,7 +71,7 @@ func (m *Message) validate() error {
 		return fmt.Errorf("%s expects %s, got %s: %w", m.Tag, m.Tag.DataType(), m.DataType, ErrTagDataTypeMismatch)
 	}
 	if !m.DataType.isValidValue(m.Value) {
-		return fmt.Errorf("expected %T got %T : %w", m.DataType.NewEmpty(0), m.Value, ErrDataTypeValueMismatch)
+		return fmt.Errorf("expected %T got %T : %w", m.DataType.newEmpty(0), m.Value, ErrDataTypeValueMismatch)
 	}
 	if m.valueSize() > RSCP_DATA_MAX_DATA_SIZE {
 		return ErrRscpDataLimitExceeded

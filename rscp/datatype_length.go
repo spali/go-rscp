@@ -23,7 +23,7 @@ var lengthMap = map[DataType]uint16{
 	Error:     4,
 }
 
-// Length returns the data type's expected byte length or 0 for variable length datatype
-func (d DataType) Length() uint16 {
+// length returns the data type's expected byte length or 0 for variable length datatype
+func (d DataType) length() uint16 {
 	return lengthMap[d]
 }

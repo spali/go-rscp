@@ -106,11 +106,11 @@ func readMessage(buf *bytes.Reader) (*Message, error) {
 		return nil, ErrRscpDataLimitExceeded
 	}
 	// test length against known length of data type's
-	if (m.DataType.Length() != 0 || m.DataType == None) && m.DataType.Length() != l {
+	if (m.DataType.length() != 0 || m.DataType == None) && m.DataType.length() != l {
 		return nil, fmt.Errorf("length %d does not match expected length of data type %s: %w", l, m.DataType, ErrRscpDataLimitExceeded)
 	}
 	// read data
-	v := m.DataType.NewEmpty(l)
+	v := m.DataType.newEmpty(l)
 	if err := read(buf, v, l); err != nil {
 		return nil, fmt.Errorf("reading message %s: %w", m.Tag, err)
 	}

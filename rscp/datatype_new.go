@@ -33,8 +33,8 @@ var newEmptyMap = map[DataType]func(size uint16) interface{}{
 	Error:     func(size uint16) interface{} { return new(RscpError) },
 }
 
-// NewEmpty returns pointer to new interface of the expected go type
-func (d DataType) NewEmpty(s uint16) interface{} {
+// newEmpty returns pointer to new interface of the expected go type
+func (d DataType) newEmpty(s uint16) interface{} {
 	return newEmptyMap[d](s)
 }
 
@@ -74,7 +74,7 @@ var newMap = map[DataType]func(v interface{}) (interface{}, error){
 	},
 }
 
-// New returns pointer to new interface of the expected go type with the provided value
-func (d DataType) New(v interface{}) (interface{}, error) {
+// new returns pointer to new interface of the expected go type with the provided value
+func (d DataType) new(v interface{}) (interface{}, error) {
 	return newMap[d](v)
 }

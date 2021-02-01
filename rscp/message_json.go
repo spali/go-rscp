@@ -78,13 +78,13 @@ func (m *Message) UnmarshalJSON(b []byte) (err error) {
 		}
 		m.Value = tmp
 	} else if x.Value != nil {
-		tmp := reflect.ValueOf(x.DataType.NewEmpty(0)).Elem().Interface()
+		tmp := reflect.ValueOf(x.DataType.newEmpty(0)).Elem().Interface()
 		if err := json.Unmarshal(x.Value, &tmp); err != nil {
 			return fmt.Errorf("%w: could not convert value '%s' for data type %s: %s", ErrJSONUnmarshal, x.Value, x.DataType, err)
 		}
 		// convert number values to expected data type (json does by default unmarshal to float64)
 		if v, isFloat := tmp.(float64); isFloat {
-			if tmp, err = x.DataType.New(v); err != nil {
+			if tmp, err = x.DataType.new(v); err != nil {
 				return fmt.Errorf("%w: could not convert number value '%f' for data type %s", ErrJSONUnmarshal, v, x.DataType)
 			}
 		}
