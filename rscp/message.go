@@ -19,7 +19,7 @@ const secretReplaceString = "********"
 
 // String converter function for a message
 func (m Message) String() string {
-	if m.Tag.IsSecret() {
+	if m.Tag.isSecret() {
 		return fmt.Sprintf("{ %s %s %v }", m.Tag, m.DataType, secretReplaceString)
 	}
 	return fmt.Sprintf("{ %s %s %v }", m.Tag, m.DataType, m.Value)

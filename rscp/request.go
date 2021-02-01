@@ -4,9 +4,9 @@ import (
 	"fmt"
 )
 
-// ValidateRequest checks the integrity of the request
+// validateRequest checks the integrity of the request
 // must contain a valid tag and data type and the data type must match the value
-func ValidateRequest(message Message) error {
+func validateRequest(message Message) error {
 	if !message.Tag.isRequest() {
 		return fmt.Errorf("%s: %w", message.Tag, ErrNotARequestTag)
 	}
@@ -17,7 +17,7 @@ func ValidateRequest(message Message) error {
 // each request must contain a valid tag and data type and the data type must match the value
 func ValidateRequests(messages []Message) error {
 	for i, m := range messages {
-		if err := ValidateRequest(m); err != nil {
+		if err := validateRequest(m); err != nil {
 			return fmt.Errorf("message at index %d: %w", i, err)
 		}
 	}

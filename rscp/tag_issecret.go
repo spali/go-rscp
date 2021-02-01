@@ -7,7 +7,7 @@ var secretTags = []Tag{
 }
 
 // Validate validates if the Value matches the expected go type
-func (t Tag) IsSecret() bool {
+func (t Tag) isSecret() bool {
 	for _, v := range secretTags {
 		if v == t {
 			return true
