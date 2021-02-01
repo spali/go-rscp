@@ -130,7 +130,7 @@ func (c *Client) authenticate() error {
 	if messages, err = c.receive(); err != nil {
 		return fmt.Errorf("authentication error: %w", err)
 	}
-	if messages[0].Tag != rscp.RSCP_AUTHENTICATION || messages[0].Value.(rscp.AuthLevel) == rscp.AUTH_LEVEL_NO_AUTH {
+	if messages[0].Tag != rscp.RSCP_AUTHENTICATION || messages[0].Value.(uint8) == uint8(rscp.AUTH_LEVEL_NO_AUTH) {
 		c.isAuthenticated = false
 		return fmt.Errorf("authentication failed: %+v", messages[0])
 	}
