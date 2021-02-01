@@ -115,6 +115,7 @@ See the examples below for more information.
    - [ ] improve implementation to make it stable for keeping stable and connected when used in a service
  - [ ] `rscp`
    - [ ] cleanup API
+     - [ ] probably expose `Message` as interface and make the struct internal (would allow to move the complete cmd specific json stuff out)
    - [ ] streamline logging
    - [x] move `e3dc` specific json marshalling out of `rscp` to command line utility `e3dc`
    - [ ] move `e3dc` specific json unmarshaling out of `rscp` to command line utility `e3dc`
