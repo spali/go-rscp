@@ -25,17 +25,18 @@ var (
 	ErrMissingUser     = errors.New("missing user argument")
 	ErrMissingPassword = errors.New("missing password argument")
 	ErrMissingKey      = errors.New("missing key argument")
-	ErrMissingMessage  = errors.New("missing message argument")
+	ErrMissingRequest  = errors.New("missing request argument")
 )
 
 type config struct {
 	version  bool
+	file     string
 	host     string
 	port     uint
 	user     string
 	password string
 	key      string
-	message  string
+	request  string
 	detail   bool
 	debug    uint
 }
@@ -61,6 +62,7 @@ func parseFlags() {
 	fs := flag.NewFlagSetWithEnvPrefix(os.Args[0], "E3DC", flag.ContinueOnError)
 	fs.BoolVar(&conf.version, "version", false, "output version details")
 	fs.String(flag.DefaultConfigFlagname, ".config", "path to config file")
+	fs.StringVar(&conf.file, "file", "", "path to request file")
 	fs.StringVar(&conf.host, "host", "", "e3dc server host")
 	fs.UintVar(&conf.port, "port", 5033, "e3dc server host port")
 	fs.StringVar(&conf.user, "user", "", "e3dc user")
@@ -99,20 +101,30 @@ func checkFlags(fs *flag.FlagSet) {
 	}
 
 	if fs.NArg() > 0 {
-		conf.message = fs.Arg(0)
+		conf.request = fs.Arg(0)
 	} else {
-		stat, _ := os.Stdin.Stat()
-		if stdin := (stat.Mode() & os.ModeCharDevice) == 0; stdin {
-			var bytes []byte
-			bytes, err := ioutil.ReadAll(os.Stdin)
-			if err != nil {
-				return
+		if conf.file != "" {
+			if m, err := ioutil.ReadFile(conf.file); err != nil {
+				fmt.Fprintf(os.Stderr, "error reading file (%s): %s\n", conf.file, err)
+				printUsage(fs)
+				os.Exit(1)
+			} else {
+				conf.request = string(m)
 			}
-			conf.message = string(bytes)
+		} else {
+			stat, _ := os.Stdin.Stat()
+			if stdin := (stat.Mode() & os.ModeCharDevice) == 0; stdin {
+				var bytes []byte
+				bytes, err := ioutil.ReadAll(os.Stdin)
+				if err != nil {
+					return
+				}
+				conf.request = string(bytes)
+			}
 		}
 	}
-	if conf.message == "" {
-		fmt.Fprintf(os.Stderr, "error: %s\n", ErrMissingMessage)
+	if conf.request == "" {
+		fmt.Fprintf(os.Stderr, "error: %s\n", ErrMissingRequest)
 		printUsage(fs)
 		os.Exit(1)
 	}
