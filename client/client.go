@@ -11,7 +11,6 @@ import (
 	"github.com/azihsoyn/rijndael256"
 	log "github.com/sirupsen/logrus"
 	"github.com/spali/go-e3dc/rscp"
-	"github.com/spali/go-e3dc/rscp/auth"
 )
 
 // Client for rscp protocol
@@ -131,7 +130,7 @@ func (c *Client) authenticate() error {
 	if messages, err = c.receive(); err != nil {
 		return fmt.Errorf("authentication error: %w", err)
 	}
-	if messages[0].Tag != rscp.RSCP_AUTHENTICATION || messages[0].Value.(auth.AuthLevel) == auth.NO_AUTH {
+	if messages[0].Tag != rscp.RSCP_AUTHENTICATION || messages[0].Value.(rscp.AuthLevel) == rscp.AUTH_LEVEL_NO_AUTH {
 		c.isAuthenticated = false
 		return fmt.Errorf("authentication failed: %+v", messages[0])
 	}
