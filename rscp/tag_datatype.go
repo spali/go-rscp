@@ -137,7 +137,7 @@ var dataTypeMap = map[Tag]DataType{
 	EMS_POWER_WB_SOLAR:                       None,
 	EMS_EXT_SRC_AVAILABLE:                    UChar8,
 	EMS_SET_POWER:                            Int32,
-	EMS_STATUS:                               UChar8,
+	EMS_STATUS:                               Uint32, // documented as UChar8, but got Uint32
 	EMS_USED_CHARGE_LIMIT:                    Int32,
 	EMS_BAT_CHARGE_LIMIT:                     Int32,
 	EMS_DCDC_CHARGE_LIMIT:                    Int32,
