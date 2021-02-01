@@ -57,7 +57,7 @@ func main() {
 			os.Exit(1)
 		}
 	} else {
-		if rb, err = json.Marshal(rscp.NewJSONSimpleMessages(r)); err != nil {
+		if rb, err = json.Marshal(NewJSONSimpleMessages(r)); err != nil {
 			fmt.Fprintf(os.Stderr, "error: %s\n", err)
 			os.Exit(1)
 		}
