@@ -92,10 +92,11 @@ See the examples below for more information.
  - [ ] `e3dc`
    - [x] read config file (security)
    - [x] read from environment variables (security)
-   - [x] cmd: streamline logging 
+   - [x] streamline logging 
  - [ ] `client`
    - [ ] client: streamline logging
    - [ ] improve implementation to make it stable for keeping stable and connected when used in a service
  - [ ] `rscp`
    - [ ] cleanup API
    - [ ] streamline logging
+   - [ ] move json marshalling and unmarshaling logic to out of the lib to command line utility
