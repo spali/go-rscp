@@ -93,6 +93,7 @@ See the examples below for more information.
    - [x] read config file (security)
    - [x] read from environment variables (security)
    - [x] streamline logging 
+   - [ ] implement optional (by flag) pair output (same as the tuple input without datatype)
  - [ ] `client`
    - [ ] client: streamline logging
    - [ ] improve implementation to make it stable for keeping stable and connected when used in a service
