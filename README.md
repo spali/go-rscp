@@ -33,9 +33,11 @@ See the examples below for more information.
     ```
     Output:
     ```json
-    {
-        "EMS_START_MANUAL_CHARGE": true
-    }
+    [
+        {
+            "EMS_START_MANUAL_CHARGE": true
+        }
+    ]
     ```
 
 * Short tag only notation just request some information
@@ -44,10 +46,14 @@ See the examples below for more information.
     ```
     Output:
     ```json
-    {
-        "INFO_UTC_TIME": "2021-01-31T15:58:48.000138Z",
-        "INFO_MAC_ADDRESS": "00:00:00:00:00:00"
-    }
+    [
+        {
+            "INFO_MAC_ADDRESS": "FC:69:47:48:D8:D2"
+        },
+        {
+            "INFO_UTC_TIME": "2021-02-01T21:35:37.000651Z"
+        }
+    ]
     ```
 
 * Tuple notation of tag's to request information
@@ -56,21 +62,27 @@ See the examples below for more information.
     ```
     Output:
     ```json
-    {
-        "INFO_UTC_TIME": "2021-01-31T15:58:48.000138Z",
-        "INFO_MAC_ADDRESS": "00:00:00:00:00:00"
-    }
+    [
+        {
+            "INFO_MAC_ADDRESS": "FC:69:47:48:D8:D2"
+        },
+        {
+            "INFO_UTC_TIME": "2021-02-01T21:35:37.000651Z"
+        }
+    ]
     ```
 
 * Tuple notation of tag's and values to send information (data type is inferred by the tag)
     ```sh
-    e3dc '["EMS_REQ_START_MANUAL_CHARGE", 3000]'
+    e3dc '[["EMS_REQ_START_MANUAL_CHARGE", 3000]]'
     ```
     Output:
     ```json
-    {
-        "EMS_START_MANUAL_CHARGE": true
-    }
+    [
+        {
+            "EMS_START_MANUAL_CHARGE": true
+        }
+    ]
     ```
 * Tuple notation of tag's and values to send information (with explicit data type)
   
@@ -80,10 +92,14 @@ See the examples below for more information.
     ```
     Output:
     ```json
-    {
-        "INFO_UTC_TIME": "2021-01-31T15:58:48.000138Z",
-        "INFO_MAC_ADDRESS": "00:00:00:00:00:00"
-    }
+    [
+        {
+            "INFO_MAC_ADDRESS": "FC:69:47:48:D8:D2"
+        },
+        {
+            "INFO_UTC_TIME": "2021-02-01T21:35:37.000651Z"
+        }
+    ]
     ```
 
 ## TODO
@@ -100,4 +116,5 @@ See the examples below for more information.
  - [ ] `rscp`
    - [ ] cleanup API
    - [ ] streamline logging
-   - [ ] move json marshalling and unmarshaling logic to out of the lib to command line utility
+   - [x] move `e3dc` specific json marshalling out of `rscp` to command line utility `e3dc`
+   - [ ] move `e3dc` specific json unmarshaling out of `rscp` to command line utility `e3dc`
