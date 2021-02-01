@@ -309,7 +309,11 @@ const (
 	EMS_EPTEST_NEXT_TESTSTART          Tag = 0x01000094
 	EMS_EPTEST_START_COUNTER           Tag = 0x01000095
 	EMS_EPTEST_RUNNING                 Tag = 0x01000096
-	EMS_REQ_GET_SYS_SPECS              Tag = 0x01000097
+	// undocumented request
+	EMS_REQ_SYS_STATUS Tag = 0x01000098
+	// undocumented response (interpretation unknown)
+	EMS_SYS_STATUS        Tag = 0x0100009E
+	EMS_REQ_GET_SYS_SPECS Tag = 0x01000097
 	// Enthält 1 -x Untercontainer vom Typ SYS_SPEC
 	EMS_GET_SYS_SPECS Tag = 0x01800098
 	// Enthält die Elemente SYS_SPEC_INDEX, SYS_SPEC_NAME, SYS_SPEC_VALUE und kennzeichnet eine Systemeigenschaft

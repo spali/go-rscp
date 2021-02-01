@@ -83,6 +83,8 @@ var dataTypeMap = map[Tag]DataType{
 	EMS_EPTEST_NEXT_TESTSTART:                Timestamp,
 	EMS_EPTEST_START_COUNTER:                 Uint32,
 	EMS_EPTEST_RUNNING:                       Bool,
+	EMS_REQ_SYS_STATUS:                       None,   // undocumented request
+	EMS_SYS_STATUS:                           Uint32, // undocumented response (interpretation unknown)
 	EMS_REQ_GET_SYS_SPECS:                    None,
 	EMS_SYS_SPEC:                             Container,
 	EMS_SYS_SPEC_INDEX:                       Int32,
