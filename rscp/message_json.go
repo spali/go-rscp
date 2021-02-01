@@ -76,7 +76,7 @@ func (m *Message) UnmarshalJSON(b []byte) (err error) {
 			return fmt.Errorf("%w: could not convert value '%s' for data type %s: %s", ErrJSONUnmarshal, x.Value, x.DataType, err)
 		}
 		m.Value = tmp
-	} else if x.Value != nil {
+	} else if x.Value != nil && x.DataType != None {
 		tmp := reflect.ValueOf(x.DataType.newEmpty(0)).Elem().Interface()
 		if err := json.Unmarshal(x.Value, &tmp); err != nil {
 			return fmt.Errorf("%w: could not convert value '%s' for data type %s: %s", ErrJSONUnmarshal, x.Value, x.DataType, err)
