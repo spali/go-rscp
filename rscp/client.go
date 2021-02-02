@@ -1,4 +1,4 @@
-package client
+package rscp
 
 import (
 	"crypto/cipher"
@@ -10,12 +10,11 @@ import (
 
 	"github.com/azihsoyn/rijndael256"
 	log "github.com/sirupsen/logrus"
-	"github.com/spali/go-e3dc/rscp"
 )
 
 // Client for rscp protocol
 type Client struct {
-	config           Config
+	config           ClientConfig
 	connectionString string
 	isConnected      bool
 	isAuthenticated  bool
@@ -24,14 +23,13 @@ type Client struct {
 	decrypter        cipher.BlockMode
 }
 
-// New creates a new client
-func New(config Config) (*Client, error) {
-	config, err := check(config)
-	if err != nil {
+// NewClient creates a new client
+func NewClient(config ClientConfig) (*Client, error) {
+	if err := config.check(); err != nil {
 		return nil, err
 	}
-	key := rscp.CreateAESKey(config.Key)
-	initIV := rscp.NewIV()
+	key := createAESKey(config.Key)
+	initIV := newIV()
 	cipherBlock, _ := rijndael256.NewCipher(key[:]) // implementation does not return an error
 	// Intitialize the Client structure.
 	c := &Client{
@@ -46,15 +44,15 @@ func New(config Config) (*Client, error) {
 }
 
 // send message
-func (c *Client) send(messages []rscp.Message) error {
-	if err := rscp.ValidateRequests(messages); err != nil {
+func (c *Client) send(messages []Message) error {
+	if err := validateRequests(messages); err != nil {
 		return err
 	}
 	var (
 		msg []byte
 		err error
 	)
-	if msg, err = rscp.Write(&c.encrypter, messages, c.config.UseChecksum.(bool)); err != nil {
+	if msg, err = Write(&c.encrypter, messages, c.config.UseChecksum.(bool)); err != nil {
 		return err
 	}
 	if err := c.conn.SetWriteDeadline(time.Now().Add(c.config.SendTimeout)); err != nil {
@@ -67,26 +65,26 @@ func (c *Client) send(messages []rscp.Message) error {
 }
 
 // receive listens for a response and decodes the response
-func (c *Client) receive() ([]rscp.Message, error) {
+func (c *Client) receive() ([]Message, error) {
 	if err := c.conn.SetReadDeadline(time.Now().Add(c.config.ReceiveTimeout)); err != nil {
 		return nil, err
 	}
 
-	buf := make([]byte, 0, rscp.RSCP_FRAME_MAX_SIZE)
+	buf := make([]byte, 0, RSCP_FRAME_MAX_SIZE)
 	var crcFlag bool
 	var frameSize uint32
 	var dataSize uint16
-	var m []rscp.Message
+	var m []Message
 
-	for i, new := 0, make([]byte, uint32(rscp.RSCP_CRYPT_BLOCK_SIZE)*uint32(c.config.ReceiveBufferBlockSize)); ; {
+	for i, new := 0, make([]byte, uint32(RSCP_CRYPT_BLOCK_SIZE)*uint32(c.config.ReceiveBufferBlockSize)); ; {
 		var err error
 		if i, err = c.conn.Read(new); err != nil {
 			return nil, fmt.Errorf("error during receive response: %w", err)
 		} else if i == 0 {
-			return nil, rscp.ErrRscpInvalidFrameLength
+			return nil, ErrRscpInvalidFrameLength
 		}
-		switch m, err = rscp.Read(&c.decrypter, &buf, &crcFlag, &frameSize, &dataSize, new[:i]); {
-		case errors.Is(err, rscp.ErrRscpInvalidFrameLength):
+		switch m, err = Read(&c.decrypter, &buf, &crcFlag, &frameSize, &dataSize, new[:i]); {
+		case errors.Is(err, ErrRscpInvalidFrameLength):
 			// frame not complete
 			continue
 		case err != nil:
@@ -117,20 +115,20 @@ func (c *Client) connect() error {
 
 // authenticate authenticates the connection
 func (c *Client) authenticate() error {
-	if msg, err := rscp.CreateRequest(rscp.RSCP_REQ_AUTHENTICATION,
-		rscp.RSCP_AUTHENTICATION_USER, c.config.Username, rscp.RSCP_AUTHENTICATION_PASSWORD, c.config.Password); err != nil {
+	if msg, err := CreateRequest(RSCP_REQ_AUTHENTICATION,
+		RSCP_AUTHENTICATION_USER, c.config.Username, RSCP_AUTHENTICATION_PASSWORD, c.config.Password); err != nil {
 		return err
-	} else if err := c.send([]rscp.Message{*msg}); err != nil {
+	} else if err := c.send([]Message{*msg}); err != nil {
 		return err
 	}
 	var (
-		messages []rscp.Message
+		messages []Message
 		err      error
 	)
 	if messages, err = c.receive(); err != nil {
 		return fmt.Errorf("authentication error: %w", err)
 	}
-	if messages[0].Tag != rscp.RSCP_AUTHENTICATION || messages[0].Value.(uint8) == uint8(rscp.AUTH_LEVEL_NO_AUTH) {
+	if messages[0].Tag != RSCP_AUTHENTICATION || messages[0].Value.(uint8) == uint8(AUTH_LEVEL_NO_AUTH) {
 		c.isAuthenticated = false
 		return fmt.Errorf("authentication failed: %+v", messages[0])
 	}
@@ -154,12 +152,12 @@ func (c *Client) Disconnect() error {
 // Send a message and return the response.
 //
 // connects and authenticates the first time used.
-func (c *Client) Send(request rscp.Message) (*rscp.Message, error) {
+func (c *Client) Send(request Message) (*Message, error) {
 	var (
-		responses []rscp.Message
+		responses []Message
 		err       error
 	)
-	if responses, err = (c.SendMultiple([]rscp.Message{request})); err != nil {
+	if responses, err = (c.SendMultiple([]Message{request})); err != nil {
 		return nil, err
 	}
 	return &responses[0], nil
@@ -168,7 +166,7 @@ func (c *Client) Send(request rscp.Message) (*rscp.Message, error) {
 // Send multiple messages in one round-trip and return the response.
 //
 // connects and authenticates the first time used.
-func (c *Client) SendMultiple(requests []rscp.Message) ([]rscp.Message, error) {
+func (c *Client) SendMultiple(requests []Message) ([]Message, error) {
 	if !c.isConnected {
 		if err := c.connect(); err != nil {
 			return nil, err
@@ -183,7 +181,7 @@ func (c *Client) SendMultiple(requests []rscp.Message) ([]rscp.Message, error) {
 		return nil, err
 	}
 	var (
-		responses []rscp.Message
+		responses []Message
 		err       error
 	)
 	if responses, err = c.receive(); err != nil {

@@ -15,7 +15,7 @@ func validateRequest(message Message) error {
 
 // ValidateRequests checks the integrity of the requests
 // each request must contain a valid tag and data type and the data type must match the value
-func ValidateRequests(messages []Message) error {
+func validateRequests(messages []Message) error {
 	for i, m := range messages {
 		if err := validateRequest(m); err != nil {
 			return fmt.Errorf("message at index %d: %w", i, err)

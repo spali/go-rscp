@@ -1,33 +1,33 @@
-package client
+package rscp
 
-type Status int8
+type ClientStatus int8
 
 // String converter function for ClientStatus
-func (status Status) String() string {
-	return StatusMeta[status].Name
+func (status ClientStatus) String() string {
+	return statusMeta[status].Name
 }
 
 // all errors as constant
 //nolint: golint,stylecheck
 const (
-	STATUS_OK                        Status = 0
-	STATUS_ERR_INVALID_INPUT         Status = -1
-	STATUS_ERR_NO_MEMORY             Status = -2
-	STATUS_ERR_INVALID_MAGIC         Status = -3
-	STATUS_ERR_PROT_VERSION_MISMATCH Status = -4
-	STATUS_ERR_INVALID_FRAME_LENGTH  Status = -5
-	STATUS_ERR_INVALID_CRC           Status = -6
-	STATUS_ERR_DATA_LIMIT_EXCEEDED   Status = -7
+	STATUS_OK                        ClientStatus = 0
+	STATUS_ERR_INVALID_INPUT         ClientStatus = -1
+	STATUS_ERR_NO_MEMORY             ClientStatus = -2
+	STATUS_ERR_INVALID_MAGIC         ClientStatus = -3
+	STATUS_ERR_PROT_VERSION_MISMATCH ClientStatus = -4
+	STATUS_ERR_INVALID_FRAME_LENGTH  ClientStatus = -5
+	STATUS_ERR_INVALID_CRC           ClientStatus = -6
+	STATUS_ERR_DATA_LIMIT_EXCEEDED   ClientStatus = -7
 )
 
-type StatusMetaType struct {
+type statusMetaType struct {
 	Name string
 }
 
 // TODO: implement as go errors
 
-// StatusMeta contains meta informations about each error
-var StatusMeta = map[Status]StatusMetaType{
+// statusMeta contains meta informations about each error
+var statusMeta = map[ClientStatus]statusMetaType{
 	STATUS_OK:                {"STATUS_OK"},
 	STATUS_ERR_INVALID_INPUT: {"STATUS_ERR_INVALID_INPUT"},
 	STATUS_ERR_NO_MEMORY:     {"STATUS_ERR_NO_MEMORY"},

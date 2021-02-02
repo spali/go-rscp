@@ -19,7 +19,7 @@ const keySize = 32
 type Key = [keySize]byte
 
 // CreateAESKey creates a 32-bit key out of a password string
-func CreateAESKey(key string) [keySize]byte {
+func createAESKey(key string) [keySize]byte {
 	aesKey := [32]byte{}
 	copy(aesKey[:], key)
 	copy(aesKey[len(key):], bytes.Repeat([]byte{RSCP_CRYPT_KEY_PADDING}, keySize-len(key)))
@@ -29,7 +29,7 @@ func CreateAESKey(key string) [keySize]byte {
 type IV = [RSCP_CRYPT_BLOCK_SIZE]byte
 
 // NewIV returns a new initialized IV
-func NewIV() IV {
+func newIV() IV {
 	var iv IV
 	copy(iv[:], bytes.Repeat([]byte{RSCP_CRYPT_IV_PADDING}, int(RSCP_CRYPT_BLOCK_SIZE))[:RSCP_CRYPT_BLOCK_SIZE])
 	return iv

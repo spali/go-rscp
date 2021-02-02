@@ -384,8 +384,8 @@ func Test_readMessage(t *testing.T) {
 }
 
 func TestRead(t *testing.T) {
-	key := CreateAESKey("testkey")
-	initIV := NewIV()
+	key := createAESKey("testkey")
+	initIV := newIV()
 	cipherBlock, _ := rijndael256.NewCipher(key[:]) // implementation does not return an error
 	type args struct {
 		mode      cipher.BlockMode

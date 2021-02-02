@@ -1,15 +1,13 @@
-package client
+package rscp
 
 import (
 	"fmt"
 	"strings"
 	"time"
-
-	"github.com/spali/go-e3dc/rscp"
 )
 
-// Config allows to configure the client behavior
-type Config struct {
+// ClientConfig allows to configure the client behavior
+type ClientConfig struct {
 	// Host address
 	Address string
 	// Port
@@ -36,7 +34,7 @@ type Config struct {
 
 // defaultClientConfig defines the default config values used when not provided by the user.
 //nolint: gomnd
-var defaultClientConfig = Config{
+var defaultClientConfig = ClientConfig{
 	Port:                   5033,
 	HeartbeatInterval:      time.Second * 10,
 	ConnectionTimeout:      time.Second * 3,
@@ -47,46 +45,46 @@ var defaultClientConfig = Config{
 }
 
 // check does set default values on missing or fail if required
-func check(config Config) (Config, error) {
+func (c *ClientConfig) check() error {
 	var missing []string
-	if len(config.Address) == 0 {
+	if len(c.Address) == 0 {
 		missing = append(missing, "address")
 	}
-	if len(config.Username) == 0 {
+	if len(c.Username) == 0 {
 		missing = append(missing, "username")
 	}
-	if len(config.Password) == 0 {
+	if len(c.Password) == 0 {
 		missing = append(missing, "password")
 	}
-	if len(config.Key) == 0 {
+	if len(c.Key) == 0 {
 		missing = append(missing, "key")
 	}
 	if len(missing) > 0 {
-		return config, fmt.Errorf("missing config values: %s", strings.Join(missing, ", "))
+		return fmt.Errorf("missing config values: %s", strings.Join(missing, ", "))
 	}
-	if config.Port == 0 {
-		config.Port = defaultClientConfig.Port
+	if c.Port == 0 {
+		c.Port = defaultClientConfig.Port
 	}
-	if config.HeartbeatInterval <= time.Second {
-		config.HeartbeatInterval = defaultClientConfig.HeartbeatInterval
+	if c.HeartbeatInterval <= time.Second {
+		c.HeartbeatInterval = defaultClientConfig.HeartbeatInterval
 	}
-	if config.ConnectionTimeout <= 0 {
-		config.ConnectionTimeout = defaultClientConfig.ConnectionTimeout
+	if c.ConnectionTimeout <= 0 {
+		c.ConnectionTimeout = defaultClientConfig.ConnectionTimeout
 	}
-	if config.SendTimeout <= 0 {
-		config.SendTimeout = defaultClientConfig.SendTimeout
+	if c.SendTimeout <= 0 {
+		c.SendTimeout = defaultClientConfig.SendTimeout
 	}
-	if config.ReceiveTimeout <= 0 {
-		config.ReceiveTimeout = defaultClientConfig.ReceiveTimeout
+	if c.ReceiveTimeout <= 0 {
+		c.ReceiveTimeout = defaultClientConfig.ReceiveTimeout
 	}
-	if config.ReceiveBufferBlockSize == 0 || config.ReceiveBufferBlockSize > rscp.RSCP_FRAME_MAX_BLOCK_SIZE {
-		config.ReceiveBufferBlockSize = defaultClientConfig.ReceiveBufferBlockSize
+	if c.ReceiveBufferBlockSize == 0 || c.ReceiveBufferBlockSize > RSCP_FRAME_MAX_BLOCK_SIZE {
+		c.ReceiveBufferBlockSize = defaultClientConfig.ReceiveBufferBlockSize
 	}
-	if _, isBool := config.UseChecksum.(bool); !isBool && config.UseChecksum != nil {
-		return config, fmt.Errorf("config value UseChecksum has to be nil or of type bool, got %T", config.UseChecksum)
+	if _, isBool := c.UseChecksum.(bool); !isBool && c.UseChecksum != nil {
+		return fmt.Errorf("config value UseChecksum has to be nil or of type bool, got %T", c.UseChecksum)
 	}
-	if config.UseChecksum == nil {
-		config.UseChecksum = defaultClientConfig.UseChecksum
+	if c.UseChecksum == nil {
+		c.UseChecksum = defaultClientConfig.UseChecksum
 	}
-	return config, nil
+	return nil
 }

@@ -26,7 +26,7 @@ func TestCreateAESKey(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := CreateAESKey(tt.args.key)
+			got := createAESKey(tt.args.key)
 			if diff := deep.Equal(got, tt.want); diff != nil {
 				t.Errorf("CreateAESKey() = %v, want %v\n%s", got, tt.want, diff)
 			}
@@ -45,7 +45,7 @@ func TestNewIV(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := NewIV()
+			got := newIV()
 			if diff := deep.Equal(got, tt.want); diff != nil {
 				t.Errorf("NewIV() = %v, want %v\n%s", got, tt.want, diff)
 			}
