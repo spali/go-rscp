@@ -19,7 +19,7 @@
             "showLog": true
         },
         {
-            "name": "Test Current File Package (Debug)",
+            "name": "Test Current Package (Debug)",
             "type": "go",
             "request": "launch",
             "mode": "test",
