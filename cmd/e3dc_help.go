@@ -11,7 +11,6 @@ import (
 )
 
 // set during built time
-//nolint: unused
 var (
 	name      string = "e3dc"
 	source    string = "unknown"
