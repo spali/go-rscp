@@ -58,10 +58,12 @@ func Test_Message_validate(t *testing.T) {
 			args{Message{Tag: INFO_REQ_UTC_TIME}},
 			nil,
 		},
-		{"message with wrong data type",
-			args{Message{Tag: INFO_REQ_UTC_TIME, DataType: Container}},
-			ErrTagDataTypeMismatch,
-		},
+		// Note: see Issue https://github.com/spali/go-e3dc/issues/1
+		//
+		// {"message with wrong data type",
+		// 	args{Message{Tag: INFO_REQ_UTC_TIME, DataType: Container}},
+		// 	ErrTagDataTypeMismatch,
+		// },
 		{"message with wrong value fir data type",
 			args{Message{Tag: INFO_REQ_UTC_TIME, DataType: None, Value: "notvalid"}},
 			ErrDataTypeValueMismatch,

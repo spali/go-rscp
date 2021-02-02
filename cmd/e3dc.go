@@ -9,14 +9,6 @@ import (
 	"github.com/spali/go-e3dc/rscp"
 )
 
-func parseJSON(message string) ([]rscp.Message, error) {
-	data := []rscp.Message{}
-	if err := json.Unmarshal([]byte(message), &data); err != nil {
-		return nil, err
-	}
-	return data, nil
-}
-
 func main() {
 	parseFlags()
 	if conf.debug > 0 {
@@ -37,7 +29,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "error: %s\n", err)
 		os.Exit(1)
 	}
-	m, err := parseJSON(conf.request)
+	m, err := unmarshalJSONRequests([]byte(conf.request))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %s\n", err)
 		os.Exit(1)
