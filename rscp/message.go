@@ -46,6 +46,11 @@ func (m *Message) valueSize() uint16 {
 }
 
 // isValidDataType check if the data type is the expected one for the message tag
+//
+// TODO: maybe we should drop it, as we found out, that server is responding with mixed types.
+// So maybe we should also support to send mixed types?
+// A solution could be to only use the Tag specified data type if not provided by the user.
+// Note: see Issue https://github.com/spali/go-e3dc/issues/1
 func (m *Message) isValidDataType() bool {
 	return m.DataType != m.Tag.DataType()
 }

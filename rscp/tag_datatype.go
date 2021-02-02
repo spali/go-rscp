@@ -1,6 +1,7 @@
 package rscp
 
 //  defines the expected Length of the data type or 0 for variable length
+//nolint: lll
 var dataTypeMap = map[Tag]DataType{
 	RSCP_REQ_AUTHENTICATION:                  Container,
 	RSCP_AUTHENTICATION_USER:                 CString,
@@ -87,7 +88,7 @@ var dataTypeMap = map[Tag]DataType{
 	EMS_SYS_STATUS:                           Uint32, // undocumented response (interpretation unknown)
 	EMS_REQ_GET_SYS_SPECS:                    None,
 	EMS_SYS_SPEC:                             Container,
-	EMS_SYS_SPEC_INDEX:                       Int32,
+	EMS_SYS_SPEC_INDEX:                       Int32, // documented as Int32, but got mixed responses (most Uint32) see Issue https://github.com/spali/go-e3dc/issues/1
 	EMS_SYS_SPEC_NAME:                        CString,
 	EMS_SYS_SPEC_VALUE_INT:                   Int32,
 	EMS_SYS_SPEC_VALUE_STRING:                CString,
@@ -135,7 +136,7 @@ var dataTypeMap = map[Tag]DataType{
 	EMS_CONFIRM_ERRORS:                       Bool,
 	EMS_POWER_WB_ALL:                         None,
 	EMS_POWER_WB_SOLAR:                       None,
-	EMS_EXT_SRC_AVAILABLE:                    UChar8,
+	EMS_EXT_SRC_AVAILABLE:                    Char8, // documented as UChar8, but got Char8
 	EMS_SET_POWER:                            Int32,
 	EMS_STATUS:                               Uint32, // documented as UChar8, but got Uint32
 	EMS_USED_CHARGE_LIMIT:                    Int32,

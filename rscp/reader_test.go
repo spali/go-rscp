@@ -349,11 +349,13 @@ func Test_readMessage(t *testing.T) {
 			nil,
 			io.ErrUnexpectedEOF,
 		},
-		{"read message with wrong data type",
-			args{bytes.NewReader([]byte{0x1, 0x0, 0x80, 0x0, 0x0, 0x1, 0x0, 0xa})},
-			nil,
-			ErrTagDataTypeMismatch,
-		},
+		// Note: see Issue https://github.com/spali/go-e3dc/issues/1
+		//
+		// {"read message with wrong data type",
+		// 	args{bytes.NewReader([]byte{0x1, 0x0, 0x80, 0x0, 0x0, 0x1, 0x0, 0xa})},
+		// 	nil,
+		// 	ErrTagDataTypeMismatch,
+		// },
 		{"read message with missing data length field",
 			args{bytes.NewReader([]byte{0x1, 0x0, 0x80, 0x0})},
 			nil,
@@ -542,18 +544,20 @@ func TestRead(t *testing.T) {
 			nil,
 			ErrRscpInvalidFrameLength,
 		},
-		{"wrong data",
-			args{
-				cipher.NewCBCDecrypter(cipherBlock, initIV[:]),
-				emptyBufPointer(),
-				new(bool),
-				new(uint32),
-				new(uint16),
-				[]byte{0xf7, 0xe7, 0x2d, 0x81, 0xd1, 0x4f, 0x5f, 0x9b, 0x37, 0x82, 0x7, 0x92, 0x4c, 0x60, 0x3b, 0x17, 0xda, 0xed, 0xea, 0xb0, 0x63, 0xda, 0x1a, 0xc4, 0xc0, 0xa1, 0x33, 0x26, 0x1, 0xb9, 0xe3, 0x1f},
-			},
-			nil,
-			ErrTagDataTypeMismatch,
-		},
+		// Note: see Issue https://github.com/spali/go-e3dc/issues/1
+		//
+		// {"wrong data",
+		// 	args{
+		// 		cipher.NewCBCDecrypter(cipherBlock, initIV[:]),
+		// 		emptyBufPointer(),
+		// 		new(bool),
+		// 		new(uint32),
+		// 		new(uint16),
+		// 		[]byte{0xf7, 0xe7, 0x2d, 0x81, 0xd1, 0x4f, 0x5f, 0x9b, 0x37, 0x82, 0x7, 0x92, 0x4c, 0x60, 0x3b, 0x17, 0xda, 0xed, 0xea, 0xb0, 0x63, 0xda, 0x1a, 0xc4, 0xc0, 0xa1, 0x33, 0x26, 0x1, 0xb9, 0xe3, 0x1f},
+		// 	},
+		// 	nil,
+		// 	ErrTagDataTypeMismatch,
+		// },
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

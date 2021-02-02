@@ -69,6 +69,11 @@ func (m *Message) UnmarshalJSON(b []byte) (err error) {
 		return fmt.Errorf("%w: %s", ErrJSONUnmarshal, "invalid request syntax, expected tuple or object")
 	}
 	// infer data type if not given or just wrong
+	//
+	// TODO: maybe we should only set this when not already provided, as we found out, that server is responding with mixed types.
+	// So maybe we should also support to sending mixed types?
+	// A solution could be to only use the Tag specified data type if not provided by the user.
+	// Note: see Issue https://github.com/spali/go-e3dc/issues/1
 	x.DataType = x.Tag.DataType()
 	if x.DataType == Container {
 		tmp := []Message{}
