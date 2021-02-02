@@ -15,4 +15,6 @@ const (
 	ERR_NOT_AVAILABLE  RscpError = 0x06
 	ERR_UNKNOWN_TAG    RscpError = 0x07
 	ERR_ALREADY_IN_USE RscpError = 0x08
+	// undocumented, but happens for example in get_db_data if time and span is invalid (not available)
+	ERR_UNEXPECTED RscpError = 0xFFFFFFFF
 )

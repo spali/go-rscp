@@ -8,29 +8,40 @@ import (
 	"fmt"
 )
 
-const _RscpErrorName = "ERR_NOT_HANDLEDERR_ACCESS_DENIEDERR_FORMATERR_AGAINERR_OUT_OF_BOUNDSERR_NOT_AVAILABLEERR_UNKNOWN_TAGERR_ALREADY_IN_USE"
+const (
+	_RscpErrorName_0 = "ERR_NOT_HANDLEDERR_ACCESS_DENIEDERR_FORMATERR_AGAINERR_OUT_OF_BOUNDSERR_NOT_AVAILABLEERR_UNKNOWN_TAGERR_ALREADY_IN_USE"
+	_RscpErrorName_1 = "ERR_UNEXPECTED"
+)
 
-var _RscpErrorIndex = [...]uint8{0, 15, 32, 42, 51, 68, 85, 100, 118}
+var (
+	_RscpErrorIndex_0 = [...]uint8{0, 15, 32, 42, 51, 68, 85, 100, 118}
+	_RscpErrorIndex_1 = [...]uint8{0, 14}
+)
 
 func (i RscpError) String() string {
-	i -= 1
-	if i >= RscpError(len(_RscpErrorIndex)-1) {
-		return fmt.Sprintf("RscpError(%d)", i+1)
+	switch {
+	case 1 <= i && i <= 8:
+		i -= 1
+		return _RscpErrorName_0[_RscpErrorIndex_0[i]:_RscpErrorIndex_0[i+1]]
+	case i == 4294967295:
+		return _RscpErrorName_1
+	default:
+		return fmt.Sprintf("RscpError(%d)", i)
 	}
-	return _RscpErrorName[_RscpErrorIndex[i]:_RscpErrorIndex[i+1]]
 }
 
-var _RscpErrorValues = []RscpError{1, 2, 3, 4, 5, 6, 7, 8}
+var _RscpErrorValues = []RscpError{1, 2, 3, 4, 5, 6, 7, 8, 4294967295}
 
 var _RscpErrorNameToValueMap = map[string]RscpError{
-	_RscpErrorName[0:15]:    1,
-	_RscpErrorName[15:32]:   2,
-	_RscpErrorName[32:42]:   3,
-	_RscpErrorName[42:51]:   4,
-	_RscpErrorName[51:68]:   5,
-	_RscpErrorName[68:85]:   6,
-	_RscpErrorName[85:100]:  7,
-	_RscpErrorName[100:118]: 8,
+	_RscpErrorName_0[0:15]:    1,
+	_RscpErrorName_0[15:32]:   2,
+	_RscpErrorName_0[32:42]:   3,
+	_RscpErrorName_0[42:51]:   4,
+	_RscpErrorName_0[51:68]:   5,
+	_RscpErrorName_0[68:85]:   6,
+	_RscpErrorName_0[85:100]:  7,
+	_RscpErrorName_0[100:118]: 8,
+	_RscpErrorName_1[0:14]:    4294967295,
 }
 
 // RscpErrorString retrieves an enum value from the enum constants string name.
