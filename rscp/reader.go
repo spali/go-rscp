@@ -92,6 +92,9 @@ func readMessage(buf *bytes.Reader) (*Message, error) {
 	if err := read(buf, &m.Tag, RSCP_DATA_TAG_SIZE); err != nil {
 		return nil, err
 	}
+	if !m.Tag.IsATag() {
+		log.Warnf("unknown tag %d received", m.Tag)
+	}
 	if err := read(buf, &m.DataType, RSCP_DATA_DATATYPE_SIZE); err != nil {
 		return nil, err
 	}
@@ -112,6 +115,12 @@ func readMessage(buf *bytes.Reader) (*Message, error) {
 	}
 	// test length against known length of data type's
 	if (m.DataType.length() != 0 || m.DataType == None) && m.DataType.length() != l {
+		// print data missed for debugging before returning the error
+		log.DebugFn(func() []interface{} {
+			b := make([]byte, l)
+			_ = read(buf, &b, l)
+			return []interface{}{fmt.Sprintf("Could not read data, due length missmatch: %#v", b)}
+		})
 		return nil, fmt.Errorf("length %d does not match expected length of data type %s: %w", l, m.DataType, ErrRscpDataLimitExceeded)
 	}
 	// read data
