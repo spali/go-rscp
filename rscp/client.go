@@ -133,7 +133,7 @@ func (c *Client) authenticate() error {
 		return fmt.Errorf("authentication failed: %+v", messages[0])
 	}
 	c.isAuthenticated = true
-	log.Infof("successfully authenticated (level: %s)", messages[0].Value)
+	log.Infof("successfully authenticated (level: %s)", AuthLevel(messages[0].Value.(uint8)))
 	return nil
 }
 
