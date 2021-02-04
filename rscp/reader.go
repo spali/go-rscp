@@ -6,6 +6,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"hash/crc32"
+	"math/big"
 	"reflect"
 	"time"
 
@@ -93,7 +94,7 @@ func readMessage(buf *bytes.Reader) (*Message, error) {
 		return nil, err
 	}
 	if !m.Tag.IsATag() {
-		log.Warnf("unknown tag %d received", m.Tag)
+		log.Warnf("unknown tag 0x%08x received", big.NewInt(int64(m.Tag)))
 	}
 	if err := read(buf, &m.DataType, RSCP_DATA_DATATYPE_SIZE); err != nil {
 		return nil, err
