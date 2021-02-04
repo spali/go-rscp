@@ -38,7 +38,7 @@ type config struct {
 	password      string
 	key           string
 	request       string
-	detail        bool
+	output        string
 	debug         uint
 	splitrequests bool
 }
@@ -72,9 +72,11 @@ func parseFlags() (*flag.FlagSet, error) {
 	fs.StringVar(&conf.user, "user", "", "e3dc user")
 	fs.StringVar(&conf.password, "password", "", "e3dc password (consider using a config file or environment variable)")
 	fs.StringVar(&conf.key, "key", "", "rscp key")
-	fs.BoolVar(&conf.detail, "detail", false, "return detailed json output")
+	fs.StringVar(&conf.output, "output", "jsonsimple", "control the output, possible values:\n"+
+		"  jsonsimple: array with simple objects with tag key for the value\n"+
+		"  json:       array of full message objects")
 	fs.UintVar(&conf.debug, "debug", 0, "enable set debug messages to stderr by setting log level (0-6)")
-	fs.BoolVar(&conf.splitrequests, "splitrequests", false, "split the request array to multiple requests, "+
+	fs.BoolVar(&conf.splitrequests, "splitrequests", false, "split the request array to multiple requests.\n"+
 		"this can help if the server sends a timeout on big requests")
 	_ = fs.Parse(os.Args[1:])
 	return checkFlags(fs)

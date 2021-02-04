@@ -42,14 +42,17 @@ func run() ([]byte, error) {
 	} else if rs, err = c.SendMultiple(ms); err != nil {
 		return nil, err
 	}
-	if conf.detail {
+	switch conf.output {
+	case "json":
 		if rb, err = json.Marshal(rs); err != nil {
 			return nil, err
 		}
-	} else {
+	case "jsonsimple":
 		if rb, err = json.Marshal(NewJSONSimpleMessages(rs)); err != nil {
 			return nil, err
 		}
+	default:
+		return nil, fmt.Errorf("output %s not supported", conf.output)
 	}
 	return rb, nil
 }
