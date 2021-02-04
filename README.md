@@ -27,79 +27,65 @@ See the examples below for more information.
 
 ***Note**: these examples assume you have the default `.config` file setup or exported the environment variables.*
 
+***Note**: all example use the default output format, check the help `./e3dc -help` for other formats.*
+
 * Short tag only notation just request some information
     ```sh
-    echo '[["EMS_REQ_START_MANUAL_CHARGE",0]]' | e3dc
+    ./e3dc '[["EMS_REQ_START_MANUAL_CHARGE",0]]' | jq
     ```
     Output:
     ```json
-    [
-        {
-            "EMS_START_MANUAL_CHARGE": true
-        }
-    ]
+    {
+      "EMS_START_MANUAL_CHARGE": true
+    }
     ```
 
 * Short tag only notation just request some information
     ```sh
-    e3dc '["INFO_REQ_MAC_ADDRESS", "INFO_REQ_UTC_TIME"]'
+    ./e3dc '["INFO_REQ_MAC_ADDRESS", "INFO_REQ_UTC_TIME"]' | jq
     ```
     Output:
     ```json
-    [
-        {
-            "INFO_MAC_ADDRESS": "FC:69:47:48:D8:D2"
-        },
-        {
-            "INFO_UTC_TIME": "2021-02-01T21:35:37.000651Z"
-        }
-    ]
+    {
+      "INFO_MAC_ADDRESS": "00:00:00:00:00:00",
+      "INFO_UTC_TIME": "1970-01-01T00:00:00.000000Z"
+    }
     ```
 
 * Tuple notation of tag's to request information
     ```sh
-    e3dc '[["INFO_REQ_MAC_ADDRESS"], ["INFO_REQ_UTC_TIME"]]'
+    ./e3dc '[["INFO_REQ_MAC_ADDRESS"], ["INFO_REQ_UTC_TIME"]]' | jq
     ```
     Output:
     ```json
-    [
-        {
-            "INFO_MAC_ADDRESS": "FC:69:47:48:D8:D2"
-        },
-        {
-            "INFO_UTC_TIME": "2021-02-01T21:35:37.000651Z"
-        }
-    ]
+    {
+      "INFO_MAC_ADDRESS": "00:00:00:00:00:00",
+      "INFO_UTC_TIME": "1970-01-01T00:00:00.000000Z"
+    }
     ```
 
 * Tuple notation of tag's and values to send information (data type is inferred by the tag)
     ```sh
-    e3dc '[["EMS_REQ_START_MANUAL_CHARGE", 3000]]'
+    ./e3dc '[["EMS_REQ_START_MANUAL_CHARGE", 3000]]' | jq
     ```
     Output:
     ```json
-    [
-        {
-            "EMS_START_MANUAL_CHARGE": true
-        }
-    ]
+    {
+      "EMS_START_MANUAL_CHARGE": true
+    }
     ```
 * Tuple notation of tag's and values to send information (with explicit data type)
   
     *Note: wrong data type is corrected by inferring it from the tag*
     ```sh
-    e3dc '[["INFO_REQ_MAC_ADDRESS","None",""], ["INFO_REQ_UTC_TIME"]]'
+    ./e3dc '[["INFO_REQ_MAC_ADDRESS","None",""], ["INFO_REQ_UTC_TIME"]]' | jq
     ```
     Output:
     ```json
-    [
-        {
-            "INFO_MAC_ADDRESS": "FC:69:47:48:D8:D2"
-        },
-        {
-            "INFO_UTC_TIME": "2021-02-01T21:35:37.000651Z"
-        }
-    ]
+    {
+      "INFO_MAC_ADDRESS": "00:00:00:00:00:00",
+      "INFO_UTC_TIME": "1970-01-01T00:00:00.000000Z"
+    }
     ```
 
 ## TODO

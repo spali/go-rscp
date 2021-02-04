@@ -51,6 +51,10 @@ func run() ([]byte, error) {
 		if rb, err = json.Marshal(NewJSONSimpleMessages(rs)); err != nil {
 			return nil, err
 		}
+	case "jsonmerged":
+		if rb, err = json.Marshal(NewJSONMergedMessages(rs)); err != nil {
+			return nil, err
+		}
 	default:
 		return nil, fmt.Errorf("output %s not supported", conf.output)
 	}

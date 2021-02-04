@@ -72,9 +72,12 @@ func parseFlags() (*flag.FlagSet, error) {
 	fs.StringVar(&conf.user, "user", "", "e3dc user")
 	fs.StringVar(&conf.password, "password", "", "e3dc password (consider using a config file or environment variable)")
 	fs.StringVar(&conf.key, "key", "", "rscp key")
-	fs.StringVar(&conf.output, "output", "jsonsimple", "control the output, possible values:\n"+
-		"  jsonsimple: array with simple objects with tag key for the value\n"+
-		"  json:       array of full message objects")
+	fs.StringVar(&conf.output, "output", "jsonmerged", "control the output, possible values:\n"+
+		"  json:       array of full message objects\n"+
+		"  jsonsimple: array with simple objects using tag as key for the value\n"+
+		"  jsonmerged: merges the the result of all responses into a single object\n"+
+		"              using the tag as keys.\n"+
+		"              requests that return the same key multiple times, will result in an array")
 	fs.UintVar(&conf.debug, "debug", 0, "enable set debug messages to stderr by setting log level (0-6)")
 	fs.BoolVar(&conf.splitrequests, "splitrequests", false, "split the request array to multiple requests.\n"+
 		"this can help if the server sends a timeout on big requests")
