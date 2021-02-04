@@ -25,5 +25,4 @@ coverage.txt
 
 # binaries
 bin
-e3dc*
-!e3dc*.go
+/e3dc*

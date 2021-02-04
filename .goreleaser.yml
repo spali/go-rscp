@@ -23,7 +23,7 @@ builds:
     ignore:
       - goos: darwin
         goarch: 386
-    main: ./cmd
+    main: ./cmd/e3dc
     binary: "{{ .ProjectName }}"
 archives:
   - replacements:

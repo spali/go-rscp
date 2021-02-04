@@ -105,15 +105,15 @@ See the examples below for more information.
 ## TODO
  - [ ] more testing
  - [ ] more documentation
- - [ ] `cmd`
+ - [ ] `cmd/e3dc`
    - [x] read config file (security)
    - [x] read from environment variables (security)
    - [x] streamline logging 
    - [ ] implement optional (by flag) pair output (same as the tuple input without datatype)
  - [ ] `rscp`
    - [ ] cleanup API
-     - [ ] probably expose `Message` as interface and make the struct internal (would allow to move the complete cmd specific json stuff out)
+     - [ ] probably expose `Message` as interface and make the struct internal (would allow to move the complete cmd/e3dc specific json stuff out)
    - [ ] streamline logging
    - [ ] client: improve implementation to make it stable for keeping stable and connected when used in a service
-   - [x] move `cmd` specific json marshalling out of `rscp` to command line utility `cmd`
-   - [x] move `cmd` specific json unmarshaling out of `rscp` to command line utility `cmd`
+   - [x] move `cmd/e3dc` specific json marshalling out of `rscp` to command line utility `cmd/e3dc`
+   - [x] move `cmd/e3dc` specific json unmarshaling out of `rscp` to command line utility `cmd/e3dc`

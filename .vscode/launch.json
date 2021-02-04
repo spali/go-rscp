@@ -9,7 +9,7 @@
             "type": "go",
             "request": "launch",
             "mode": "debug",
-            "program": "${workspaceFolder}//cmd",
+            "program": "${workspaceFolder}/cmd/e3dc",
             "env": {},
             "args": [
                 "-debug","5",
