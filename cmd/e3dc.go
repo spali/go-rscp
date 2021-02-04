@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/sirupsen/logrus"
-	"github.com/spali/go-e3dc/rscp"
+	"github.com/spali/go-rscp/rscp"
 )
 
 func main() {

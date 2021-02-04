@@ -1,4 +1,4 @@
-# go-e3dc
+# go-rscp & e3dc command line utility
 
 Go library (rscp) and command line utility (e3dc) to communicate with a E3DC system implementing the RSCP (Remote Storage Control Protocol).
 

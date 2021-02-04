@@ -1,4 +1,4 @@
-module github.com/spali/go-e3dc
+module github.com/spali/go-rscp
 
 go 1.15
 

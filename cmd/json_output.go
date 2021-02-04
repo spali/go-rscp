@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/spali/go-e3dc/rscp"
+	"github.com/spali/go-rscp/rscp"
 )
 
 type JSONSimpleMessage map[rscp.Tag]interface{}
