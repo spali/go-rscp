@@ -4,7 +4,7 @@ package rscp
 type RscpError uint32
 
 // all errors as constant
-//go:generate enumer -type=RscpError -json
+//go:generate go run github.com/alvaroloes/enumer -type=RscpError -json
 //nolint: golint,stylecheck
 const (
 	ERR_NOT_HANDLED    RscpError = 0x01

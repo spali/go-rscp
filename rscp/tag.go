@@ -4,7 +4,7 @@ package rscp
 type Tag uint32
 
 // all tags as constant
-//go:generate enumer -type=Tag -json
+//go:generate go run github.com/alvaroloes/enumer -type=Tag -json
 //nolint: golint,stylecheck
 const (
 	// Dieser TAG kapselt eine Authorisierungsanfrage an das S10.

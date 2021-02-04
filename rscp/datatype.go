@@ -2,7 +2,7 @@ package rscp
 
 type DataType uint8
 
-//go:generate enumer -type=DataType -json
+//go:generate go run github.com/alvaroloes/enumer -type=DataType -json
 const (
 	None      DataType = 0x00
 	Bool      DataType = 0x01
