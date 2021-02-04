@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 
@@ -70,8 +71,11 @@ func main() {
 		printVersion()
 		os.Exit(0)
 	case err != nil:
-		fmt.Fprintf(os.Stderr, "error: %s\n", err)
-		printUsage(fs)
+		// workaround for https://github.com/jnovack/flag/issues/1
+		if !errors.Is(err, ErrFlagError) {
+			fmt.Fprintf(os.Stderr, "error: %s\n", err)
+			printUsage(fs)
+		}
 		os.Exit(1)
 	}
 	if conf.debug > 0 {

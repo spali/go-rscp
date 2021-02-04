@@ -26,6 +26,7 @@ var (
 	ErrMissingPassword = errors.New("missing password argument")
 	ErrMissingKey      = errors.New("missing key argument")
 	ErrMissingRequest  = errors.New("missing request argument")
+	ErrFlagError       = errors.New("")
 )
 
 type config struct {
@@ -81,7 +82,9 @@ func parseFlags() (*flag.FlagSet, error) {
 	fs.UintVar(&conf.debug, "debug", 0, "enable set debug messages to stderr by setting log level (0-6)")
 	fs.BoolVar(&conf.splitrequests, "splitrequests", false, "split the request array to multiple requests.\n"+
 		"this can help if the server sends a timeout on big requests")
-	_ = fs.Parse(os.Args[1:])
+	if err := fs.Parse(os.Args[1:]); err != nil {
+		return fs, fmt.Errorf("%w%s", ErrFlagError, err)
+	}
 	return checkFlags(fs)
 }
 
@@ -101,7 +104,6 @@ func checkFlags(fs *flag.FlagSet) (*flag.FlagSet, error) {
 	if conf.key == "" {
 		return fs, ErrMissingKey
 	}
-
 	if fs.NArg() > 0 {
 		conf.request = fs.Arg(0)
 	} else {
