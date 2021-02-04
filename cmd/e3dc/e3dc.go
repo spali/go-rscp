@@ -9,14 +9,7 @@ import (
 	"github.com/spali/go-rscp/rscp"
 )
 
-func main() {
-	parseFlags()
-	if conf.debug > 0 {
-		logrus.SetLevel(logrus.Level(conf.debug))
-		logrus.SetOutput(os.Stderr)
-	} else {
-		logrus.SetLevel(logrus.PanicLevel)
-	}
+func run() ([]byte, error) {
 	c, err := rscp.NewClient(rscp.ClientConfig{
 		Address:     conf.host,
 		Port:        uint16(conf.port),
@@ -26,31 +19,67 @@ func main() {
 		UseChecksum: true,
 	})
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "error: %s\n", err)
-		os.Exit(1)
+		return nil, err
 	}
-	m, err := unmarshalJSONRequests([]byte(conf.request))
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "error: %s\n", err)
-		os.Exit(1)
+	defer func() { _ = c.Disconnect() }()
+	var (
+		rb []byte
+		ms []rscp.Message
+		rs []rscp.Message
+	)
+	if ms, err = unmarshalJSONRequests([]byte(conf.request)); err != nil {
+		return nil, err
 	}
-	r, err := c.SendMultiple(m)
-	_ = c.Disconnect()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "error: %s\n", err)
-		os.Exit(1)
+	if conf.splitrequests {
+		rs = make([]rscp.Message, len(ms))
+		for i := range ms {
+			var r *rscp.Message
+			if r, err = c.Send(ms[i]); err != nil {
+				return nil, err
+			}
+			rs[i] = *r
+		}
+	} else if rs, err = c.SendMultiple(ms); err != nil {
+		return nil, err
 	}
-	var rb []byte
 	if conf.detail {
-		if rb, err = json.Marshal(r); err != nil {
-			fmt.Fprintf(os.Stderr, "error: %s\n", err)
-			os.Exit(1)
+		if rb, err = json.Marshal(rs); err != nil {
+			return nil, err
 		}
 	} else {
-		if rb, err = json.Marshal(NewJSONSimpleMessages(r)); err != nil {
-			fmt.Fprintf(os.Stderr, "error: %s\n", err)
-			os.Exit(1)
+		if rb, err = json.Marshal(NewJSONSimpleMessages(rs)); err != nil {
+			return nil, err
 		}
+	}
+	return rb, nil
+}
+
+func main() {
+	switch fs, err := parseFlags(); {
+	case conf.help:
+		printUsage(fs)
+		os.Exit(0)
+	case conf.version:
+		printVersion()
+		os.Exit(0)
+	case err != nil:
+		fmt.Fprintf(os.Stderr, "error: %s\n", err)
+		printUsage(fs)
+		os.Exit(1)
+	}
+	if conf.debug > 0 {
+		logrus.SetLevel(logrus.Level(conf.debug))
+		logrus.SetOutput(os.Stderr)
+	} else {
+		logrus.SetLevel(logrus.PanicLevel)
+	}
+	var (
+		rb  []byte
+		err error
+	)
+	if rb, err = run(); err != nil {
+		fmt.Fprintf(os.Stderr, "error: %s\n", err)
+		os.Exit(1)
 	}
 	fmt.Printf("%s\n", rb)
 }

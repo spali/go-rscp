@@ -29,16 +29,18 @@ var (
 )
 
 type config struct {
-	version  bool
-	file     string
-	host     string
-	port     uint
-	user     string
-	password string
-	key      string
-	request  string
-	detail   bool
-	debug    uint
+	help          bool
+	version       bool
+	file          string
+	host          string
+	port          uint
+	user          string
+	password      string
+	key           string
+	request       string
+	detail        bool
+	debug         uint
+	splitrequests bool
 }
 
 var conf = config{}
@@ -58,8 +60,10 @@ func printUsage(fs *flag.FlagSet) {
 	fs.PrintDefaults()
 }
 
-func parseFlags() {
+func parseFlags() (*flag.FlagSet, error) {
 	fs := flag.NewFlagSetWithEnvPrefix(os.Args[0], "E3DC", flag.ContinueOnError)
+	fs.BoolVar(&conf.help, "help", false, "output this help")
+	fs.BoolVar(&conf.help, "h", false, "output this help")
 	fs.BoolVar(&conf.version, "version", false, "output version details")
 	fs.String(flag.DefaultConfigFlagname, ".config", "path to config file")
 	fs.StringVar(&conf.file, "file", "", "path to request file")
@@ -70,62 +74,55 @@ func parseFlags() {
 	fs.StringVar(&conf.key, "key", "", "rscp key")
 	fs.BoolVar(&conf.detail, "detail", false, "return detailed json output")
 	fs.UintVar(&conf.debug, "debug", 0, "enable set debug messages to stderr by setting log level (0-6)")
+	fs.BoolVar(&conf.splitrequests, "splitrequests", false, "split the request array to multiple requests, "+
+		"this can help if the server sends a timeout on big requests")
 	_ = fs.Parse(os.Args[1:])
-	checkFlags(fs)
+	return checkFlags(fs)
 }
 
-func checkFlags(fs *flag.FlagSet) {
+func checkFlags(fs *flag.FlagSet) (*flag.FlagSet, error) {
 	if conf.version {
-		printVersion()
-		os.Exit(0)
+		return fs, nil
 	}
 	if conf.host == "" {
-		fmt.Fprintf(os.Stderr, "error: %s\n", ErrMissingHost)
-		printUsage(fs)
-		os.Exit(1)
+		return fs, ErrMissingHost
 	}
 	if conf.user == "" {
-		fmt.Fprintf(os.Stderr, "error: %s\n", ErrMissingUser)
-		printUsage(fs)
-		os.Exit(1)
+		return fs, ErrMissingUser
 	}
 	if conf.password == "" {
-		fmt.Fprintf(os.Stderr, "error: %s\n", ErrMissingPassword)
-		printUsage(fs)
-		os.Exit(1)
+		return fs, ErrMissingPassword
 	}
 	if conf.key == "" {
-		fmt.Fprintf(os.Stderr, "error: %s\n", ErrMissingKey)
-		printUsage(fs)
-		os.Exit(1)
+		return fs, ErrMissingKey
 	}
 
 	if fs.NArg() > 0 {
 		conf.request = fs.Arg(0)
 	} else {
 		if conf.file != "" {
-			if m, err := ioutil.ReadFile(conf.file); err != nil {
-				fmt.Fprintf(os.Stderr, "error reading file (%s): %s\n", conf.file, err)
-				printUsage(fs)
-				os.Exit(1)
-			} else {
-				conf.request = string(m)
+			var (
+				m   []byte
+				err error
+			)
+			if m, err = ioutil.ReadFile(conf.file); err != nil {
+				return fs, fmt.Errorf("could not read input file: %s", err)
 			}
+			conf.request = string(m)
 		} else {
 			stat, _ := os.Stdin.Stat()
 			if stdin := (stat.Mode() & os.ModeCharDevice) == 0; stdin {
 				var bytes []byte
 				bytes, err := ioutil.ReadAll(os.Stdin)
 				if err != nil {
-					return
+					return fs, fmt.Errorf("could not read stdin: %s", err)
 				}
 				conf.request = string(bytes)
 			}
 		}
 	}
 	if conf.request == "" {
-		fmt.Fprintf(os.Stderr, "error: %s\n", ErrMissingRequest)
-		printUsage(fs)
-		os.Exit(1)
+		return fs, ErrMissingRequest
 	}
+	return fs, nil
 }
