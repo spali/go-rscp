@@ -142,8 +142,10 @@ func (c *Client) Disconnect() error {
 	c.isAuthenticated = false
 	c.isConnected = false
 
-	if err := c.conn.Close(); err != nil {
-		return err
+	if c.isConnected && c.conn != nil {
+		if err := c.conn.Close(); err != nil {
+			return err
+		}
 	}
 	log.Info("disconnected")
 	return nil
