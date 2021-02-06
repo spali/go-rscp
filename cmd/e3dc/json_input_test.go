@@ -2,6 +2,7 @@ package main
 
 import (
 	"testing"
+	"time"
 
 	"github.com/go-test/deep"
 	"github.com/spali/go-rscp/rscp"
@@ -118,6 +119,11 @@ func Test_unmarshalJSONRequest(t *testing.T) {
 			`"INVALID_TAG"`,
 			rscp.Message{},
 			true,
+		},
+		{`time value`,
+			`["INFO_SET_TIME","1234-05-06T07:08:09.123456Z"]`,
+			rscp.Message{Tag: rscp.INFO_SET_TIME, Value: time.Date(1234, 5, 6, 7, 8, 9, 123456000, time.UTC)},
+			false,
 		},
 	}
 	for _, tt := range tests {

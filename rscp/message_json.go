@@ -21,7 +21,13 @@ func (m *Message) UnmarshalJSONValue(jm json.RawMessage) error {
 		}
 		m.Value = tmp
 	} else if jm != nil && m.DataType != None {
-		tmp := reflect.ValueOf(m.DataType.newEmpty(0)).Elem().Interface()
+		var tmp interface{}
+		// TODO: we need to cleanup generic data type handling somewhen to prevent such hacks
+		if m.DataType == Timestamp {
+			tmp = m.DataType.newEmpty(0)
+		} else {
+			tmp = reflect.ValueOf(m.DataType.newEmpty(0)).Elem().Interface()
+		}
 		if err := json.Unmarshal(jm, &tmp); err != nil {
 			return fmt.Errorf("could not convert value '%s' for data type %s: %s", jm, m.DataType, err)
 		}
@@ -33,7 +39,12 @@ func (m *Message) UnmarshalJSONValue(jm json.RawMessage) error {
 				return fmt.Errorf("could not convert number value '%f' for data type %s", v, m.DataType)
 			}
 		}
-		m.Value = tmp
+		// TODO: we need to cleanup generic data type handling somewhen to prevent such hacks
+		if m.DataType == Timestamp {
+			m.Value = reflect.ValueOf(tmp).Elem().Interface()
+		} else {
+			m.Value = tmp
+		}
 	}
 	return nil
 }
