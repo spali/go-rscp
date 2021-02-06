@@ -122,7 +122,7 @@ func Test_unmarshalJSONRequest(t *testing.T) {
 		},
 		{`time value`,
 			`["INFO_SET_TIME","1234-05-06T07:08:09.123456Z"]`,
-			rscp.Message{Tag: rscp.INFO_SET_TIME, Value: time.Date(1234, 5, 6, 7, 8, 9, 123456000, time.UTC)},
+			rscp.Message{Tag: rscp.INFO_SET_TIME, DataType: rscp.Timestamp, Value: time.Date(1234, 5, 6, 7, 8, 9, 123456000, time.UTC)},
 			false,
 		},
 	}
