@@ -45,10 +45,7 @@ func unmarshalJSONRequest(b []byte, m *rscp.Message) error {
 		if err := json.Unmarshal(t[0], &(m.Tag)); err != nil {
 			return err
 		}
-		if l != 2 {
-			// infer data type
-			m.DataType = m.Tag.DataType()
-		} else {
+		if l > 1 {
 			// check for data type in second element
 			if isDataType, dt := isJSONDataType(t[1]); isDataType {
 				m.DataType = *dt
@@ -60,6 +57,9 @@ func unmarshalJSONRequest(b []byte, m *rscp.Message) error {
 					return err
 				}
 			}
+		} else {
+			// infer data type
+			m.DataType = m.Tag.DataType()
 		}
 		if l == 3 {
 			// unmarshal value
