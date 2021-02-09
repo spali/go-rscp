@@ -91,6 +91,7 @@ See the examples below for more information.
 ## TODO
  - [ ] more testing
  - [ ] more documentation
+ - [ ] check the generic data type logic (i.e. pointer vs value in interface), this should do a pro ;)
  - [ ] `cmd/e3dc`
    - [x] read config file (security)
    - [x] read from environment variables (security)
