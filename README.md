@@ -96,6 +96,7 @@ See the examples below for more information.
    - [x] read config file (security)
    - [x] read from environment variables (security)
    - [x] streamline logging 
+   - [ ] optional experimental mode which accepts any custom message (including tag, datatype and value)
    - [ ] implement optional (by flag) pair output (same as the tuple input without datatype)
  - [ ] `rscp`
    - [ ] cleanup API
