@@ -93,8 +93,8 @@ var dataTypeMap = map[Tag]DataType{
 	EMS_SYS_SPEC_VALUE_INT:                   Int32,
 	EMS_SYS_SPEC_VALUE_STRING:                CString,
 	EMS_POWER_LIMITS_USED:                    Bool,
-	EMS_MAX_CHARGE_POWER:                     Int32,
-	EMS_MAX_DISCHARGE_POWER:                  Int32,
+	EMS_MAX_CHARGE_POWER:                     Uint32, // documented as Int32, but requires Uint32
+	EMS_MAX_DISCHARGE_POWER:                  Uint32, // documented as Int32, but requires Uint32
 	EMS_DISCHARGE_START_POWER:                Uint32,
 	EMS_POWERSAVE_ENABLED:                    Bool,
 	EMS_WEATHER_REGULATED_CHARGE_ENABLED:     Bool,
