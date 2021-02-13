@@ -128,7 +128,10 @@ func (c *Client) authenticate() error {
 	if messages, err = c.receive(); err != nil {
 		return fmt.Errorf("authentication error: %w", err)
 	}
-	if messages[0].Tag != RSCP_AUTHENTICATION || messages[0].Value.(uint8) == uint8(AUTH_LEVEL_NO_AUTH) {
+	if messages[0].Tag != RSCP_AUTHENTICATION ||
+		// wrong credentials returns 0 as Int32 instead of Uint8
+		messages[0].Value.(int32) == int32(AUTH_LEVEL_NO_AUTH) ||
+		messages[0].Value.(uint8) == uint8(AUTH_LEVEL_NO_AUTH) {
 		c.isAuthenticated = false
 		return fmt.Errorf("authentication failed: %+v", messages[0])
 	}
