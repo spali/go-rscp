@@ -3,6 +3,7 @@ package rscp
 import (
 	"crypto/cipher"
 	"fmt"
+	"math"
 	"net"
 	"time"
 
@@ -22,6 +23,8 @@ type Client struct {
 	encrypter        cipher.BlockMode
 	decrypter        cipher.BlockMode
 }
+
+const RequiredAuthLogLevel = 99
 
 // NewClient creates a new client
 func NewClient(config ClientConfig) (*Client, error) {
@@ -115,11 +118,25 @@ func (c *Client) connect() error {
 
 // authenticate authenticates the connection
 func (c *Client) authenticate() error {
+	orgLogLevel := log.GetLevel()
+	if orgLogLevel < RequiredAuthLogLevel {
+		log.Infof("hiding auth request for security, use debug >= %d to debug authentication", RequiredAuthLogLevel)
+		log.SetLevel(log.Level((math.Min(float64(orgLogLevel), float64(log.InfoLevel)))))
+	}
 	if msg, err := CreateRequest(RSCP_REQ_AUTHENTICATION,
 		RSCP_AUTHENTICATION_USER, c.config.Username, RSCP_AUTHENTICATION_PASSWORD, c.config.Password); err != nil {
+		if orgLogLevel < RequiredAuthLogLevel {
+			log.SetLevel(orgLogLevel)
+		}
 		return err
 	} else if err := c.send([]Message{*msg}); err != nil {
+		if orgLogLevel < RequiredAuthLogLevel {
+			log.SetLevel(orgLogLevel)
+		}
 		return err
+	}
+	if orgLogLevel < RequiredAuthLogLevel {
+		log.SetLevel(orgLogLevel)
 	}
 	var (
 		messages []Message
