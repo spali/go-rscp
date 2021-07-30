@@ -1,0 +1,51 @@
+project_name: e3dc
+before:
+  hooks:
+    - go mod download
+    - go test ./...
+builds:
+  - env:
+      - CGO_ENABLED=0
+    ldflags:
+      - "-s -w -X main.name={{.ProjectName}} -X main.source={{.GitURL}} -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.platform={{.Os}}/{{.Arch}}{{.Arm}} -X main.buildTime={{.Date}}"
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - 386
+      - arm
+      - arm64
+    goarm:
+      - 6
+      - 7
+    ignore:
+      - goos: darwin
+        goarch: 386
+    main: ./cmd/e3dc
+    binary: "{{ .ProjectName }}"
+archives:
+  - replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+    format_overrides:
+      - goos: windows
+        format: zip
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-SNAPSHOT-{{.ShortCommit}}"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^doc:'
+      - '^docs:'
+      - '^test:'
+      - '^dev:'
+release:
+  prerelease: true
