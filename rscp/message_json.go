@@ -23,7 +23,7 @@ func (m *Message) UnmarshalJSONValue(jm json.RawMessage) error {
 	} else if jm != nil && m.DataType != None {
 		var tmp interface{}
 		// TODO: we need to cleanup generic data type handling somewhen to prevent such hacks
-		if m.DataType == Timestamp {
+		if m.DataType == Timestamp || m.DataType == ByteArray {
 			tmp = m.DataType.newEmpty(0)
 		} else {
 			tmp = reflect.ValueOf(m.DataType.newEmpty(0)).Elem().Interface()
@@ -32,11 +32,28 @@ func (m *Message) UnmarshalJSONValue(jm json.RawMessage) error {
 			return fmt.Errorf("could not convert value '%s' for data type %s: %s", jm, m.DataType, err)
 		}
 		// convert number values to expected data type (json does by default unmarshal to float64)
-		v, isFloat := tmp.(float64)
-		if isFloat {
+		if v, isFloat := tmp.(float64); isFloat {
 			var err error
 			if tmp, err = m.DataType.new(v); err != nil {
 				return fmt.Errorf("could not convert number value '%f' for data type %s", v, m.DataType)
+			}
+		}
+		// convert number array to byte array (json does by default unmarshal to []float64)
+		if m.DataType == ByteArray {
+			var arr []interface{}
+			var isInterfaceArray bool
+			if arr, isInterfaceArray = tmp.([]interface{}); !isInterfaceArray {
+				return fmt.Errorf("could not convert byte array value '%v' for data type %s", tmp, m.DataType)
+			}
+			l := len(arr)
+			tmp = make([]byte, l)
+			for i := 0; i < l; i++ {
+				var v float64
+				var isFloat bool
+				if v, isFloat = arr[i].(float64); !isFloat {
+					return fmt.Errorf("could not convert byte array value '%v' for data type %s", tmp, m.DataType)
+				}
+				tmp.([]uint8)[i] = uint8(v)
 			}
 		}
 		// TODO: we need to cleanup generic data type handling somewhen to prevent such hacks
