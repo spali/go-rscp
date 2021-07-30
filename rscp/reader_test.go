@@ -371,6 +371,11 @@ func Test_readMessage(t *testing.T) {
 			nil,
 			io.ErrUnexpectedEOF,
 		},
+		{"read byte array",
+			args{bytes.NewReader([]byte{0x10, 0x20, 0x4, 0xe, 0x10, 0x3, 0x0, 0x0, 0x1, 0x2})},
+			pointerOfMessage(Message{WB_EXTERN_DATA, ByteArray, []byte{0x0, 0x1, 0x2}}),
+			nil,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

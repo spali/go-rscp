@@ -53,6 +53,14 @@ func Test_write(t *testing.T) {
 			[]byte{0xd9, 0x74, 0x46, 0x98, 0xfa, 0xff, 0xff, 0xff, 0x0, 0xca, 0x5b, 0x7},
 			nil,
 		},
+		{"byte array",
+			args{
+				bytes.NewBuffer([]byte{}),
+				[]Message{{WB_EXTERN_DATA, ByteArray, []byte{0x0, 0x1, 0x2}}},
+			},
+			[]byte{0x10, 0x20, 0x4, 0xe, 0x10, 0x3, 0x0, 0x0, 0x1, 0x2},
+			nil,
+		},
 		{"messages",
 			args{
 				bytes.NewBuffer([]byte{}),
@@ -66,10 +74,10 @@ func Test_write(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			err := write(tt.args.buf, tt.args.v)
 			if (err != nil || tt.wantErr != nil) && !(errors.Is(err, tt.wantErr) || err.Error() == tt.wantErr.Error()) {
-				t.Errorf("write() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("write() error = %#v, wantErr %#v", err, tt.wantErr)
 			}
 			if diff := deep.Equal(tt.args.buf.Bytes(), tt.wantBufBytes); diff != nil {
-				t.Errorf("write() = %v, want %v\n%s", tt.args.buf.Bytes(), tt.wantBufBytes, diff)
+				t.Errorf("write() = %#v, want %#v\n%s", tt.args.buf.Bytes(), tt.wantBufBytes, diff)
 			}
 		})
 	}

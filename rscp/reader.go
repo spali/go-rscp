@@ -129,8 +129,11 @@ func readMessage(buf *bytes.Reader) (*Message, error) {
 	if err := read(buf, v, l); err != nil {
 		return nil, fmt.Errorf("reading message %s: %w", m.Tag, err)
 	}
-	m.Value = reflect.ValueOf(v).Elem().Interface() // dereference pointer value
-
+	if reflect.ValueOf(v).Kind() == reflect.Ptr {
+		m.Value = reflect.ValueOf(v).Elem().Interface() // dereference pointer value
+	} else {
+		m.Value = v
+	}
 	return m, nil
 }
 

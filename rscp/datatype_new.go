@@ -63,8 +63,6 @@ var newMap = map[DataType]func(v interface{}) (interface{}, error){
 		return nil, fmt.Errorf("cannot convert %T to []Message", v)
 	},
 	Timestamp: func(v interface{}) (interface{}, error) { return conv.Time(v) },
-	// TODO: could not be tested,
-	//       couldn't get a request working for the only known Tag that should response with WB_EXTERN_DATA.
 	ByteArray: func(v interface{}) (interface{}, error) { s, err := conv.String(v); return []byte(s), err },
 	Error: func(v interface{}) (interface{}, error) {
 		if e, ok := v.(RscpError); ok {
