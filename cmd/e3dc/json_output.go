@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"sort"
+	"strings"
 
 	"github.com/spali/go-rscp/rscp"
 )
@@ -71,17 +72,23 @@ func (m JSONMessage) MarshalJSON() ([]byte, error) {
 	for i, key := range keys {
 		var (
 			b   []byte
-			vb  []byte
 			err error
 		)
 		t := rscp.Tag(key)
 		if b, err = json.Marshal(t); err != nil {
 			return nil, err
 		}
-		if vb, err = json.Marshal(m[t]); err != nil {
-			return nil, err
+		switch v := m[t].(type) {
+		default:
+			if v, err = json.Marshal(v); err != nil {
+				return nil, err
+			}
+			buffer.WriteString(fmt.Sprintf("%s:%s", b, v))
+		case []uint8:
+			// bytearray as json array of numbers
+			va := strings.Join(strings.Fields(fmt.Sprintf("%d", v)), ",")
+			buffer.WriteString(fmt.Sprintf("%s:%s", b, va))
 		}
-		buffer.WriteString(fmt.Sprintf("%s:%s", b, vb))
 		if i < lastIndex {
 			buffer.WriteString(",")
 		}

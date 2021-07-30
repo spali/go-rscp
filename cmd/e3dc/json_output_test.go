@@ -137,6 +137,13 @@ func TestJSONSimpleMessage_MarshalJSON(t *testing.T) {
 			[]byte(`{"BAT_DATA":{"BAT_INDEX":0,"BAT_RSOC":0}}`),
 			false,
 		},
+		{"byte array as array bot as string",
+			JSONMessage{
+				rscp.WB_EXTERN_DATA: []uint8{0, 0, 6, 0, 0, 0, 0, 0},
+			},
+			[]byte(`{"WB_EXTERN_DATA":[0,0,6,0,0,0,0,0]}`),
+			false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
