@@ -159,12 +159,12 @@ func Read(mode *cipher.BlockMode, buf *[]byte, crcFlag *bool, frameSize *uint32,
 		// read frame data
 		r := bytes.NewReader((*buf)[RSCP_FRAME_HEADER_SIZE:])
 		var m []Message
+		// defer logging to also get the read data till errors
+		defer func() { log.Tracef("read plain %#v", *buf) }()
+		defer func() { log.Tracef("read %s", m) }()
 		if err := read(r, &m, *dataSize); err != nil {
 			return nil, err
 		}
-
-		log.Tracef("read plain %#v", *buf)
-		log.Debugf("read %s", m)
 
 		// read and check crc
 		if *crcFlag {
