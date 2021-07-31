@@ -10,6 +10,10 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Now returns the current local time.
+// patchable for tests.
+var Now = time.Now
+
 // write wraps the binary.Write for little endian.
 // supports some extra type's.
 func write(buf *bytes.Buffer, v interface{}) error {
@@ -84,7 +88,7 @@ func writeFrame(messages []Message, useChecksum bool) ([]byte, error) {
 	if err := write(buf, ctrl); err != nil {
 		return nil, err
 	}
-	t := time.Now().UTC()
+	t := Now().UTC()
 	if err := write(buf, t); err != nil {
 		return nil, err
 	}

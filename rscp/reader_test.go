@@ -10,6 +10,7 @@ import (
 
 	"github.com/azihsoyn/rijndael256"
 	"github.com/go-test/deep"
+	log "github.com/sirupsen/logrus"
 )
 
 func Test_readHeader(t *testing.T) {
@@ -168,223 +169,175 @@ func Test_truncatePadding(t *testing.T) {
 }
 
 func Test_read(t *testing.T) {
-	pointerOfUint8 := func(i uint8) *uint8 { return &i }
-	pointerOfString := func(s string) *string { return &s }
-	pointerOfTime := func(t time.Time) *time.Time { return &t }
-	type args struct {
-		buf  *bytes.Reader
-		v    interface{}
-		size uint16
-	}
 	tests := []struct {
-		name    string
-		args    args
-		wantV   interface{}
-		wantErr error
+		name      string
+		bytes     []byte      // byte representation of the data
+		emptydata interface{} // go representation of the data (empty input)
+		size      uint16      // size of the byte data to read
+		want      interface{} // go representation of the data readed
+		wantErr   error
 	}{
 		{"simple type",
-			args{
-				bytes.NewReader([]byte{255}),
-				new(uint8),
-				1,
-			},
+			[]byte{255},
+			new(uint8),
+			1,
 			pointerOfUint8(255),
 			nil,
 		},
-		{"simple type read error",
-			args{
-				bytes.NewReader([]byte{255}),
-				new(uint16),
-				2,
-			},
+		{"simple type error",
+			[]byte{255},
+			new(uint16),
+			2,
 			new(uint16),
 			io.ErrUnexpectedEOF,
 		},
 		{"string",
-			args{
-				bytes.NewReader([]byte{0x74, 0x65, 0x73, 0x74}),
-				new(string),
-				4,
-			},
+			[]byte{0x74, 0x65, 0x73, 0x74},
+			new(string),
+			4,
 			pointerOfString("test"),
 			nil,
 		},
-		{"string read error unexpected EOF",
-			args{
-				bytes.NewReader([]byte{0x74, 0x65, 0x73, 0x74}),
-				new(string),
-				6,
-			},
+		{"string error unexpected EOF",
+			[]byte{0x74, 0x65, 0x73, 0x74},
+			new(string),
+			6,
 			new(string),
 			io.ErrUnexpectedEOF,
 		},
-		{"string read error EOF",
-			args{
-				bytes.NewReader([]byte{}),
-				new(string),
-				4,
-			},
+		{"string error EOF",
+			[]byte{},
+			new(string),
+			4,
 			new(string),
 			io.EOF,
 		},
 		{"time",
-			args{
-				bytes.NewReader([]byte{0xd9, 0x74, 0x46, 0x98, 0xfa, 0xff, 0xff, 0xff, 0x0, 0xca, 0x5b, 0x7}),
-				new(time.Time),
-				12,
-			},
-			pointerOfTime(time.Date(1234, 5, 6, 7, 8, 9, 123456000, time.UTC)), // 0xd9, 0x74, 0x46, 0x98, 0xfa, 0xff, 0xff, 0xff, 0x0, 0xca, 0x5b, 0x7
+			[]byte{0xd9, 0x74, 0x46, 0x98, 0xfa, 0xff, 0xff, 0xff, 0x0, 0xca, 0x5b, 0x7},
+			new(time.Time),
+			12,
+			pointerOfTime(testTime()), // 0xd9, 0x74, 0x46, 0x98, 0xfa, 0xff, 0xff, 0xff, 0x0, 0xca, 0x5b, 0x7
 			nil,
 		},
 		{"time no ns",
-			args{
-				bytes.NewReader([]byte{0xd9, 0x74, 0x46, 0x98, 0xfa, 0xff, 0xff, 0xff}),
-				new(time.Time),
-				12,
-			},
+			[]byte{0xd9, 0x74, 0x46, 0x98, 0xfa, 0xff, 0xff, 0xff},
+			new(time.Time),
+			12,
 			new(time.Time),
 			io.EOF,
 		},
 		{"time partial ns",
-			args{
-				bytes.NewReader([]byte{0xd9, 0x74, 0x46, 0x98, 0xfa, 0xff, 0xff, 0xff, 0x0, 0xca}),
-				new(time.Time),
-				12,
-			},
+			[]byte{0xd9, 0x74, 0x46, 0x98, 0xfa, 0xff, 0xff, 0xff, 0x0, 0xca},
+			new(time.Time),
+			12,
 			new(time.Time),
 			io.ErrUnexpectedEOF,
 		},
 		{"time no s",
-			args{
-				bytes.NewReader([]byte{}),
-				new(time.Time),
-				12,
-			},
+			[]byte{},
+			new(time.Time),
+			12,
 			new(time.Time),
 			io.EOF,
 		},
 		{"time partial s",
-			args{
-				bytes.NewReader([]byte{0xd9, 0x74}),
-				new(time.Time),
-				12,
-			},
+			[]byte{0xd9, 0x74},
+			new(time.Time),
+			12,
 			new(time.Time),
 			io.ErrUnexpectedEOF,
 		},
 		{"messages",
-			args{
-				bytes.NewReader([]byte{0x1, 0x0, 0x80, 0x0, 0x3, 0x1, 0x0, 0xa, 0x1, 0x0, 0x80, 0x0, 0x3, 0x1, 0x0, 0xa}),
-				new([]Message),
-				16,
-			},
+			[]byte{0x1, 0x0, 0x80, 0x0, 0x3, 0x1, 0x0, 0xa, 0x1, 0x0, 0x80, 0x0, 0x3, 0x1, 0x0, 0xa},
+			new([]Message),
+			16,
 			&[]Message{{RSCP_AUTHENTICATION, UChar8, uint8(10)}, {RSCP_AUTHENTICATION, UChar8, uint8(10)}},
 			nil,
 		},
-		{"messages EOF",
-			args{
-				bytes.NewReader([]byte{0x1, 0x0, 0x80, 0x0, 0x3, 0x1, 0x0, 0xa}),
-				new([]Message),
-				16,
-			},
+		{"message EOF due wrong length",
+			[]byte{0x1, 0x0, 0x80, 0x0, 0x3, 0x1, 0x0, 0xa},
+			new([]Message),
+			16,
 			&[]Message{{RSCP_AUTHENTICATION, UChar8, uint8(10)}},
 			io.EOF,
 		},
-		{"messages unexpected EOF",
-			args{
-				bytes.NewReader([]byte{0x1, 0x0, 0x80}),
-				new([]Message),
-				16,
-			},
+		{"message EOF due missing data in message",
+			[]byte{0x1, 0x0, 0x80, 0x0, 0x3, 0x1, 0x0},
+			new([]Message),
+			8,
+			new([]Message),
+			io.EOF,
+		},
+		{"message unexpected EOF",
+			[]byte{0x1, 0x0, 0x80},
+			new([]Message),
+			16,
 			new([]Message),
 			io.ErrUnexpectedEOF,
 		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			err := read(tt.args.buf, tt.args.v, tt.args.size)
-			if (err != nil || tt.wantErr != nil) && !errors.Is(err, tt.wantErr) {
-				t.Errorf("read() error = %v, wantErr %v", err, tt.wantErr)
-			}
-			if diff := deep.Equal(tt.args.v, tt.wantV); diff != nil {
-				t.Errorf("read() = %v, want %v\n%s", tt.args.v, tt.wantV, diff)
-			}
-		})
-	}
-}
-
-func Test_readMessage(t *testing.T) {
-	pointerOfMessage := func(m Message) *Message { return &m }
-	type args struct {
-		buf *bytes.Reader
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    *Message
-		wantErr error
-	}{
-		{"read valid message",
-			args{bytes.NewReader([]byte{0x1, 0x0, 0x80, 0x0, 0x3, 0x1, 0x0, 0xa})},
-			pointerOfMessage(Message{RSCP_AUTHENTICATION, UChar8, uint8(10)}),
-			nil,
-		},
-		{"read message missing data",
-			args{bytes.NewReader([]byte{0x1, 0x0, 0x80, 0x0, 0x3, 0x1, 0x0})},
-			nil,
-			io.EOF,
-		},
-		{"read message with wrong length field",
-			args{bytes.NewReader([]byte{0x1, 0x0, 0x80, 0x0, 0x3, 0x0, 0x0, 0xa})},
-			nil,
+		{"message with wrong length field",
+			[]byte{0x1, 0x0, 0x80, 0x0, 0x3, 0x0, 0x0, 0xa},
+			new([]Message),
+			8,
+			new([]Message),
 			ErrRscpDataLimitExceeded,
 		},
-		{"read message with length field overflow",
-			args{bytes.NewReader([]byte{0x1, 0x0, 0x80, 0x0, 0x3, 0xff, 0xff, 0xa})},
-			nil,
+		{"message with length field overflow",
+			[]byte{0x1, 0x0, 0x80, 0x0, 0x3, 0xff, 0xff, 0xa},
+			new([]Message),
+			8,
+			new([]Message),
 			ErrRscpDataLimitExceeded,
 		},
-		{"read message unexpected eof length field",
-			args{bytes.NewReader([]byte{0x1, 0x0, 0x80, 0x0, 0x3, 0xff})},
-			nil,
+		{"message with unexpected eof length field",
+			[]byte{0x1, 0x0, 0x80, 0x0, 0x3, 0xff},
+			new([]Message),
+			8,
+			new([]Message),
 			io.ErrUnexpectedEOF,
 		},
 		// Note: see Issue https://github.com/spali/go-e3dc/issues/1
 		//
-		// {"read message with wrong data type",
-		// 	args{bytes.NewReader([]byte{0x1, 0x0, 0x80, 0x0, 0x0, 0x1, 0x0, 0xa})},
-		// 	nil,
+		// {"message with wrong data type",
+		// 	[]byte{0x1, 0x0, 0x80, 0x0, 0x0, 0x1, 0x0, 0xa},
+		// 	new([]Message),
+		// 	8,
+		// 	new([]Message),
 		// 	ErrTagDataTypeMismatch,
 		// },
-		{"read message with missing data length field",
-			args{bytes.NewReader([]byte{0x1, 0x0, 0x80, 0x0})},
-			nil,
+		{"message with missing data length field",
+			[]byte{0x1, 0x0, 0x80, 0x0},
+			new([]Message),
+			8,
+			new([]Message),
 			io.EOF,
 		},
-		{"read message with missing tag field",
-			args{bytes.NewReader([]byte{})},
+		{"message with byte array",
+			[]byte{0x10, 0x20, 0x4, 0xe, 0x10, 0x3, 0x0, 0x0, 0x1, 0x2},
+			new([]Message),
+			10,
+			&[]Message{{WB_EXTERN_DATA, ByteArray, []byte{0x0, 0x1, 0x2}}},
 			nil,
-			io.EOF,
 		},
-		{"read message with partial tag field",
-			args{bytes.NewReader([]byte{0x1, 0x0})},
-			nil,
-			io.ErrUnexpectedEOF,
-		},
-		{"read byte array",
-			args{bytes.NewReader([]byte{0x10, 0x20, 0x4, 0xe, 0x10, 0x3, 0x0, 0x0, 0x1, 0x2})},
-			pointerOfMessage(Message{WB_EXTERN_DATA, ByteArray, []byte{0x0, 0x1, 0x2}}),
+		{"message with unknown tag log warning",
+			[]byte{0x0, 0x0, 0x00, 0x0, 0x3, 0x1, 0x0, 0xa},
+			new([]Message),
+			8,
+			&[]Message{{0, UChar8, uint8(10)}},
 			nil,
 		},
 	}
 	for _, tt := range tests {
+		// to call debug callback function provided to log.DebugFn at least once
+		log.SetLevel(log.DebugLevel)
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := readMessage(tt.args.buf)
+			reader := bytes.NewReader(tt.bytes)
+			err := read(reader, tt.emptydata, tt.size)
 			if (err != nil || tt.wantErr != nil) && !errors.Is(err, tt.wantErr) {
-				t.Errorf("readMessage() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("read() error = %v, wantErr %v", err, tt.wantErr)
 			}
-			if diff := deep.Equal(got, tt.want); diff != nil {
-				t.Errorf("readMessage() = %v, want %v\n%s", got, tt.want, diff)
+			if diff := deep.Equal(tt.emptydata, tt.want); diff != nil {
+				t.Errorf("read() = %v, want %v\n%s", tt.emptydata, tt.want, diff)
 			}
 		})
 	}
@@ -430,7 +383,7 @@ func TestRead(t *testing.T) {
 					{BAT_STATUS_CODE, Uint32, uint32(0)},
 					{BAT_ERROR_CODE, Uint32, uint32(0)},
 				}},
-				{INFO_TIME, Timestamp, time.Date(1234, 5, 6, 7, 8, 9, 123456000, time.UTC)},
+				{INFO_TIME, Timestamp, testTime()},
 				{EMS_GET_POWER_SETTINGS, Container, []Message{
 					{EMS_POWER_LIMITS_USED, Bool, true},
 					{EMS_MAX_CHARGE_POWER, Int32, int32(4500)},
@@ -464,7 +417,7 @@ func TestRead(t *testing.T) {
 					{BAT_STATUS_CODE, Uint32, uint32(0)},
 					{BAT_ERROR_CODE, Uint32, uint32(0)},
 				}},
-				{INFO_TIME, Timestamp, time.Date(1234, 5, 6, 7, 8, 9, 123456000, time.UTC)},
+				{INFO_TIME, Timestamp, testTime()},
 				{EMS_GET_POWER_SETTINGS, Container, []Message{
 					{EMS_POWER_LIMITS_USED, Bool, true},
 					{EMS_MAX_CHARGE_POWER, Int32, int32(4500)},
