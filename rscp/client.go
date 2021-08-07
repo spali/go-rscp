@@ -3,6 +3,7 @@ package rscp
 import (
 	"crypto/cipher"
 	"fmt"
+	"io"
 	"math"
 	"net"
 	"time"
@@ -143,6 +144,9 @@ func (c *Client) authenticate() error {
 		err      error
 	)
 	if messages, err = c.receive(); err != nil {
+		if errors.Is(err, io.EOF) {
+			log.Warnf("Hint: EOF during authentification usually is due a wrong rscp key")
+		}
 		return fmt.Errorf("authentication error: %w", err)
 	}
 	if messages[0].Tag != RSCP_AUTHENTICATION {
