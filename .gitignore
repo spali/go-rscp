@@ -21,7 +21,9 @@
 .config*
 
 # test ouput
+coverage.out
 coverage.txt
+coverage.html
 
 # binaries
 bin

@@ -1,4 +1,4 @@
-name: Prerelease
+name: Pre-Release
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: GoReleaser build
+    name: Pre-Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

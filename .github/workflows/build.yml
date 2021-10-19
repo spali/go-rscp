@@ -1,0 +1,59 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
+          version: v1.35
+          args: --timeout 10m
+
+  test:
+    name: Test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+        go: [1.16, 1.17]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: "Setup Go ${{ matrix.go }}"
+        uses: actions/setup-go@v2
+        with:
+          go-version: "${{ matrix.go }}"
+      - name: "Setup Go modules cache"
+        uses: "actions/cache@v2"
+        with:
+          path: "~/go/pkg/mod"
+          key: "${{ runner.os }}-go-${{ hashFiles('go.sum') }}"
+          restore-keys: "${{ runner.os }}-go-"
+      - name: Build Binary
+        run: go build ./cmd/e3dc
+      - name: Run Test
+        run: go test -race -coverprofile coverage.out -covermode atomic -v ./...
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./coverage.out
+          verbose: true
