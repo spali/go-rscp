@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - build/*
   pull_request:
     branches:
       - master
@@ -14,12 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 6
     steps:
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.17
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
       - name: Lint
-        uses: golangci/golangci-lint-action@v2
+        uses: golangci/golangci-lint-action@v3
         with:
           # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
           version: v1.35
@@ -39,7 +43,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: "Setup Go ${{ matrix.go }}"
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: "${{ matrix.go }}"
       - name: "Setup Go modules cache"
