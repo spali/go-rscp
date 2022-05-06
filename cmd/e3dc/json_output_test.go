@@ -144,6 +144,16 @@ func TestJSONSimpleMessage_MarshalJSON(t *testing.T) {
 			[]byte(`{"WB_EXTERN_DATA":[0,0,6,0,0,0,0,0]}`),
 			false,
 		},
+		{"valid time (test workaround for https://github.com/spali/go-rscp/issues/17)",
+			JSONMessage{rscp.EMS_MANUAL_CHARGE_LASTSTART: time.Date(1234, 5, 6, 7, 8, 9, 123456000, time.UTC)},
+			[]byte(`{"EMS_MANUAL_CHARGE_LASTSTART":"1234-05-06T07:08:09.123456Z"}`),
+			false,
+		},
+		{"invalid negative time (test workaround for https://github.com/spali/go-rscp/issues/17)",
+			JSONMessage{rscp.EMS_MANUAL_CHARGE_LASTSTART: time.Date(0, 0, 0, 0, 0, 0, 0, time.UTC)},
+			[]byte(`{"EMS_MANUAL_CHARGE_LASTSTART":"1970-01-01T00:00:00Z"}`),
+			false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

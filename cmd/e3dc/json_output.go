@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/spali/go-rscp/rscp"
 )
@@ -77,6 +78,12 @@ func (m JSONMessage) MarshalJSON() ([]byte, error) {
 		t := rscp.Tag(key)
 		if b, err = json.Marshal(t); err != nil {
 			return nil, err
+		}
+		// workaround for https://github.com/spali/go-rscp/issues/17
+		if v, ok := m[t].(time.Time); ok {
+			if v.Year() < 0 {
+				m[t] = time.Unix(0, 0).UTC()
+			}
 		}
 		switch v := m[t].(type) {
 		default:
