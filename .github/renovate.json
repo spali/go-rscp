@@ -1,0 +1,15 @@
+{
+    "extends": [
+      "config:base",
+      ":preserveSemverRanges",
+      ":disableDependencyDashboard"
+    ],
+    "labels": ["dependencies"],
+    "packageRules": [
+      {
+        "matchManagers": ["github-actions"],
+        "addLabels": ["ci"]
+      }
+    ]
+  }
+  
