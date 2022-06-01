@@ -1,6 +1,6 @@
 package rscp
 
-//nolint: golint,stylecheck
+//nolint: revive,stylecheck
 const (
 	RSCP_FRAME_MAGIC_SIZE  uint16 = 0x2 // magic field size of frame
 	RSCP_FRAME_CTRL_SIZE   uint16 = 0x2 // control field size of frame
@@ -45,7 +45,7 @@ const (
 //        |         V V V V |                 | Versionskennzeichnung -> RSCP_CTRL_BIT_MASK_VERSION
 //        |         0 0 0 1 |                 | Version 1.0 (Momentan einzig zugelassener Wert) -> RSCP_VERSION_1_0
 //
-//nolint: lll,golint,stylecheck
+//nolint: lll,revive,stylecheck
 const (
 	RSCP_CTRL_BIT_MASK_CRC     uint16 = 0b0001000000000000 // allowed bit's for crc field of control field
 	RSCP_FLAG_BIT_CRC          uint8  = 12                 // bit start position of crc field of control field

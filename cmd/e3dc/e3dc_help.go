@@ -12,12 +12,12 @@ import (
 
 // set during built time
 var (
-	name      string = "e3dc"
-	source    string = "unknown"
-	version   string = "unknown"
-	commit    string = "unknown"
-	platform  string = "unknown"
-	buildTime string = "unknown"
+	name      = "e3dc"
+	source    = "unknown"
+	version   = "unknown"
+	commit    = "unknown"
+	platform  = "unknown"
+	buildTime = "unknown"
 )
 
 var (
@@ -69,7 +69,7 @@ func parseFlags() (*flag.FlagSet, error) {
 	fs.String(flag.DefaultConfigFlagname, ".config", "path to config file")
 	fs.StringVar(&conf.file, "file", "", "path to request file")
 	fs.StringVar(&conf.host, "host", "", "e3dc server host")
-	fs.UintVar(&conf.port, "port", 5033, "e3dc server host port")
+	fs.UintVar(&conf.port, "port", 5033, "e3dc server host port") //nolint:gomnd
 	fs.StringVar(&conf.user, "user", "", "e3dc user")
 	fs.StringVar(&conf.password, "password", "", "e3dc password (consider using a config file or environment variable)")
 	fs.StringVar(&conf.key, "key", "", "rscp key")

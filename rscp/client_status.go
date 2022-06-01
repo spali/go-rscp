@@ -8,7 +8,7 @@ func (status ClientStatus) String() string {
 }
 
 // all errors as constant
-//nolint: golint,stylecheck
+//nolint: revive,stylecheck
 const (
 	STATUS_OK                        ClientStatus = 0
 	STATUS_ERR_INVALID_INPUT         ClientStatus = -1

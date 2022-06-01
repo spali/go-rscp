@@ -4,7 +4,7 @@ import "fmt"
 
 // messagesSize returns the size of all messages including the headers
 func messagesSize(ms []Message) uint16 {
-	var l uint16 = 0
+	var l uint16
 	for _, m := range ms {
 		l += RSCP_DATA_HEADER_SIZE + m.valueSize()
 	}
