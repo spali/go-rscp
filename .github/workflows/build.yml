@@ -57,7 +57,7 @@ jobs:
       - name: Run Test
         run: go test -race -coverprofile coverage.out -covermode atomic -v ./...
       - name: Upload Coverage
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           files: ./coverage.out
           verbose: true
