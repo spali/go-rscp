@@ -98,7 +98,8 @@ var dataTypeMap = map[Tag]DataType{
 	EMS_DISCHARGE_START_POWER:                Uint32,
 	EMS_POWERSAVE_ENABLED:                    Bool,
 	EMS_WEATHER_REGULATED_CHARGE_ENABLED:     Bool,
-	EMS_WEATHER_FORECAST_MODE:                Int32,
+	EMS_WEATHER_FORECAST_MODE:                Int32, // undocumented
+	EMS_RES_WEATHER_FORECAST_MODE:            Int32, // undocumented
 	EMS_MANUAL_CHARGE_START_COUNTER:          Int64, // documented as Uint32, but got Int64
 	EMS_MANUAL_CHARGE_ACTIVE:                 Bool,
 	EMS_MANUAL_CHARGE_ENERGY_COUNTER:         Double64, // documented as Uint32, but got Int64
@@ -286,6 +287,10 @@ var dataTypeMap = map[Tag]DataType{
 	BAT_REQ_DCB_COUNT:                        None,
 	BAT_REQ_MAX_DCB_CELL_TEMPERATURE:         None,
 	BAT_REQ_MIN_DCB_CELL_TEMPERATURE:         None,
+	BAT_REQ_DCB_ALL_CELL_TEMPERATURES:        UInt16,  // undocumented
+	BAT_DCB_ALL_CELL_TEMPERATURES:            Float32, // undocumented
+	BAT_REQ_DCB_ALL_CELL_VOLTAGES:            UInt16,  // undocumented
+	BAT_DCB_ALL_CELL_VOLTAGES:                Float32, // undocumented
 	BAT_REQ_READY_FOR_SHUTDOWN:               None,
 	BAT_REQ_INFO:                             None,
 	BAT_REQ_TRAINING_MODE:                    None,
@@ -305,6 +310,10 @@ var dataTypeMap = map[Tag]DataType{
 	BAT_ERROR_CODE:                           Uint32,
 	BAT_DEVICE_NAME:                          CString,
 	BAT_DCB_COUNT:                            UChar8,
+	BAT_MAX_DCB_CELL_CURRENT:                 Float32, // undocumented
+	BAT_MIN_DCB_CELL_CURRENT:                 Float32, // undocumented
+	BAT_MAX_DCB_CELL_VOLTAGE:                 Float32, // undocumented
+	BAT_MIN_DCB_CELL_VOLTAGE:                 Float32, // undocumented
 	BAT_MAX_DCB_CELL_TEMPERATURE:             Float32,
 	BAT_MIN_DCB_CELL_TEMPERATURE:             Float32,
 	BAT_DCB_CELL_TEMPERATURE:                 Float32,
@@ -312,6 +321,8 @@ var dataTypeMap = map[Tag]DataType{
 	BAT_READY_FOR_SHUTDOWN:                   Bool,
 	BAT_INFO:                                 Container,
 	BAT_TRAINING_MODE:                        UChar8,
+	BAT_REQ_DCB_INFO:                         UInt16,    // undocumented
+	BAT_DCB_INFO:                             Container, // undocumented
 	BAT_DCB_INDEX:                            UInt16,
 	BAT_DCB_LAST_MESSAGE_TIMESTAMP:           Uint64,
 	BAT_DCB_MAX_CHARGE_VOLTAGE:               Float32,
@@ -337,6 +348,16 @@ var dataTypeMap = map[Tag]DataType{
 	BAT_DCB_FW_VERSION:                       Uint32,
 	BAT_DCB_DATA_TABLE_VERSION:               Uint32,
 	BAT_DCB_PCB_VERSION:                      Uint32,
+	BAT_DCB_NR_SERIES_CELL:                   Uint32,  // undocumented
+	BAT_DCB_NR_PARALLEL_CELL:                 Uint32,  // undocumented
+	BAT_DCB_MANUFACTURE_NAME:                 CString, // undocumented
+	BAT_DCB_DEVICE_NAME:                      CString, // undocumented
+	BAT_DCB_SERIALCODE:                       CString, // undocumented
+	BAT_DCB_NR_SENSOR:                        UChar8,  // undocumented
+	BAT_DCB_STATUS:                           UInt16,  // undocumented
+	BAT_DCB_WARNING:                          UInt16,  // undocumented
+	BAT_DCB_ALARM:                            UInt16,  // undocumented
+	BAT_DCB_ERROR:                            UInt16,  // undocumented
 	BAT_DATA:                                 Container,
 	BAT_DEVICE_STATE:                         Container,
 	BAT_DEVICE_CONNECTED:                     Bool,

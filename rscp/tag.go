@@ -267,21 +267,19 @@ const (
 	EMS_RES_POWERSAVE_ENABLED                Tag = 0x01800104
 	EMS_WEATHER_REGULATED_CHARGE_ENABLED     Tag = 0x01000105
 	EMS_RES_WEATHER_REGULATED_CHARGE_ENABLED Tag = 0x01800105
-	// undocumented response tag
-	EMS_WEATHER_FORECAST_MODE Tag = 0x01000106
-	// undocumented response tag
-	EMS_RES_WEATHER_FORECAST_MODE     Tag = 0x01800106
-	EMS_REQ_SETTINGS_CHANGE_MARKER    Tag = 0x0100008D
-	EMS_SETTINGS_CHANGE_MARKER        Tag = 0x0180008D
-	EMS_REQ_GET_MANUAL_CHARGE         Tag = 0x0100008E
-	EMS_GET_MANUAL_CHARGE             Tag = 0x0180008E
-	EMS_MANUAL_CHARGE_START_COUNTER   Tag = 0x01000150
-	EMS_MANUAL_CHARGE_ACTIVE          Tag = 0x01000151
-	EMS_MANUAL_CHARGE_ENERGY_COUNTER  Tag = 0x01000152
-	EMS_MANUAL_CHARGE_LASTSTART       Tag = 0x01000153
-	EMS_REQ_START_MANUAL_CHARGE       Tag = 0x0100008F
-	EMS_START_MANUAL_CHARGE           Tag = 0x0180008F
-	EMS_REQ_START_EMERGENCYPOWER_TEST Tag = 0x01000090
+	EMS_WEATHER_FORECAST_MODE                Tag = 0x01000106 // undocumented response tag
+	EMS_RES_WEATHER_FORECAST_MODE            Tag = 0x01800106 // undocumented response tag
+	EMS_REQ_SETTINGS_CHANGE_MARKER           Tag = 0x0100008D
+	EMS_SETTINGS_CHANGE_MARKER               Tag = 0x0180008D
+	EMS_REQ_GET_MANUAL_CHARGE                Tag = 0x0100008E
+	EMS_GET_MANUAL_CHARGE                    Tag = 0x0180008E
+	EMS_MANUAL_CHARGE_START_COUNTER          Tag = 0x01000150
+	EMS_MANUAL_CHARGE_ACTIVE                 Tag = 0x01000151
+	EMS_MANUAL_CHARGE_ENERGY_COUNTER         Tag = 0x01000152
+	EMS_MANUAL_CHARGE_LASTSTART              Tag = 0x01000153
+	EMS_REQ_START_MANUAL_CHARGE              Tag = 0x0100008F
+	EMS_START_MANUAL_CHARGE                  Tag = 0x0180008F
+	EMS_REQ_START_EMERGENCYPOWER_TEST        Tag = 0x01000090
 	// Gibt als Rückantwort die Anzahl der gestarteten Notstromtests zurück
 	EMS_START_EMERGENCYPOWER_TEST Tag = 0x01800090
 	EMS_REQ_GET_GENERATOR_STATE   Tag = 0x01000091
@@ -363,7 +361,13 @@ const (
 	// Rückgabewert für Batteriebezeichnung
 	BAT_DEVICE_NAME Tag = 0x0380000C
 	// Rückgabewert für Anzahl der gefundenen DCBs
-	BAT_DCB_COUNT                Tag = 0x0380000D
+	BAT_DCB_COUNT Tag = 0x0380000D
+
+	BAT_MAX_DCB_CELL_CURRENT Tag = 0x03800012 // source https://github.com/rxhan/RSCPGui
+	BAT_MIN_DCB_CELL_CURRENT Tag = 0x03800013 // source https://github.com/rxhan/RSCPGui
+	BAT_MAX_DCB_CELL_VOLTAGE Tag = 0x03800014 // source https://github.com/rxhan/RSCPGui
+	BAT_MIN_DCB_CELL_VOLTAGE Tag = 0x03800015 // source https://github.com/rxhan/RSCPGui
+
 	BAT_MAX_DCB_CELL_TEMPERATURE Tag = 0x03800016
 	// Ein Container mit allen Temperaturen für die angefragte DCB.
 	BAT_MIN_DCB_CELL_TEMPERATURE Tag = 0x03800017
@@ -414,13 +418,19 @@ const (
 	// Kann nur innerhalb eines REQ_BAT_DATA Container verwendet werden!
 	BAT_REQ_MAX_DCB_CELL_TEMPERATURE Tag = 0x03000016
 	// Kann nur innerhalb eines REQ_BAT_DATA Container verwendet werden!
-	BAT_REQ_MIN_DCB_CELL_TEMPERATURE Tag = 0x03000017
+	BAT_REQ_MIN_DCB_CELL_TEMPERATURE  Tag = 0x03000017
+	BAT_REQ_DCB_ALL_CELL_TEMPERATURES Tag = 0x03000018 // source https://github.com/rxhan/RSCPGui
+	BAT_DCB_ALL_CELL_TEMPERATURES     Tag = 0x03800018 // source https://github.com/rxhan/RSCPGui
+	BAT_REQ_DCB_ALL_CELL_VOLTAGES     Tag = 0x0300001A // source https://github.com/rxhan/RSCPGui
+	BAT_DCB_ALL_CELL_VOLTAGES         Tag = 0x0380001A // source https://github.com/rxhan/RSCPGui
 	// Kann nur innerhalb eines REQ_BAT_DATA Container verwendet werden!
 	BAT_REQ_READY_FOR_SHUTDOWN Tag = 0x0300001E
 	// Kann nur innerhalb eines REQ_BAT_DATA Container verwendet werden!
 	BAT_REQ_INFO Tag = 0x03000020
 	// Kann nur innerhalb eines REQ_BAT_DATA Container verwendet werden!
 	BAT_REQ_TRAINING_MODE           Tag = 0x03000021
+	BAT_REQ_DCB_INFO                Tag = 0x03000042 // source https://github.com/rxhan/RSCPGui
+	BAT_DCB_INFO                    Tag = 0x03800042 // source https://github.com/rxhan/RSCPGui
 	BAT_DCB_INDEX                   Tag = 0x03800100
 	BAT_DCB_LAST_MESSAGE_TIMESTAMP  Tag = 0x03800101
 	BAT_DCB_MAX_CHARGE_VOLTAGE      Tag = 0x03800102
@@ -446,7 +456,19 @@ const (
 	BAT_DCB_FW_VERSION              Tag = 0x03800122
 	BAT_DCB_DATA_TABLE_VERSION      Tag = 0x03800123
 	BAT_DCB_PCB_VERSION             Tag = 0x03800124
-	BAT_REQ_DEVICE_STATE            Tag = 0x03060000
+
+	BAT_DCB_NR_SERIES_CELL   Tag = 0x03800300 // source https://github.com/rxhan/RSCPGui
+	BAT_DCB_NR_PARALLEL_CELL Tag = 0x03800301 // source https://github.com/rxhan/RSCPGui
+	BAT_DCB_MANUFACTURE_NAME Tag = 0x03800302 // source https://github.com/rxhan/RSCPGui
+	BAT_DCB_DEVICE_NAME      Tag = 0x03800303 // source https://github.com/rxhan/RSCPGui
+	BAT_DCB_SERIALCODE       Tag = 0x03800304 // source https://github.com/rxhan/RSCPGui
+	BAT_DCB_NR_SENSOR        Tag = 0x03800305 // source https://github.com/rxhan/RSCPGui
+	BAT_DCB_STATUS           Tag = 0x03800306 // source https://github.com/rxhan/RSCPGui
+	BAT_DCB_WARNING          Tag = 0x03800307 // source https://github.com/rxhan/RSCPGui
+	BAT_DCB_ALARM            Tag = 0x03800308 // source https://github.com/rxhan/RSCPGui
+	BAT_DCB_ERROR            Tag = 0x03800309 // source https://github.com/rxhan/RSCPGui
+
+	BAT_REQ_DEVICE_STATE Tag = 0x03060000
 	// DEVICE_CONNECTED & DEVICE_WORKING & DEVICE_IN_SERVICE
 	BAT_DEVICE_STATE Tag = 0x03860000
 	// Kommt nur im BAT_DEVICE_STATE Antwort vor
