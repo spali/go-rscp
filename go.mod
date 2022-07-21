@@ -1,6 +1,6 @@
 module github.com/spali/go-rscp
 
-go 1.17
+go 1.18
 
 require (
 	github.com/alvaroloes/enumer v1.1.2
