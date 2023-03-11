@@ -11,6 +11,8 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/go-test/deep v1.0.8 h1:TDsG77qcSprGbC6vTN8OuXp5g+J+b5Pcguhf7Zt61VM=
 github.com/go-test/deep v1.0.8/go.mod h1:5C2ZWiW0ErCdrYzpqxLbTX7MG14M9iiw8DgHncVwcsE=
+github.com/go-test/deep v1.1.0 h1:WOcxcdHcvdgThNXjw0t76K42FXTU7HpNQWHpA2HHNlg=
+github.com/go-test/deep v1.1.0/go.mod h1:5C2ZWiW0ErCdrYzpqxLbTX7MG14M9iiw8DgHncVwcsE=
 github.com/jnovack/flag v1.16.0 h1:gJC3JVofq/hNGlNfki4NlIWLOiDkaeLNUOCzznCablU=
 github.com/jnovack/flag v1.16.0/go.mod h1:8g1MmrEr03yquMjIe6CYeXUiIsZ46ssYt+o3X7uEjcg=
 github.com/pascaldekloe/name v0.0.0-20180628100202-0fd16699aae1 h1:/I3lTljEEDNYLho3/FUB7iD/oc2cEFgVmbHzV+O0PtU=
