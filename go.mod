@@ -8,7 +8,7 @@ require (
 	github.com/cstockton/go-conv v1.0.0
 	github.com/go-test/deep v1.1.0
 	github.com/jnovack/flag v1.16.0
-	github.com/sirupsen/logrus v1.9.2
+	github.com/sirupsen/logrus v1.9.3
 	github.com/spali/go-slicereader v0.0.0-20201122145524-8e262e1a5127
 )
 
