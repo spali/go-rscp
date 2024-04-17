@@ -66,15 +66,6 @@ func (m *Message) validateResponse() error {
 //
 // must contain a valid tag and data type and the data type must match the value
 func (m *Message) validate() error {
-	// check if message data type matches expected data type of the tag
-	if !m.Tag.IsATag() {
-		return fmt.Errorf("%s: %w", m.Tag, ErrValidTag)
-	}
-	// Note: see Issue https://github.com/spali/go-e3dc/issues/1
-	//
-	// else if m.isValidDataType() {
-	// 	return fmt.Errorf("%s expects %s, got %s: %w", m.Tag, m.Tag.DataType(), m.DataType, ErrTagDataTypeMismatch)
-	// }
 	if !m.DataType.isValidValue(m.Value) {
 		return fmt.Errorf("expected %T got %T : %w", m.DataType.newEmpty(0), m.Value, ErrDataTypeValueMismatch)
 	}

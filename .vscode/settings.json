@@ -21,6 +21,5 @@
         "uncoveredBorderColor": ""
     },
     "go.coverOnSingleTest": true,
-    "go.coverOnTestPackage": true,
-
+    "go.coverOnTestPackage": true
 }

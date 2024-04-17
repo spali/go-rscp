@@ -22,6 +22,11 @@ func isJSONString(d []byte) bool {
 	return len(x) > 0 && x[0] == '"'
 }
 
+func isJSONNumber(d []byte) bool {
+	x := bytes.TrimLeft(d, " \t\r\n")
+	return len(x) > 0 && x[0] >= 48 && x[0] <= 57
+}
+
 func isJSONDataType(d []byte) (bool, *rscp.DataType) {
 	if isJSONString(d) {
 		s := new(rscp.DataType)

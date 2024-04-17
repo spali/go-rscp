@@ -52,7 +52,7 @@ func Test_Message_validate(t *testing.T) {
 	}{
 		{"empty message",
 			args{Message{}},
-			ErrValidTag,
+			nil,
 		},
 		{"message of type None",
 			args{Message{Tag: INFO_REQ_UTC_TIME}},

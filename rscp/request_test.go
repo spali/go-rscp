@@ -163,7 +163,7 @@ func TestValidateRequests(t *testing.T) {
 	}{
 		{"empty message",
 			args{[]Message{{}}},
-			ErrValidTag,
+			nil,
 		},
 		{"not a request",
 			args{[]Message{{INFO_UTC_TIME, Timestamp, nil}}},

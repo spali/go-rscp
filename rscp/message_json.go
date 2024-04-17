@@ -68,16 +68,19 @@ func (m *Message) UnmarshalJSONValue(jm json.RawMessage) error {
 
 // UnmarshalJSON unmarshals a message from json including nested messages in containers
 func (m *Message) UnmarshalJSON(b []byte) (err error) {
+	const UnsetDataType = 0xF0
 	// treat as Message, but we do not use Message type to prevent a stack overflow and copy the fields after unmarshalling
-	jm := jsonMessage{}
+	// also we use a non existing DataType default to detect if set in json or not
+	jm := jsonMessage{DataType: UnsetDataType}
 	if err := json.Unmarshal(b, &jm); err != nil {
 		return fmt.Errorf("%w: %s", ErrJSONUnmarshal, err)
 	}
-	// Note: see Issue https://github.com/spali/go-e3dc/issues/1
-	if jm.DataType == None && jm.DataType != jm.Tag.DataType() {
-		jm.DataType = jm.Tag.DataType()
+	m.Tag = jm.Tag
+	if jm.DataType == UnsetDataType {
+		m.DataType = m.Tag.DataType()
+	} else {
+		m.DataType = jm.DataType
 	}
-	m.Tag, m.DataType = jm.Tag, jm.DataType
 	if err := m.UnmarshalJSONValue(jm.Value); err != nil {
 		return fmt.Errorf("%w: %s", ErrJSONUnmarshal, err)
 	}
