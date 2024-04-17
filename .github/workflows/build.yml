@@ -47,12 +47,6 @@ jobs:
         with:
           go-version-file: go.mod
           check-latest: true
-      - name: "Setup Go modules cache"
-        uses: "actions/cache@v4"
-        with:
-          path: "~/go/pkg/mod"
-          key: "${{ runner.os }}-go-${{ hashFiles('go.sum') }}"
-          restore-keys: "${{ runner.os }}-go-"
       - name: Build Binary
         run: go build ./cmd/e3dc
       - name: Run Test
