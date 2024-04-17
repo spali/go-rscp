@@ -49,5 +49,6 @@ changelog:
       - '^docs:'
       - '^test:'
       - '^dev:'
+      - '^chore(\(.*\))?:'
 release:
   prerelease: true
