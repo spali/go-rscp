@@ -154,6 +154,11 @@ func TestJSONSimpleMessage_MarshalJSON(t *testing.T) {
 			[]byte(`{"EMS_MANUAL_CHARGE_LASTSTART":"1970-01-01T00:00:00Z"}`),
 			false,
 		},
+		{"Unknown Tag to String key",
+			JSONMessage{25166461: 0},
+			[]byte(`{"25166461":0}`),
+			false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

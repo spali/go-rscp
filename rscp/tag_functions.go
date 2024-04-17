@@ -23,7 +23,7 @@ func (t Tag) MarshalJSON() ([]byte, error) {
 	if t.IsATag() {
 		return json.Marshal(t.String())
 	}
-	return []byte(fmt.Sprintf("%d", t)), nil
+	return []byte(fmt.Sprintf("\"%d\"", t)), nil
 }
 
 // UnmarshalJSON implements the json.Unmarshaler interface for Tag
