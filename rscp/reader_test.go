@@ -157,7 +157,7 @@ func Test_truncatePadding(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := truncatePadding(&tt.args.data, tt.args.frameSize)
+			err := truncatePadding(&tt.args.data, tt.args.frameSize) // #nosec G601
 			if (err != nil || tt.wantErr != nil) && !errors.Is(err, tt.wantErr) {
 				t.Errorf("truncatePadding() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -519,7 +519,7 @@ func TestRead(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := Read(&tt.args.mode, tt.args.buf, tt.args.crcFlag, tt.args.frameSize, tt.args.dataSize, tt.args.data)
+			got, err := Read(&tt.args.mode, tt.args.buf, tt.args.crcFlag, tt.args.frameSize, tt.args.dataSize, tt.args.data) // #nosec G601
 			if (err != nil || tt.wantErr != nil) && !errors.Is(err, tt.wantErr) {
 				t.Errorf("Read() error = %v, wantErr %v", err, tt.wantErr)
 			}

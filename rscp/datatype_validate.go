@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-//  defines the expected Length of the data type or 0 for variable Length
+// defines the expected Length of the data type or 0 for variable Length
 var validateMap = map[DataType]func(v interface{}) bool{
 	None:     func(v interface{}) bool { return v == nil },
 	Bool:     func(v interface{}) bool { _, isType := v.(bool); return isType },

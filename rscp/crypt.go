@@ -6,7 +6,7 @@ import (
 	"github.com/azihsoyn/rijndael256"
 )
 
-//nolint: revive,stylecheck
+//nolint:revive,stylecheck
 const (
 	RSCP_CRYPT_BLOCK_SIZE    uint8 = rijndael256.BlockSize
 	RSCP_CRYPT_BLOCK_PADDING       = byte(0x00)

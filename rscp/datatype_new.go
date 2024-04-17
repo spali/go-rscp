@@ -9,28 +9,28 @@ import (
 
 // returns pointer to new interface of the expected go type
 var newEmptyMap = map[DataType]func(size uint16) interface{}{
-	None:     func(size uint16) interface{} { return nil },
-	Bool:     func(size uint16) interface{} { return new(bool) },
-	Char8:    func(size uint16) interface{} { return new(int8) },
-	UChar8:   func(size uint16) interface{} { return new(uint8) },
-	Int16:    func(size uint16) interface{} { return new(int16) },
-	UInt16:   func(size uint16) interface{} { return new(uint16) },
-	Int32:    func(size uint16) interface{} { return new(int32) },
-	Uint32:   func(size uint16) interface{} { return new(uint32) },
-	Int64:    func(size uint16) interface{} { return new(int64) },
-	Uint64:   func(size uint16) interface{} { return new(uint64) },
-	Float32:  func(size uint16) interface{} { return new(float32) },
-	Double64: func(size uint16) interface{} { return new(float64) },
+	None:     func(_ uint16) interface{} { return nil },
+	Bool:     func(_ uint16) interface{} { return new(bool) },
+	Char8:    func(_ uint16) interface{} { return new(int8) },
+	UChar8:   func(_ uint16) interface{} { return new(uint8) },
+	Int16:    func(_ uint16) interface{} { return new(int16) },
+	UInt16:   func(_ uint16) interface{} { return new(uint16) },
+	Int32:    func(_ uint16) interface{} { return new(int32) },
+	Uint32:   func(_ uint16) interface{} { return new(uint32) },
+	Int64:    func(_ uint16) interface{} { return new(int64) },
+	Uint64:   func(_ uint16) interface{} { return new(uint64) },
+	Float32:  func(_ uint16) interface{} { return new(float32) },
+	Double64: func(_ uint16) interface{} { return new(float64) },
 	// TODO: currently no known tag returns this type,
 	//       so not sure if this is correct (BAT_REQ_STATUS_CODE and BAT_REQ_ERROR_CODE documented to return it, but thats wrong).
-	Bitfield:  func(size uint16) interface{} { return new(byte) },
-	CString:   func(size uint16) interface{} { return new(string) },
-	Container: func(size uint16) interface{} { return new([]Message) },
-	Timestamp: func(size uint16) interface{} { return new(time.Time) },
+	Bitfield:  func(_ uint16) interface{} { return new(byte) },
+	CString:   func(_ uint16) interface{} { return new(string) },
+	Container: func(_ uint16) interface{} { return new([]Message) },
+	Timestamp: func(_ uint16) interface{} { return new(time.Time) },
 	// TODO: could not be tested,
 	//       couldn't get a request working for the only known Tag that should response with WB_EXTERN_DATA.
 	ByteArray: func(size uint16) interface{} { return make([]byte, size) },
-	Error:     func(size uint16) interface{} { return new(RscpError) },
+	Error:     func(_ uint16) interface{} { return new(RscpError) },
 }
 
 // newEmpty returns pointer to new interface of the expected go type
@@ -40,7 +40,7 @@ func (d DataType) newEmpty(s uint16) interface{} {
 
 // returns pointer to new interface of the expected go type with the provided value
 var newMap = map[DataType]func(v interface{}) (interface{}, error){
-	None:     func(v interface{}) (interface{}, error) { return nil, nil },
+	None:     func(_ interface{}) (interface{}, error) { return nil, nil },
 	Bool:     func(v interface{}) (interface{}, error) { return conv.Bool(v) },
 	Char8:    func(v interface{}) (interface{}, error) { return conv.Uint8(v) },
 	UChar8:   func(v interface{}) (interface{}, error) { return conv.Uint8(v) },

@@ -28,9 +28,10 @@ func validateRequests(messages []Message) error {
 // if the tag's data type is a Container, following tag's will be nested as "sub" requests within the container.
 // Every tag that has a data type other than DATATYPE_None requires a following value.
 // Examples:
-//  CreateRequest(INFO_REQ_UTC_TIME)
-//  CreateRequest(EMS_REQ_SET_ERROR_BUZZER_ENABLED, true)
-//  CreateRequest(BAT_REQ_DATA, BAT_INDEX, 0, BAT_REQ_DEVICE_STATE, BAT_REQ_RSOC, BAT_REQ_STATUS_CODE)
+//
+//	CreateRequest(INFO_REQ_UTC_TIME)
+//	CreateRequest(EMS_REQ_SET_ERROR_BUZZER_ENABLED, true)
+//	CreateRequest(BAT_REQ_DATA, BAT_INDEX, 0, BAT_REQ_DEVICE_STATE, BAT_REQ_RSOC, BAT_REQ_STATUS_CODE)
 func CreateRequest(values ...interface{}) (msg *Message, err error) {
 	if msg, err = readRequestSlice(values); err != nil {
 		return nil, err
@@ -41,9 +42,10 @@ func CreateRequest(values ...interface{}) (msg *Message, err error) {
 // CreateRequests creates multiple new requests (infer the data type from the tag)
 // if the tag's data type is a Container, provided values will be converted to "sub" requests, separated by the provided tag's
 // Examples:
-//  CreateRequests([]interface{}{INFO_REQ_UTC_TIME})
-//  CreateRequests([]interface{}{EMS_REQ_SET_ERROR_BUZZER_ENABLED, true})
-//  CreateRequests([]interface{}{BAT_REQ_DATA, BAT_INDEX, 0, BAT_REQ_DEVICE_STATE, BAT_REQ_RSOC, BAT_REQ_STATUS_CODE})
+//
+//	CreateRequests([]interface{}{INFO_REQ_UTC_TIME})
+//	CreateRequests([]interface{}{EMS_REQ_SET_ERROR_BUZZER_ENABLED, true})
+//	CreateRequests([]interface{}{BAT_REQ_DATA, BAT_INDEX, 0, BAT_REQ_DEVICE_STATE, BAT_REQ_RSOC, BAT_REQ_STATUS_CODE})
 func CreateRequests(values ...[]interface{}) ([]Message, error) {
 	if len(values) == 0 {
 		return nil, ErrNoArguments

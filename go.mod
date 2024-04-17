@@ -1,6 +1,6 @@
 module github.com/spali/go-rscp
 
-go 1.19
+go 1.22
 
 require (
 	github.com/alvaroloes/enumer v1.1.2
@@ -14,6 +14,7 @@ require (
 
 require (
 	github.com/pascaldekloe/name v0.0.0-20180628100202-0fd16699aae1 // indirect
-	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
-	golang.org/x/tools v0.0.0-20190524210228-3d17549cdc6b // indirect
+	golang.org/x/mod v0.14.0 // indirect
+	golang.org/x/sys v0.16.0 // indirect
+	golang.org/x/tools v0.13.0 // indirect
 )

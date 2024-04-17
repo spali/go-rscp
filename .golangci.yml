@@ -1,9 +1,21 @@
-run:
-  go: '1.17'
-
 linters-settings:
   lll:
     line-length: 140
+  depguard:
+    rules:
+      main:
+        files:
+          - "$all"
+          - "!$test"
+        allow:
+        - "$gostd"
+        - github.com/
+      tests:
+        files:
+          - "$test"
+        allow:
+        - "$gostd"
+        - github.com/
 
 linters:
   # please, do not use `enable-all`: it's deprecated and will be removed soon.
@@ -11,7 +23,6 @@ linters:
   disable-all: true
   enable:
     - bodyclose
-    - deadcode
     - depguard
     - dogsled
     - dupl
@@ -39,13 +50,11 @@ linters:
     - revive
     - rowserrcheck
     - staticcheck
-    - structcheck
     - stylecheck
     - typecheck
     - unconvert
     - unparam
     - unused
-    - varcheck
 
   # don't enable:
   # - whitespace

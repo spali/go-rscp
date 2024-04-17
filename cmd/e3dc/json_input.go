@@ -26,7 +26,7 @@ func unmarshalJSONValue(b []byte, m *rscp.Message) error {
 	return nil
 }
 
-//nolint: gomnd
+//nolint:gomnd
 func unmarshalJSONRequest(b []byte, m *rscp.Message) error {
 	if isJSONEmpty(b) {
 		return ErrInputInvalidTuple

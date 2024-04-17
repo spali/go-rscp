@@ -4,8 +4,9 @@ package rscp
 type Tag uint32
 
 // all tags as constant
+//
+//nolint:revive,stylecheck
 //go:generate go run github.com/alvaroloes/enumer -type=Tag -json
-//nolint: revive,stylecheck
 const (
 	// Dieser TAG kapselt eine Authorisierungsanfrage an das S10.
 	// Er enthält daher die Daten-Tags AUTHENTICATION_USER und AUTHENTICATION_PASSWORD

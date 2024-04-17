@@ -3,7 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"strings"
 
@@ -112,7 +112,7 @@ func checkFlags(fs *flag.FlagSet) (*flag.FlagSet, error) {
 				m   []byte
 				err error
 			)
-			if m, err = ioutil.ReadFile(conf.file); err != nil {
+			if m, err = os.ReadFile(conf.file); err != nil {
 				return fs, fmt.Errorf("could not read input file: %s", err)
 			}
 			conf.request = string(m)
@@ -120,7 +120,7 @@ func checkFlags(fs *flag.FlagSet) (*flag.FlagSet, error) {
 			stat, _ := os.Stdin.Stat()
 			if stdin := (stat.Mode() & os.ModeCharDevice) == 0; stdin {
 				var bytes []byte
-				bytes, err := ioutil.ReadAll(os.Stdin)
+				bytes, err := io.ReadAll(os.Stdin)
 				if err != nil {
 					return fs, fmt.Errorf("could not read stdin: %s", err)
 				}

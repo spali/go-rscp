@@ -1,7 +1,8 @@
 package rscp
 
-//  defines the expected Length of the data type or 0 for variable length
-//nolint: lll
+// defines the expected Length of the data type or 0 for variable length
+//
+//nolint:lll
 var dataTypeMap = map[Tag]DataType{
 	RSCP_REQ_AUTHENTICATION:                  Container,
 	RSCP_AUTHENTICATION_USER:                 CString,

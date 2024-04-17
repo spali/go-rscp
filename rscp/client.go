@@ -80,14 +80,14 @@ func (c *Client) receive() ([]Message, error) {
 	var dataSize uint16
 	var m []Message
 
-	for i, new := 0, make([]byte, uint32(RSCP_CRYPT_BLOCK_SIZE)*uint32(c.config.ReceiveBufferBlockSize)); ; {
+	for i, data := 0, make([]byte, uint32(RSCP_CRYPT_BLOCK_SIZE)*uint32(c.config.ReceiveBufferBlockSize)); ; {
 		var err error
-		if i, err = c.conn.Read(new); err != nil {
+		if i, err = c.conn.Read(data); err != nil {
 			return nil, fmt.Errorf("error during receive response: %w", err)
 		} else if i == 0 {
 			return nil, ErrRscpInvalidFrameLength
 		}
-		switch m, err = Read(&c.decrypter, &buf, &crcFlag, &frameSize, &dataSize, new[:i]); {
+		switch m, err = Read(&c.decrypter, &buf, &crcFlag, &frameSize, &dataSize, data[:i]); {
 		case errors.Is(err, ErrRscpInvalidFrameLength):
 			// frame not complete
 			continue

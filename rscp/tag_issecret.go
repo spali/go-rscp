@@ -1,6 +1,6 @@
 package rscp
 
-//  defines the expected Length of the data type or 0 for variable Length
+// defines the expected Length of the data type or 0 for variable Length
 var secretTags = []Tag{
 	RSCP_AUTHENTICATION_PASSWORD,
 	RSCP_REQ_SET_ENCRYPTION_PASSPHRASE,

@@ -33,7 +33,8 @@ type ClientConfig struct {
 }
 
 // defaultClientConfig defines the default config values used when not provided by the user.
-//nolint: gomnd
+//
+//nolint:gomnd
 var defaultClientConfig = ClientConfig{
 	Port:                   5033,
 	HeartbeatInterval:      time.Second * 10,

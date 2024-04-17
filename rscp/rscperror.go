@@ -1,11 +1,12 @@
 package rscp
 
-//nolint: revive
+//nolint:revive
 type RscpError uint32
 
 // all errors as constant
+//
+//nolint:revive,stylecheck
 //go:generate go run github.com/alvaroloes/enumer -type=RscpError -json
-//nolint: revive,stylecheck
 const (
 	ERR_NOT_HANDLED    RscpError = 0x01
 	ERR_ACCESS_DENIED  RscpError = 0x02
