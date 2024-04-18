@@ -24,11 +24,17 @@ password mypassword
 key mykey
 ```
 
-request sent, is always last argument or can be piped through `stdin` as json string.
+### rscp library
+
+See [cmd/example](https://github.com/spali/go-rscp/blob/master/cmd/example/e3dc.go) for a small example with different requests and responses.
+
+### e3dc command line utility
+
+Request sent, is always last argument or can be piped through `stdin` as json string.
 
 See the examples below for more information.
 
-### Examples
+#### Examples
 
 **\*Note**: top element has always to be an array\*
 
