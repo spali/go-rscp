@@ -45,13 +45,6 @@ func (m *Message) valueSize() uint16 {
 	}
 }
 
-// isValidDataType check if the data type is the expected one for the message tag
-//
-// Note: see Issue https://github.com/spali/go-e3dc/issues/1
-// func (m *Message) isValidDataType() bool {
-// 	return m.DataType != m.Tag.DataType()
-// }
-
 // validateResponse checks the integrity of the response
 //
 // must contain a valid tag and data type and the data type must match the value

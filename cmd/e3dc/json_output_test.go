@@ -155,8 +155,8 @@ func TestJSONSimpleMessage_MarshalJSON(t *testing.T) {
 			false,
 		},
 		{"Unknown Tag to String key",
-			JSONMessage{25166461: 0},
-			[]byte(`{"25166461":0}`),
+			JSONMessage{4294967295: 0},
+			[]byte(`{"4294967295":0}`),
 			false,
 		},
 	}

@@ -100,13 +100,6 @@ func readMessage(buf *bytes.Reader) (*Message, error) {
 		return nil, err
 	}
 
-	// Note: see Issue https://github.com/spali/go-e3dc/issues/1
-	//
-	// i.e request EMS_GET_SYS_SPECS is returning some Uint32 and some Int32 data types for EMS_SYS_SPEC_INDEX
-	//  if m.DataType != m.Tag.DataType() && m.DataType != Error {
-	//  	return nil, fmt.Errorf("expected data type %s for tag %s, got %s: %w", m.Tag.DataType(), m.Tag, m.DataType, ErrTagDataTypeMismatch)
-	//  }
-
 	var l uint16
 	if err := read(buf, &l, RSCP_DATA_LENGTH_SIZE); err != nil {
 		return nil, err
