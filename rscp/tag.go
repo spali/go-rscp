@@ -893,16 +893,6 @@ const (
 // 0x03xxxxxx
 // ------------------
 const (
-	/*
-		BAT_REQ_SPECIFICATION        Tag = 0x03000043 // Source: https://github.com/pvtom/rscp2mqtt/blob/main/RscpTags.h
-		BAT_SPECIFICATION            Tag = 0x03800043 // Source: https://github.com/pvtom/rscp2mqtt/blob/main/RscpTags.h
-		BAT_SPECIFIED_CAPACITY       Tag = 0x03800125 // Source: https://github.com/pvtom/rscp2mqtt/blob/main/RscpTags.h
-		BAT_SPECIFIED_DSCHARGE_POWER Tag = 0x03800126 // Source: https://github.com/pvtom/rscp2mqtt/blob/main/RscpTags.h
-		BAT_SPECIFIED_CHARGE_POWER   Tag = 0x03800127 // Source: https://github.com/pvtom/rscp2mqtt/blob/main/RscpTags.h
-		BAT_SPECIFIED_MAX_DCB_COUNT  Tag = 0x03800128 // Source: https://github.com/pvtom/rscp2mqtt/blob/main/RscpTags.h
-		BAT_ROLE                     Tag = 0x03800129 // Source: https://github.com/pvtom/rscp2mqtt/blob/main/RscpTags.h
-	*/
-
 	// Beinhaltet alle Anfrage-TAGs, der Container MUSS einen Index enthalten
 	BAT_REQ_DATA Tag = 0x03040000
 	// Index des angefragten Gerätes (Im Moment immer 0 bei der Batterie), kann in der Anfrage und in der Antwort vorkommen.
