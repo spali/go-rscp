@@ -120,7 +120,7 @@ See the examples below for more information.
   - [ ] implement optional (by flag) pair output (same as the tuple input without datatype)
 - [ ] `rscp`
   - [ ] cleanup API
-    - [ ] probably expose `Message` as interface and make the struct internal (would allow to move the complete cmd/e3dc specific json stuff out)
+    - [x] probably expose `Message` as interface and make the struct internal (would allow to move the complete cmd/e3dc specific json stuff out)
   - [ ] streamline logging
   - [ ] client: improve implementation to make it stable for keeping stable and connected when used in a service
   - [x] move `cmd/e3dc` specific json marshalling out of `rscp` to command line utility `cmd/e3dc`
