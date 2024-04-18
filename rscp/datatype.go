@@ -1,5 +1,6 @@
 package rscp
 
+// Data type
 type DataType uint8
 
 //go:generate go run github.com/alvaroloes/enumer -type=DataType -json

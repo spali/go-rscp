@@ -8,18 +8,16 @@ linters-settings:
           - "$all"
           - "!$test"
         allow:
-        - "$gostd"
-        - github.com/
+          - "$gostd"
+          - github.com/
       tests:
         files:
           - "$test"
         allow:
-        - "$gostd"
-        - github.com/
+          - "$gostd"
+          - github.com/
 
 linters:
-  # please, do not use `enable-all`: it's deprecated and will be removed soon.
-  # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
   disable-all: true
   enable:
     - bodyclose
@@ -70,15 +68,19 @@ linters:
   # - testpackage
   # - wsl
 issues:
-  # Excluding configuration per-path, per-linter, per-text and per-source
   exclude-rules:
     - path: _test\.go
       linters:
         - funlen
         - exportloopref
         - lll
+    # enforce ALL_CAPS constant naming for tags
     - linters:
-        - lll
         - revive
+      path: rscp/tag.go
+      text: "var-naming: don't use ALL_CAPS in Go names; use CamelCase"
+    # enforce ALL_CAPS constant naming for tags
+    - linters:
         - stylecheck
-      source: "^//go:generate "
+      path: rscp/tag.go
+      text: "ST1003: should not use ALL_CAPS in Go names; use CamelCase instead"

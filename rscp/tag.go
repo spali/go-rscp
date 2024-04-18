@@ -1,12 +1,21 @@
 package rscp
 
-// Tag datatype
+// Tag
 type Tag uint32
 
-// all tags as constant
-//
-//nolint:revive,stylecheck
 //go:generate go run github.com/alvaroloes/enumer -type=Tag
+
+//
+// Contains all to us known tags.
+// "undocumented" means in general it is not documented
+// in the excel file from the official RscpExample.zip archive.
+// most tag specific comments are from the german excel file.
+//
+
+// ------------------
+// NAMESPACE: System
+// 0x00xxxxxx
+// -----------------
 const (
 	// Dieser TAG kapselt eine Authorisierungsanfrage an das S10.
 	// Er enthält daher die Daten-Tags AUTHENTICATION_USER und AUTHENTICATION_PASSWORD
@@ -31,6 +40,13 @@ const (
 	RSCP_REQ_SET_ENCRYPTION_PASSPHRASE Tag = 0x00000005
 	RSCP_SET_ENCRYPTION_PASSPHRASE     Tag = 0x00800005
 	RSCP_GENERAL_ERROR                 Tag = 0x00FFFFFF
+)
+
+// --------------
+// NAMESPACE: EMS
+// 0x01xxxxxx
+// --------------
+const (
 	// PV-Leistung des S10s in W
 	EMS_REQ_POWER_PV Tag = 0x01000001
 	// Batterie-Leistung des S10s in W (-=entladen / +=laden)
@@ -331,6 +347,175 @@ const (
 	EMS_REQ_ALIVE     Tag = 0x01050000
 	EMS_ALIVE         Tag = 0x01850000
 	EMS_GENERAL_ERROR Tag = 0x01FFFFFF
+)
+
+// ---------------------
+// NAMESPACE: PVInverter
+// 0x02xxxxxx
+// ---------------------
+const (
+	// PVI_INDEX & PVI_... Antwort mit allen Daten der REQ_DATA Anfrage
+	PVI_DATA Tag = 0x02840000
+	// PVI_INDEX & PVI_REQ...  Beinhaltet alle Anfrage-TAGs, der Container MUSS einen Index enthalten
+	PVI_REQ_DATA Tag = 0x02040000
+	// Index des angefragten Gerätes (0?x), Muss in Anfrage und Antwort zum DATA-Tag vorkommen
+	PVI_INDEX Tag = 0x02040001
+	// dataType gibt den jeweiligen Daten Typ zurück!
+	PVI_VALUE            Tag = 0x02040005
+	PVI_GENERAL_ERROR    Tag = 0x02FFFFFF
+	PVI_ON_GRID          Tag = 0x02800001
+	PVI_REQ_ON_GRID      Tag = 0x02000001
+	PVI_STATE            Tag = 0x02800002
+	PVI_REQ_STATE        Tag = 0x02000002
+	PVI_LAST_ERROR       Tag = 0x02800003
+	PVI_REQ_LAST_ERROR   Tag = 0x02000003
+	PVI_FLASH_FILE       Tag = 0x02800007
+	PVI_REQ_DEVICE_STATE Tag = 0x02060000
+	// DEVICE_CONNECTED & DEVICE_WORKING & DEVICE_IN_SERVICE
+	PVI_DEVICE_STATE      Tag = 0x02860000
+	PVI_DEVICE_CONNECTED  Tag = 0x02860001
+	PVI_DEVICE_WORKING    Tag = 0x02860002
+	PVI_DEVICE_IN_SERVICE Tag = 0x02860003
+	PVI_REQ_TYPE          Tag = 0x02000009
+	// 1=SOLU 2=KACO 3=E3DC_E
+	PVI_TYPE Tag = 0x02800009
+	// PVI_COS_PHI_VALUE & PVI_COS_PHI_IS_AKTIV & PVI_COS_PHI_EXCITED
+	PVI_COS_PHI     Tag = 0x02800060
+	PVI_REQ_COS_PHI Tag = 0x02000060
+	// PVI_COS_PHI_VALUE & PVI_COS_PHI_IS_AKTIV & PVI_COS_PHI_EXCITED
+	PVI_REQ_SET_COS_PHI  Tag = 0x02000061
+	PVI_COS_PHI_VALUE    Tag = 0x02000062
+	PVI_COS_PHI_IS_AKTIV Tag = 0x02000063
+	PVI_COS_PHI_EXCITED  Tag = 0x02000064
+	// PVI_VOLTAGE_MONITORING_THRESHOLD_TOP &
+	// PVI_VOLTAGE_MONITORING_THRESHOLD_BOTTOM &
+	// PVI_VOLTAGE_MONITORING_SLOPE_UP &
+	// PVI_VOLTAGE_MONITORING_SLOPE_DOWN
+	PVI_VOLTAGE_MONITORING                  Tag = 0x02800070
+	PVI_REQ_VOLTAGE_MONITORING              Tag = 0x02000070
+	PVI_VOLTAGE_MONITORING_THRESHOLD_TOP    Tag = 0x02000072
+	PVI_VOLTAGE_MONITORING_THRESHOLD_BOTTOM Tag = 0x02000073
+	PVI_VOLTAGE_MONITORING_SLOPE_UP         Tag = 0x02000074
+	PVI_VOLTAGE_MONITORING_SLOPE_DOWN       Tag = 0x02000075
+	// PVI_FREQUENCY_UNDER & PVI_FREQUENCY_OVER
+	PVI_FREQUENCY_UNDER_OVER     Tag = 0x02800080
+	PVI_REQ_FREQUENCY_UNDER_OVER Tag = 0x02000080
+	PVI_FREQUENCY_UNDER          Tag = 0x02000082
+	PVI_FREQUENCY_OVER           Tag = 0x02000083
+	// Mode:
+	//  IdleMode = 0,
+	//  NormalMode = 1,
+	//  GridChargeMode = 2,
+	//  BackupPowerMode = 3
+	PVI_SYSTEM_MODE     Tag = 0x02800085
+	PVI_REQ_SYSTEM_MODE Tag = 0x02000085
+	// Mode:
+	//  PVI ON 1
+	//  PVI OFF 0
+	//  PVI ON_FORCE 101
+	//  PVI OFF_FORCE 100
+	PVI_POWER_MODE     Tag = 0x02800087
+	PVI_REQ_POWER_MODE Tag = 0x02000087
+	// PVI_INDEX & PVI_VALUE
+	PVI_TEMPERATURE           Tag = 0x02800100
+	PVI_REQ_TEMPERATURE       Tag = 0x02000100
+	PVI_TEMPERATURE_COUNT     Tag = 0x02800101
+	PVI_REQ_TEMPERATURE_COUNT Tag = 0x02000101
+	PVI_MAX_TEMPERATURE       Tag = 0x02800102
+	PVI_REQ_MAX_TEMPERATURE   Tag = 0x02000102
+	PVI_MIN_TEMPERATURE       Tag = 0x02800103
+	PVI_REQ_MIN_TEMPERATURE   Tag = 0x02000103
+	PVI_SERIAL_NUMBER         Tag = 0x028ABC01
+	PVI_REQ_SERIAL_NUMBER     Tag = 0x020ABC01
+	// PVI_VERSION_MAIN |& PVI_VERSION_PIC |& ?.
+	PVI_VERSION            Tag = 0x028ABC02
+	PVI_REQ_VERSION        Tag = 0x020ABC02
+	PVI_VERSION_MAIN       Tag = 0x020ABC03
+	PVI_VERSION_PIC        Tag = 0x020ABC04
+	PVI_AC_MAX_PHASE_COUNT Tag = 0x028AC000
+	// PVI_INDEX & PVI_VALUE
+	PVI_AC_POWER Tag = 0x028AC001
+	// PVI_INDEX & PVI_VALUE
+	PVI_AC_VOLTAGE Tag = 0x028AC002
+	// PVI_INDEX & PVI_VALUE
+	PVI_AC_CURRENT Tag = 0x028AC003
+	// PVI_INDEX & PVI_VALUE
+	PVI_AC_APPARENTPOWER Tag = 0x028AC004
+	// PVI_INDEX & PVI_VALUE
+	PVI_AC_REACTIVEPOWER Tag = 0x028AC005
+	// PVI_INDEX & PVI_VALUE
+	PVI_AC_ENERGY_ALL Tag = 0x028AC006
+	// PVI_INDEX & PVI_VALUE
+	PVI_AC_MAX_APPARENTPOWER Tag = 0x028AC007
+	// PVI_INDEX & PVI_VALUE
+	PVI_AC_ENERGY_DAY Tag = 0x028AC008
+	// PVI_INDEX & PVI_VALUE
+	PVI_AC_ENERGY_GRID_CONSUMPTION Tag = 0x028AC009
+	PVI_REQ_AC_MAX_PHASE_COUNT     Tag = 0x020AC000
+	// Value der Anfrage beinhaltet die angefragte Phase
+	PVI_REQ_AC_POWER Tag = 0x020AC001
+	// Value der Anfrage beinhaltet die angefragte Phase
+	PVI_REQ_AC_VOLTAGE Tag = 0x020AC002
+	// Value der Anfrage beinhaltet die angefragte Phase
+	PVI_REQ_AC_CURRENT Tag = 0x020AC003
+	// Value der Anfrage beinhaltet die angefragte Phase
+	PVI_REQ_AC_APPARENTPOWER Tag = 0x020AC004
+	// Value der Anfrage beinhaltet die angefragte Phase
+	PVI_REQ_AC_REACTIVEPOWER Tag = 0x020AC005
+	// Value der Anfrage beinhaltet die angefragte Phase
+	PVI_REQ_AC_ENERGY_ALL Tag = 0x020AC006
+	// Value der Anfrage beinhaltet die angefragte Phase
+	PVI_REQ_AC_MAX_APPARENTPOWER Tag = 0x020AC007
+	// Value der Anfrage beinhaltet die angefragte Phase
+	PVI_REQ_AC_ENERGY_DAY Tag = 0x020AC008
+	// Value der Anfrage beinhaltet die angefragte Phase
+	PVI_REQ_AC_ENERGY_GRID_CONSUMPTION Tag = 0x020AC009
+	PVI_DC_MAX_STRING_COUNT            Tag = 0x028DC000
+	// PVI_INDEX & PVI_VALUE
+	PVI_DC_POWER Tag = 0x028DC001
+	// PVI_INDEX & PVI_VALUE
+	PVI_DC_VOLTAGE Tag = 0x028DC002
+	// PVI_INDEX & PVI_VALUE
+	PVI_DC_CURRENT Tag = 0x028DC003
+	// PVI_INDEX & PVI_VALUE
+	PVI_DC_MAX_POWER Tag = 0x028DC004
+	// PVI_INDEX & PVI_VALUE
+	PVI_DC_MAX_VOLTAGE Tag = 0x028DC005
+	// PVI_INDEX & PVI_VALUE
+	PVI_DC_MIN_VOLTAGE Tag = 0x028DC006
+	// PVI_INDEX & PVI_VALUE
+	PVI_DC_MAX_CURRENT Tag = 0x028DC007
+	// PVI_INDEX & PVI_VALUE
+	PVI_DC_MIN_CURRENT Tag = 0x028DC008
+	// PVI_INDEX & PVI_VALUE
+	PVI_DC_STRING_ENERGY_ALL     Tag = 0x028DC009
+	PVI_REQ_DC_MAX_STRING_COUNT  Tag = 0x020DC000
+	PVI_REQ_DC_POWER             Tag = 0x020DC001
+	PVI_REQ_DC_VOLTAGE           Tag = 0x020DC002
+	PVI_REQ_DC_CURRENT           Tag = 0x020DC003
+	PVI_REQ_DC_MAX_POWER         Tag = 0x020DC004
+	PVI_REQ_DC_MAX_VOLTAGE       Tag = 0x020DC005
+	PVI_REQ_DC_MIN_VOLTAGE       Tag = 0x020DC006
+	PVI_REQ_DC_MAX_CURRENT       Tag = 0x020DC007
+	PVI_REQ_DC_MIN_CURRENT       Tag = 0x020DC008
+	PVI_REQ_DC_STRING_ENERGY_ALL Tag = 0x020DC009
+)
+
+// ------------------
+// NAMESPACE: Battery
+// 0x03xxxxxx
+// ------------------
+const (
+	/*
+		BAT_REQ_SPECIFICATION        Tag = 0x03000043 // Source: https://github.com/pvtom/rscp2mqtt/blob/main/RscpTags.h
+		BAT_SPECIFICATION            Tag = 0x03800043 // Source: https://github.com/pvtom/rscp2mqtt/blob/main/RscpTags.h
+		BAT_SPECIFIED_CAPACITY       Tag = 0x03800125 // Source: https://github.com/pvtom/rscp2mqtt/blob/main/RscpTags.h
+		BAT_SPECIFIED_DSCHARGE_POWER Tag = 0x03800126 // Source: https://github.com/pvtom/rscp2mqtt/blob/main/RscpTags.h
+		BAT_SPECIFIED_CHARGE_POWER   Tag = 0x03800127 // Source: https://github.com/pvtom/rscp2mqtt/blob/main/RscpTags.h
+		BAT_SPECIFIED_MAX_DCB_COUNT  Tag = 0x03800128 // Source: https://github.com/pvtom/rscp2mqtt/blob/main/RscpTags.h
+		BAT_ROLE                     Tag = 0x03800129 // Source: https://github.com/pvtom/rscp2mqtt/blob/main/RscpTags.h
+	*/
+
 	// Beinhaltet alle Anfrage-TAGs, der Container MUSS einen Index enthalten
 	BAT_REQ_DATA Tag = 0x03040000
 	// Index des angefragten Gerätes (Im Moment immer 0 bei der Batterie), kann in der Anfrage und in der Antwort vorkommen.
@@ -479,6 +664,69 @@ const (
 	// Kommt nur im BAT_DEVICE_STATE Antwort vor
 	BAT_DEVICE_IN_SERVICE Tag = 0x03860003
 	BAT_GENERAL_ERROR     Tag = 0x03FFFFFF
+)
+
+// ----------------------
+// NAMESPACE: BatteryDcdc
+// 0x04xxxxxx
+// ----------------------
+const (
+	// Beinhaltet alle Anfrage-TAGs, der Container MUSS einen Index enthalten
+	DCDC_REQ_DATA Tag = 0x04040000
+	// Index des angefragten Gerätes (0?n für die FBC Nr oder 0xFF für Gruppe), Kommt in der Anfrage und in der Antwort zum DATA-Tag vor
+	DCDC_INDEX Tag = 0x04040001
+	// Antwort mit allen Daten der REQ_DATA Anfrage
+	DCDC_DATA Tag = 0x04840000
+	// As parameter the index of the DCDC is required. Index 0 is for GroupController.
+	DCDC_REQ_I_BAT            Tag = 0x04000001
+	DCDC_REQ_U_BAT            Tag = 0x04000002
+	DCDC_REQ_P_BAT            Tag = 0x04000003
+	DCDC_REQ_I_DCL            Tag = 0x04000004
+	DCDC_REQ_U_DCL            Tag = 0x04000005
+	DCDC_REQ_P_DCL            Tag = 0x04000006
+	DCDC_REQ_FIRMWARE_VERSION Tag = 0x04000008
+	DCDC_REQ_FPGA_FIRMWARE    Tag = 0x04000009
+	DCDC_REQ_SERIAL_NUMBER    Tag = 0x0400000A
+	DCDC_REQ_BOARD_VERSION    Tag = 0x0400000B
+	DCDC_REQ_FLASH_FILE_LIST  Tag = 0x0400000C
+	DCDC_REQ_IS_FLASHING      Tag = 0x0400000E
+	DCDC_REQ_FLASH            Tag = 0x0400000F
+	DCDC_REQ_STATUS           Tag = 0x04000010
+	DCDC_REQ_STATUS_AS_STRING Tag = 0x04000013
+	DCDC_I_BAT                Tag = 0x04800001
+	DCDC_U_BAT                Tag = 0x04800002
+	DCDC_P_BAT                Tag = 0x04800003
+	DCDC_I_DCL                Tag = 0x04800004
+	DCDC_U_DCL                Tag = 0x04800005
+	DCDC_P_DCL                Tag = 0x04800006
+	DCDC_FIRMWARE_VERSION     Tag = 0x04800008
+	DCDC_FPGA_FIRMWARE        Tag = 0x04800009
+	DCDC_SERIAL_NUMBER        Tag = 0x0480000A
+	DCDC_BOARD_VERSION        Tag = 0x0480000B
+	DCDC_FLASH_FILE_LIST      Tag = 0x0480000C
+	DCDC_FLASH_FILE           Tag = 0x0480000D
+	DCDC_IS_FLASHING          Tag = 0x0480000E
+	DCDC_FLASH                Tag = 0x0480000F
+	DCDC_STATUS               Tag = 0x04800010
+	DCDC_STATE                Tag = 0x04800011
+	DCDC_SUBSTATE             Tag = 0x04800012
+	DCDC_STATUS_AS_STRING     Tag = 0x04800013
+	DCDC_STATE_AS_STRING      Tag = 0x04800014
+	DCDC_SUBSTATE_AS_STRING   Tag = 0x04800015
+	DCDC_REQ_DEVICE_STATE     Tag = 0x04060000
+	// DEVICE_CONNECTED & DEVICE_WORKING & DEVICE_IN_SERVICE
+	DCDC_DEVICE_STATE      Tag = 0x04860000
+	DCDC_DEVICE_CONNECTED  Tag = 0x04860001
+	DCDC_DEVICE_WORKING    Tag = 0x04860002
+	DCDC_DEVICE_IN_SERVICE Tag = 0x04860003
+	DCDC_GENERAL_ERROR     Tag = 0x04FFFFFF
+)
+
+// ---------------------
+// NAMESPACE: PowerMeter
+// 0x05xxxxxx
+// ---------------------
+const (
 	// Beinhaltet alle Anfrage-TAGs, der Container MUSS einen Index enthalten
 	PM_REQ_DATA Tag = 0x05040000
 	// Index des angefragten Gerätes (0?x), muss in Anfrage und ist in Antwort enthalten
@@ -597,202 +845,89 @@ const (
 	PM_DEVICE_WORKING    Tag = 0x05860002
 	PM_DEVICE_IN_SERVICE Tag = 0x05860003
 	PM_GENERAL_ERROR     Tag = 0x05FFFFFF
-	// Beinhaltet alle Anfrage-TAGs, der Container MUSS einen Index enthalten
-	DCDC_REQ_DATA Tag = 0x04040000
-	// Index des angefragten Gerätes (0?n für die FBC Nr oder 0xFF für Gruppe), Kommt in der Anfrage und in der Antwort zum DATA-Tag vor
-	DCDC_INDEX Tag = 0x04040001
-	// Antwort mit allen Daten der REQ_DATA Anfrage
-	DCDC_DATA Tag = 0x04840000
-	// As parameter the index of the DCDC is required. Index 0 is for GroupController.
-	DCDC_REQ_I_BAT            Tag = 0x04000001
-	DCDC_REQ_U_BAT            Tag = 0x04000002
-	DCDC_REQ_P_BAT            Tag = 0x04000003
-	DCDC_REQ_I_DCL            Tag = 0x04000004
-	DCDC_REQ_U_DCL            Tag = 0x04000005
-	DCDC_REQ_P_DCL            Tag = 0x04000006
-	DCDC_REQ_FIRMWARE_VERSION Tag = 0x04000008
-	DCDC_REQ_FPGA_FIRMWARE    Tag = 0x04000009
-	DCDC_REQ_SERIAL_NUMBER    Tag = 0x0400000A
-	DCDC_REQ_BOARD_VERSION    Tag = 0x0400000B
-	DCDC_REQ_FLASH_FILE_LIST  Tag = 0x0400000C
-	DCDC_REQ_IS_FLASHING      Tag = 0x0400000E
-	DCDC_REQ_FLASH            Tag = 0x0400000F
-	DCDC_REQ_STATUS           Tag = 0x04000010
-	DCDC_REQ_STATUS_AS_STRING Tag = 0x04000013
-	DCDC_I_BAT                Tag = 0x04800001
-	DCDC_U_BAT                Tag = 0x04800002
-	DCDC_P_BAT                Tag = 0x04800003
-	DCDC_I_DCL                Tag = 0x04800004
-	DCDC_U_DCL                Tag = 0x04800005
-	DCDC_P_DCL                Tag = 0x04800006
-	DCDC_FIRMWARE_VERSION     Tag = 0x04800008
-	DCDC_FPGA_FIRMWARE        Tag = 0x04800009
-	DCDC_SERIAL_NUMBER        Tag = 0x0480000A
-	DCDC_BOARD_VERSION        Tag = 0x0480000B
-	DCDC_FLASH_FILE_LIST      Tag = 0x0480000C
-	DCDC_FLASH_FILE           Tag = 0x0480000D
-	DCDC_IS_FLASHING          Tag = 0x0480000E
-	DCDC_FLASH                Tag = 0x0480000F
-	DCDC_STATUS               Tag = 0x04800010
-	DCDC_STATE                Tag = 0x04800011
-	DCDC_SUBSTATE             Tag = 0x04800012
-	DCDC_STATUS_AS_STRING     Tag = 0x04800013
-	DCDC_STATE_AS_STRING      Tag = 0x04800014
-	DCDC_SUBSTATE_AS_STRING   Tag = 0x04800015
-	DCDC_REQ_DEVICE_STATE     Tag = 0x04060000
-	// DEVICE_CONNECTED & DEVICE_WORKING & DEVICE_IN_SERVICE
-	DCDC_DEVICE_STATE      Tag = 0x04860000
-	DCDC_DEVICE_CONNECTED  Tag = 0x04860001
-	DCDC_DEVICE_WORKING    Tag = 0x04860002
-	DCDC_DEVICE_IN_SERVICE Tag = 0x04860003
-	DCDC_GENERAL_ERROR     Tag = 0x04FFFFFF
-	// PVI_INDEX & PVI_... Antwort mit allen Daten der REQ_DATA Anfrage
-	PVI_DATA Tag = 0x02840000
-	// PVI_INDEX & PVI_REQ...  Beinhaltet alle Anfrage-TAGs, der Container MUSS einen Index enthalten
-	PVI_REQ_DATA Tag = 0x02040000
-	// Index des angefragten Gerätes (0?x), Muss in Anfrage und Antwort zum DATA-Tag vorkommen
-	PVI_INDEX Tag = 0x02040001
-	// dataType gibt den jeweiligen Daten Typ zurück!
-	PVI_VALUE            Tag = 0x02040005
-	PVI_GENERAL_ERROR    Tag = 0x02FFFFFF
-	PVI_ON_GRID          Tag = 0x02800001
-	PVI_REQ_ON_GRID      Tag = 0x02000001
-	PVI_STATE            Tag = 0x02800002
-	PVI_REQ_STATE        Tag = 0x02000002
-	PVI_LAST_ERROR       Tag = 0x02800003
-	PVI_REQ_LAST_ERROR   Tag = 0x02000003
-	PVI_FLASH_FILE       Tag = 0x02800007
-	PVI_REQ_DEVICE_STATE Tag = 0x02060000
-	// DEVICE_CONNECTED & DEVICE_WORKING & DEVICE_IN_SERVICE
-	PVI_DEVICE_STATE      Tag = 0x02860000
-	PVI_DEVICE_CONNECTED  Tag = 0x02860001
-	PVI_DEVICE_WORKING    Tag = 0x02860002
-	PVI_DEVICE_IN_SERVICE Tag = 0x02860003
-	PVI_REQ_TYPE          Tag = 0x02000009
-	// 1=SOLU 2=KACO 3=E3DC_E
-	PVI_TYPE Tag = 0x02800009
-	// PVI_COS_PHI_VALUE & PVI_COS_PHI_IS_AKTIV & PVI_COS_PHI_EXCITED
-	PVI_COS_PHI     Tag = 0x02800060
-	PVI_REQ_COS_PHI Tag = 0x02000060
-	// PVI_COS_PHI_VALUE & PVI_COS_PHI_IS_AKTIV & PVI_COS_PHI_EXCITED
-	PVI_REQ_SET_COS_PHI  Tag = 0x02000061
-	PVI_COS_PHI_VALUE    Tag = 0x02000062
-	PVI_COS_PHI_IS_AKTIV Tag = 0x02000063
-	PVI_COS_PHI_EXCITED  Tag = 0x02000064
-	// PVI_VOLTAGE_MONITORING_THRESHOLD_TOP &
-	// PVI_VOLTAGE_MONITORING_THRESHOLD_BOTTOM &
-	// PVI_VOLTAGE_MONITORING_SLOPE_UP &
-	// PVI_VOLTAGE_MONITORING_SLOPE_DOWN
-	PVI_VOLTAGE_MONITORING                  Tag = 0x02800070
-	PVI_REQ_VOLTAGE_MONITORING              Tag = 0x02000070
-	PVI_VOLTAGE_MONITORING_THRESHOLD_TOP    Tag = 0x02000072
-	PVI_VOLTAGE_MONITORING_THRESHOLD_BOTTOM Tag = 0x02000073
-	PVI_VOLTAGE_MONITORING_SLOPE_UP         Tag = 0x02000074
-	PVI_VOLTAGE_MONITORING_SLOPE_DOWN       Tag = 0x02000075
-	// PVI_FREQUENCY_UNDER & PVI_FREQUENCY_OVER
-	PVI_FREQUENCY_UNDER_OVER     Tag = 0x02800080
-	PVI_REQ_FREQUENCY_UNDER_OVER Tag = 0x02000080
-	PVI_FREQUENCY_UNDER          Tag = 0x02000082
-	PVI_FREQUENCY_OVER           Tag = 0x02000083
-	// Mode:
-	//  IdleMode = 0,
-	//  NormalMode = 1,
-	//  GridChargeMode = 2,
-	//  BackupPowerMode = 3
-	PVI_SYSTEM_MODE     Tag = 0x02800085
-	PVI_REQ_SYSTEM_MODE Tag = 0x02000085
-	// Mode:
-	//  PVI ON 1
-	//  PVI OFF 0
-	//  PVI ON_FORCE 101
-	//  PVI OFF_FORCE 100
-	PVI_POWER_MODE     Tag = 0x02800087
-	PVI_REQ_POWER_MODE Tag = 0x02000087
-	// PVI_INDEX & PVI_VALUE
-	PVI_TEMPERATURE           Tag = 0x02800100
-	PVI_REQ_TEMPERATURE       Tag = 0x02000100
-	PVI_TEMPERATURE_COUNT     Tag = 0x02800101
-	PVI_REQ_TEMPERATURE_COUNT Tag = 0x02000101
-	PVI_MAX_TEMPERATURE       Tag = 0x02800102
-	PVI_REQ_MAX_TEMPERATURE   Tag = 0x02000102
-	PVI_MIN_TEMPERATURE       Tag = 0x02800103
-	PVI_REQ_MIN_TEMPERATURE   Tag = 0x02000103
-	PVI_SERIAL_NUMBER         Tag = 0x028ABC01
-	PVI_REQ_SERIAL_NUMBER     Tag = 0x020ABC01
-	// PVI_VERSION_MAIN |& PVI_VERSION_PIC |& ?.
-	PVI_VERSION            Tag = 0x028ABC02
-	PVI_REQ_VERSION        Tag = 0x020ABC02
-	PVI_VERSION_MAIN       Tag = 0x020ABC03
-	PVI_VERSION_PIC        Tag = 0x020ABC04
-	PVI_AC_MAX_PHASE_COUNT Tag = 0x028AC000
-	// PVI_INDEX & PVI_VALUE
-	PVI_AC_POWER Tag = 0x028AC001
-	// PVI_INDEX & PVI_VALUE
-	PVI_AC_VOLTAGE Tag = 0x028AC002
-	// PVI_INDEX & PVI_VALUE
-	PVI_AC_CURRENT Tag = 0x028AC003
-	// PVI_INDEX & PVI_VALUE
-	PVI_AC_APPARENTPOWER Tag = 0x028AC004
-	// PVI_INDEX & PVI_VALUE
-	PVI_AC_REACTIVEPOWER Tag = 0x028AC005
-	// PVI_INDEX & PVI_VALUE
-	PVI_AC_ENERGY_ALL Tag = 0x028AC006
-	// PVI_INDEX & PVI_VALUE
-	PVI_AC_MAX_APPARENTPOWER Tag = 0x028AC007
-	// PVI_INDEX & PVI_VALUE
-	PVI_AC_ENERGY_DAY Tag = 0x028AC008
-	// PVI_INDEX & PVI_VALUE
-	PVI_AC_ENERGY_GRID_CONSUMPTION Tag = 0x028AC009
-	PVI_REQ_AC_MAX_PHASE_COUNT     Tag = 0x020AC000
-	// Value der Anfrage beinhaltet die angefragte Phase
-	PVI_REQ_AC_POWER Tag = 0x020AC001
-	// Value der Anfrage beinhaltet die angefragte Phase
-	PVI_REQ_AC_VOLTAGE Tag = 0x020AC002
-	// Value der Anfrage beinhaltet die angefragte Phase
-	PVI_REQ_AC_CURRENT Tag = 0x020AC003
-	// Value der Anfrage beinhaltet die angefragte Phase
-	PVI_REQ_AC_APPARENTPOWER Tag = 0x020AC004
-	// Value der Anfrage beinhaltet die angefragte Phase
-	PVI_REQ_AC_REACTIVEPOWER Tag = 0x020AC005
-	// Value der Anfrage beinhaltet die angefragte Phase
-	PVI_REQ_AC_ENERGY_ALL Tag = 0x020AC006
-	// Value der Anfrage beinhaltet die angefragte Phase
-	PVI_REQ_AC_MAX_APPARENTPOWER Tag = 0x020AC007
-	// Value der Anfrage beinhaltet die angefragte Phase
-	PVI_REQ_AC_ENERGY_DAY Tag = 0x020AC008
-	// Value der Anfrage beinhaltet die angefragte Phase
-	PVI_REQ_AC_ENERGY_GRID_CONSUMPTION Tag = 0x020AC009
-	PVI_DC_MAX_STRING_COUNT            Tag = 0x028DC000
-	// PVI_INDEX & PVI_VALUE
-	PVI_DC_POWER Tag = 0x028DC001
-	// PVI_INDEX & PVI_VALUE
-	PVI_DC_VOLTAGE Tag = 0x028DC002
-	// PVI_INDEX & PVI_VALUE
-	PVI_DC_CURRENT Tag = 0x028DC003
-	// PVI_INDEX & PVI_VALUE
-	PVI_DC_MAX_POWER Tag = 0x028DC004
-	// PVI_INDEX & PVI_VALUE
-	PVI_DC_MAX_VOLTAGE Tag = 0x028DC005
-	// PVI_INDEX & PVI_VALUE
-	PVI_DC_MIN_VOLTAGE Tag = 0x028DC006
-	// PVI_INDEX & PVI_VALUE
-	PVI_DC_MAX_CURRENT Tag = 0x028DC007
-	// PVI_INDEX & PVI_VALUE
-	PVI_DC_MIN_CURRENT Tag = 0x028DC008
-	// PVI_INDEX & PVI_VALUE
-	PVI_DC_STRING_ENERGY_ALL     Tag = 0x028DC009
-	PVI_REQ_DC_MAX_STRING_COUNT  Tag = 0x020DC000
-	PVI_REQ_DC_POWER             Tag = 0x020DC001
-	PVI_REQ_DC_VOLTAGE           Tag = 0x020DC002
-	PVI_REQ_DC_CURRENT           Tag = 0x020DC003
-	PVI_REQ_DC_MAX_POWER         Tag = 0x020DC004
-	PVI_REQ_DC_MAX_VOLTAGE       Tag = 0x020DC005
-	PVI_REQ_DC_MIN_VOLTAGE       Tag = 0x020DC006
-	PVI_REQ_DC_MAX_CURRENT       Tag = 0x020DC007
-	PVI_REQ_DC_MIN_CURRENT       Tag = 0x020DC008
-	PVI_REQ_DC_STRING_ENERGY_ALL Tag = 0x020DC009
-	HA_REQ_DATAPOINT_LIST        Tag = 0x09000001
-	HA_REQ_ACTUATOR_STATES       Tag = 0x09000010
+)
+
+// -------------------
+// NAMESPACE: Database
+// 0x06xxxxxx
+// -------------------
+const (
+	// Muss die TAGs DB_REQ_HISTORY_TIME_START, DB_REQ_HISTORY_TIME_INTERVAL, DB_REQ_HISTORY_TIME_SPAN enthalten
+	DB_REQ_HISTORY_DATA_DAY      Tag = 0x06000100
+	DB_REQ_HISTORY_TIME_START    Tag = 0x06000101
+	DB_REQ_HISTORY_TIME_INTERVAL Tag = 0x06000102
+	DB_REQ_HISTORY_TIME_SPAN     Tag = 0x06000103
+	// Muss die TAGs DB_REQ_HISTORY_TIME_START, DB_REQ_HISTORY_TIME_INTERVAL, DB_REQ_HISTORY_TIME_SPAN enthalten
+	DB_REQ_HISTORY_DATA_WEEK Tag = 0x06000200
+	// Muss die TAGs DB_REQ_HISTORY_TIME_START, DB_REQ_HISTORY_TIME_INTERVAL, DB_REQ_HISTORY_TIME_SPAN enthalten
+	DB_REQ_HISTORY_DATA_MONTH Tag = 0x06000300
+	// Muss die TAGs DB_REQ_HISTORY_TIME_START, DB_REQ_HISTORY_TIME_INTERVAL, DB_REQ_HISTORY_TIME_SPAN enthalten
+	DB_REQ_HISTORY_DATA_YEAR Tag = 0x06000400
+	// Die Summe zwischen der Energien über den Zeitraum
+	DB_SUM_CONTAINER Tag = 0x06800010
+	// Meist mehr als einer von diesen Kontainern in einem HISTORY_DATA Kontainer
+	DB_VALUE_CONTAINER Tag = 0x06800020
+	// Diagrammposition in Prozent
+	DB_GRAPH_INDEX         Tag = 0x06800001
+	DB_BAT_POWER_IN        Tag = 0x06800002
+	DB_BAT_POWER_OUT       Tag = 0x06800003
+	DB_DC_POWER            Tag = 0x06800004
+	DB_GRID_POWER_IN       Tag = 0x06800005
+	DB_GRID_POWER_OUT      Tag = 0x06800006
+	DB_CONSUMPTION         Tag = 0x06800007
+	DB_PM_0_POWER          Tag = 0x06800008
+	DB_PM_1_POWER          Tag = 0x06800009
+	DB_BAT_CHARGE_LEVEL    Tag = 0x0680000A
+	DB_BAT_CYCLE_COUNT     Tag = 0x0680000B
+	DB_CONSUMED_PRODUCTION Tag = 0x0680000C
+	DB_AUTARKY             Tag = 0x0680000D
+	// Beinhaltet die Container DB_SUM_CONTAINER, VALUE_CONTAINER
+	DB_HISTORY_DATA_DAY Tag = 0x06800100
+	// Beinhaltet die Container DB_SUM_CONTAINER, VALUE_CONTAINER
+	DB_HISTORY_DATA_WEEK Tag = 0x06800200
+	// Beinhaltet die Container DB_SUM_CONTAINER, VALUE_CONTAINER
+	DB_HISTORY_DATA_MONTH Tag = 0x06800300
+	// Beinhaltet die Container DB_SUM_CONTAINER, VALUE_CONTAINER
+	DB_HISTORY_DATA_YEAR Tag = 0x06800400
+	DB_PAR_TIME_MIN      Tag = 0x06B00000
+	DB_PAR_TIME_MAX      Tag = 0x06B00001
+	DB_PARAM_ROW         Tag = 0x06B00002
+	DB_PARAM_COLUMN      Tag = 0x06B00003
+	DB_PARAM_INDEX       Tag = 0x06B00004
+	DB_PARAM_VALUE       Tag = 0x06B00005
+	DB_PARAM_MAX_ROWS    Tag = 0x06B00006
+	DB_PARAM_TIME        Tag = 0x06B00007
+	DB_PARAM_VERSION     Tag = 0x06B00008
+	DB_PARAM_HEADER      Tag = 0x06B00009
+)
+
+// --------------
+// NAMESPACE: FMS
+// 0x07xxxxxx
+// --------------
+const ()
+
+// --------------
+// NAMESPACE: SRV
+// 0x08xxxxxx
+// undocumented
+// --------------
+const (
+	SRV_REQ_IS_ONLINE Tag = 0x08000001
+	SRV_IS_ONLINE     Tag = 0x08800001
+	SRV_REQ_ADD_USER  Tag = 0x08000002
+	SRV_ADD_USER      Tag = 0x08800002
+	SRV_GENERAL_ERROR Tag = 0x08FFFFFF
+)
+
+// --------------
+// NAMESPACE: HA
+// 0x09xxxxxx
+// undocumented
+// --------------
+const (
+	HA_REQ_DATAPOINT_LIST  Tag = 0x09000001
+	HA_REQ_ACTUATOR_STATES Tag = 0x09000010
 	// Beinhaltet
 	// DATAPOINT_INDEX, DATAPOINT_TYPE, DATAPOINT_NAME, DATAPOINT_NAME,
 	// DATAPOINT_DESCRIPTIONS, DATAPOINT_DESCRIPTION_VALUE, DATAPOINT_DESCRIPTION_VALUE
@@ -847,16 +982,19 @@ const (
 	HA_DESCRIPTIONS_CHANGE Tag = 0x09800050
 	HA_REQ_DEVICE_STATE    Tag = 0x09060000
 	// DEVICE_CONNECTED & DEVICE_WORKING & DEVICE_IN_SERVICE
-	HA_DEVICE_STATE              Tag = 0x09860000
-	HA_DEVICE_CONNECTED          Tag = 0x09860001
-	HA_DEVICE_WORKING            Tag = 0x09860002
-	HA_DEVICE_IN_SERVICE         Tag = 0x09860003
-	HA_GENERAL_ERROR             Tag = 0x09FFFFFF
-	SRV_REQ_IS_ONLINE            Tag = 0x08000001
-	SRV_IS_ONLINE                Tag = 0x08800001
-	SRV_REQ_ADD_USER             Tag = 0x08000002
-	SRV_ADD_USER                 Tag = 0x08800002
-	SRV_GENERAL_ERROR            Tag = 0x08FFFFFF
+	HA_DEVICE_STATE      Tag = 0x09860000
+	HA_DEVICE_CONNECTED  Tag = 0x09860001
+	HA_DEVICE_WORKING    Tag = 0x09860002
+	HA_DEVICE_IN_SERVICE Tag = 0x09860003
+	HA_GENERAL_ERROR     Tag = 0x09FFFFFF
+)
+
+// --------------
+// NAMESPACE: INFO
+// 0x0Axxxxxx
+// undocumented
+// --------------
+const (
 	INFO_REQ_SERIAL_NUMBER       Tag = 0x0A000001
 	INFO_REQ_PRODUCTION_DATE     Tag = 0x0A000002
 	INFO_REQ_MODULES_SW_VERSIONS Tag = 0x0A000003
@@ -897,16 +1035,24 @@ const (
 	INFO_UTC_TIME          Tag = 0x0A80000F
 	INFO_TIME_ZONE         Tag = 0x0A800010
 	// Beinhaltet die TAGs INFO_SERIAL_NUMBER, INFO_PRODUCTION_DATE, INFO_MAC_ADDRESS
-	INFO_INFO                  Tag = 0x0A800011
-	INFO_SET_IP_ADDRESS        Tag = 0x0A800012
-	INFO_SET_SUBNET_MASK       Tag = 0x0A800013
-	INFO_SET_DHCP_STATUS       Tag = 0x0A800014
-	INFO_SET_GATEWAY           Tag = 0x0A800015
-	INFO_SET_DNS               Tag = 0x0A800016
-	INFO_SET_TIME              Tag = 0x0A800017
-	INFO_SET_TIME_ZONE         Tag = 0x0A800018
-	INFO_SW_RELEASE            Tag = 0x0A800019
-	INFO_GENERAL_ERROR         Tag = 0x0AFFFFFF
+	INFO_INFO            Tag = 0x0A800011
+	INFO_SET_IP_ADDRESS  Tag = 0x0A800012
+	INFO_SET_SUBNET_MASK Tag = 0x0A800013
+	INFO_SET_DHCP_STATUS Tag = 0x0A800014
+	INFO_SET_GATEWAY     Tag = 0x0A800015
+	INFO_SET_DNS         Tag = 0x0A800016
+	INFO_SET_TIME        Tag = 0x0A800017
+	INFO_SET_TIME_ZONE   Tag = 0x0A800018
+	INFO_SW_RELEASE      Tag = 0x0A800019
+	INFO_GENERAL_ERROR   Tag = 0x0AFFFFFF
+)
+
+// --------------
+// NAMESPACE: EP
+// 0x0Bxxxxxx
+// undocumented
+// --------------
+const (
 	EP_REQ_IS_READY_FOR_SWITCH Tag = 0x0B000003
 	EP_REQ_IS_GRID_CONNECTED   Tag = 0x0B000004
 	EP_REQ_IS_ISLAND_GRID      Tag = 0x0B000005
@@ -918,53 +1064,14 @@ const (
 	EP_IS_INVALID_STATE        Tag = 0x0B800006
 	EP_IS_POSSIBLE             Tag = 0x0B800007
 	EP_GENERAL_ERROR           Tag = 0x0BFFFFFF
-	// Muss die TAGs DB_REQ_HISTORY_TIME_START, DB_REQ_HISTORY_TIME_INTERVAL, DB_REQ_HISTORY_TIME_SPAN enthalten
-	DB_REQ_HISTORY_DATA_DAY      Tag = 0x06000100
-	DB_REQ_HISTORY_TIME_START    Tag = 0x06000101
-	DB_REQ_HISTORY_TIME_INTERVAL Tag = 0x06000102
-	DB_REQ_HISTORY_TIME_SPAN     Tag = 0x06000103
-	// Muss die TAGs DB_REQ_HISTORY_TIME_START, DB_REQ_HISTORY_TIME_INTERVAL, DB_REQ_HISTORY_TIME_SPAN enthalten
-	DB_REQ_HISTORY_DATA_WEEK Tag = 0x06000200
-	// Muss die TAGs DB_REQ_HISTORY_TIME_START, DB_REQ_HISTORY_TIME_INTERVAL, DB_REQ_HISTORY_TIME_SPAN enthalten
-	DB_REQ_HISTORY_DATA_MONTH Tag = 0x06000300
-	// Muss die TAGs DB_REQ_HISTORY_TIME_START, DB_REQ_HISTORY_TIME_INTERVAL, DB_REQ_HISTORY_TIME_SPAN enthalten
-	DB_REQ_HISTORY_DATA_YEAR Tag = 0x06000400
-	// Die Summe zwischen der Energien über den Zeitraum
-	DB_SUM_CONTAINER Tag = 0x06800010
-	// Meist mehr als einer von diesen Kontainern in einem HISTORY_DATA Kontainer
-	DB_VALUE_CONTAINER Tag = 0x06800020
-	// Diagrammposition in Prozent
-	DB_GRAPH_INDEX         Tag = 0x06800001
-	DB_BAT_POWER_IN        Tag = 0x06800002
-	DB_BAT_POWER_OUT       Tag = 0x06800003
-	DB_DC_POWER            Tag = 0x06800004
-	DB_GRID_POWER_IN       Tag = 0x06800005
-	DB_GRID_POWER_OUT      Tag = 0x06800006
-	DB_CONSUMPTION         Tag = 0x06800007
-	DB_PM_0_POWER          Tag = 0x06800008
-	DB_PM_1_POWER          Tag = 0x06800009
-	DB_BAT_CHARGE_LEVEL    Tag = 0x0680000A
-	DB_BAT_CYCLE_COUNT     Tag = 0x0680000B
-	DB_CONSUMED_PRODUCTION Tag = 0x0680000C
-	DB_AUTARKY             Tag = 0x0680000D
-	// Beinhaltet die Container DB_SUM_CONTAINER, VALUE_CONTAINER
-	DB_HISTORY_DATA_DAY Tag = 0x06800100
-	// Beinhaltet die Container DB_SUM_CONTAINER, VALUE_CONTAINER
-	DB_HISTORY_DATA_WEEK Tag = 0x06800200
-	// Beinhaltet die Container DB_SUM_CONTAINER, VALUE_CONTAINER
-	DB_HISTORY_DATA_MONTH Tag = 0x06800300
-	// Beinhaltet die Container DB_SUM_CONTAINER, VALUE_CONTAINER
-	DB_HISTORY_DATA_YEAR  Tag = 0x06800400
-	DB_PAR_TIME_MIN       Tag = 0x06B00000
-	DB_PAR_TIME_MAX       Tag = 0x06B00001
-	DB_PARAM_ROW          Tag = 0x06B00002
-	DB_PARAM_COLUMN       Tag = 0x06B00003
-	DB_PARAM_INDEX        Tag = 0x06B00004
-	DB_PARAM_VALUE        Tag = 0x06B00005
-	DB_PARAM_MAX_ROWS     Tag = 0x06B00006
-	DB_PARAM_TIME         Tag = 0x06B00007
-	DB_PARAM_VERSION      Tag = 0x06B00008
-	DB_PARAM_HEADER       Tag = 0x06B00009
+)
+
+// --------------
+// NAMESPACE: SYS
+// 0x0Cxxxxxx
+// undocumented
+// --------------
+const (
 	SYS_REQ_SYSTEM_REBOOT Tag = 0x0C000001
 	// Erläuterung
 	//  0    - Reboot kann momentan nicht durchgeführt -> später nochmal versuchen (im Moment nicht in gebrauch)
@@ -980,7 +1087,15 @@ const (
 	SYS_RESTART_APPLICATION Tag = 0x0C800003
 	SYS_SCRIPT_FILE         Tag = 0x0C800011
 	SYS_GENERAL_ERROR       Tag = 0x0CFFFFFF
-	UM_REQ_UPDATE_STATUS    Tag = 0x0D000001
+)
+
+// -------------
+// NAMESPACE: UM
+// 0x0Dxxxxxx
+// undocumented
+// -------------
+const (
+	UM_REQ_UPDATE_STATUS Tag = 0x0D000001
 	// Status:
 	//  IDLE = 0x00
 	//  UPDATE_CHECK_RUNNING = 0x01
@@ -993,6 +1108,14 @@ const (
 	//  1 = check wird ausgeführt, wenn was neues entdeckt wird, wird es installiert
 	UM_CHECK_FOR_UPDATES Tag = 0x0D800003
 	UM_GENERAL_ERROR     Tag = 0x0DFFFFFF
+)
+
+// -------------
+// NAMESPACE: WB
+// 0x0Exxxxxx
+// undocumented
+// -------------
+const (
 	// Beinhaltet alle Anfrage-TAGs, der Container MUSS einen Index enthalten
 	WB_REQ_DATA Tag = 0x0E040000
 	// Index des angefragten Gerätes (0?x) 0xFF -> GroupController
@@ -1211,3 +1334,325 @@ const (
 	//  Byte 6: Display Design, uint8
 	WB_RSP_PARAM_1 Tag = 0x0E84101B
 )
+
+// ---------------
+// NAMESPACE: PTDB
+// 0x0Fxxxxxx
+// undocumented
+// ---------------
+const ()
+
+// --------------
+// NAMESPACE: LED
+// 0x10xxxxxx
+// undocumented
+// --------------
+const ()
+
+// ---------------
+// NAMESPACE: DIAG
+// 0x11xxxxxx
+// undocumented
+// ---------------
+const ()
+
+// --------------
+// NAMESPACE: SGR
+// 0x12xxxxxx
+// undocumented
+// --------------
+const ()
+
+// --------------
+// NAMESPACE: MBS
+// 0x13xxxxxx
+// undocumented
+// --------------
+const ()
+
+// -------------
+// NAMESPACE: EH
+// 0x14xxxxxx
+// undocumented
+// -------------
+const ()
+
+// ----------------
+// NAMESPACE: UPNPC
+// 0x15xxxxxx
+// undocumented
+// ----------------
+const ()
+
+// --------------
+// NAMESPACE: KNX
+// 0x16xxxxxx
+// undocumented
+// --------------
+const ()
+
+// ----------------
+// NAMESPACE: EMSHB
+// 0x17xxxxxx
+// undocumented
+// ----------------
+const ()
+
+// ---------------
+// NAMESPACE: MYPV
+// 0x18xxxxxx
+// undocumented
+// ---------------
+const ()
+
+// ---------------
+// NAMESPACE: GPIO
+// 0x19xxxxxx
+// undocumented
+// ---------------
+const ()
+
+// ---------------
+// NAMESPACE: FARM
+// 0x1Axxxxxx
+// undocumented
+// ---------------
+const ()
+
+// -------------
+// NAMESPACE: SE
+// 0x1Bxxxxxx
+// undocumented
+// -------------
+const ()
+
+// --------------
+// NAMESPACE: QPI
+// 0x1Cxxxxxx
+// undocumented
+// --------------
+const ()
+
+// ---------------
+// NAMESPACE: GAPP
+// 0x1Dxxxxxx
+// undocumented
+// ---------------
+const ()
+
+// ----------------
+// NAMESPACE: EMSPR
+// 0x1Exxxxxx
+// undocumented
+// ----------------
+const ()
+
+// ----------------
+// NAMESPACE: IOBOX
+// 0x1Fxxxxxx
+// undocumented
+// ----------------
+const ()
+
+// --------------
+// NAMESPACE: WBD
+// 0x20xxxxxx
+// undocumented
+// --------------
+const ()
+
+// ---------------
+// NAMESPACE: REFU
+// 0x21xxxxxx
+// undocumented
+// ---------------
+const ()
+
+// --------------
+// NAMESPACE: OVP
+// 0x22xxxxxx
+// undocumented
+// --------------
+const ()
+
+// ------------------
+// NAMESPACE: NETWORK
+// 0x23xxxxxx
+// undocumented
+// ------------------
+const ()
+
+// -----------------
+// NAMESPACE: WBAUTH
+// 0x24xxxxxx
+// undocumented
+// -----------------
+const ()
+
+// ---------------
+// NAMESPACE: PLAY
+// 0x25xxxxxx
+// undocumented
+// ---------------
+const ()
+
+// --------------
+// NAMESPACE: GDI
+// 0x26xxxxxx
+// undocumented
+// --------------
+const ()
+
+// --------------
+// NAMESPACE: SCM
+// 0x27xxxxxx
+// undocumented
+// --------------
+const ()
+
+// ----------------
+// NAMESPACE: EEBUS
+// 0x28xxxxxx
+// undocumented
+// ----------------
+const ()
+
+// ---------------
+// NAMESPACE: SDSA
+// 0x29xxxxxx
+// undocumented
+// ---------------
+const ()
+
+// --------------
+// NAMESPACE: ETH
+// 0x2Axxxxxx
+// undocumented
+// --------------
+const ()
+
+// --------------
+// NAMESPACE: LCT
+// 0x2Bxxxxxx
+// undocumented
+// --------------
+const ()
+
+// -------------
+// NAMESPACE: HG
+// 0x2Cxxxxxx
+// undocumented
+// -------------
+const ()
+
+// ---------------
+// NAMESPACE: OCPP
+// 0x2Dxxxxxx
+// undocumented
+// ---------------
+const ()
+
+// -------------
+// NAMESPACE: WB
+// 0x2Exxxxxx
+// undocumented
+// -------------
+const ()
+
+// -------------
+// NAMESPACE: LC
+// 0x2Fxxxxxx
+// undocumented
+// -------------
+const ()
+
+// --------------------
+// NAMESPACE: DASHBOARD
+// 0x30xxxxxx
+// undocumented
+// --------------------
+const ()
+
+// ---------------
+// NAMESPACE: UMRC
+// 0xF0xxxxxx
+// undocumented
+// ---------------
+const ()
+
+// --------------
+// NAMESPACE: LOG
+// 0xF4xxxxxx
+// undocumented
+// --------------
+const ()
+
+// --------------
+// NAMESPACE: DCL
+// 0xF5xxxxxx
+// undocumented
+// --------------
+const ()
+
+// -------------
+// NAMESPACE: CL
+// 0xF6xxxxxx
+// undocumented
+// -------------
+const ()
+
+// ---------------
+// NAMESPACE: DBRC
+// 0xF7xxxxxx
+// undocumented
+// ---------------
+const ()
+
+// -----------------
+// NAMESPACE: SERVER
+// 0xF8xxxxxx
+// undocumented
+// -----------------
+const ()
+
+// --------------
+// NAMESPACE: SYS
+// 0xF9xxxxxx
+// undocumented
+// --------------
+const ()
+
+// -------------
+// NAMESPACE: DB
+// 0xFAxxxxxx
+// undocumented
+// -------------
+const ()
+
+// -------------
+// NAMESPACE: DB
+// 0xFBxxxxxx
+// undocumented
+// -------------
+const ()
+
+// ----------------
+// NAMESPACE: GROUP
+// 0xFCxxxxxx
+// undocumented
+// ----------------
+const ()
+
+// ----------------
+// NAMESPACE: ADMIN
+// 0xFDxxxxxx
+// undocumented
+// ----------------
+const ()
+
+// ----------------
+// NAMESPACE: FINAL
+// 0xFExxxxxx
+// undocumented
+// ----------------
+const ()
