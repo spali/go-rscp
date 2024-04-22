@@ -43,8 +43,8 @@ func run() int {
 		fmt.Fprintf(os.Stderr, "Connection error: %s\n", err)
 		return 1
 	}
-	logrus.SetLevel(logrus.WarnLevel)
-	logrus.SetOutput(os.Stderr)
+	rscp.Log.SetLevel(logrus.WarnLevel)
+	rscp.Log.SetOutput(os.Stderr)
 	defer func() { _ = c.Disconnect() }() // make sure to disconnect at the end
 	{
 		//

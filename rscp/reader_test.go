@@ -10,7 +10,7 @@ import (
 
 	"github.com/azihsoyn/rijndael256"
 	"github.com/go-test/deep"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
 
 func Test_readHeader(t *testing.T) {
@@ -320,7 +320,7 @@ func Test_read(t *testing.T) {
 	}
 	for _, tt := range tests {
 		// to call debug callback function provided to log.DebugFn at least once
-		log.SetLevel(log.DebugLevel)
+		Log.SetLevel(logrus.DebugLevel)
 		t.Run(tt.name, func(t *testing.T) {
 			reader := bytes.NewReader(tt.bytes)
 			err := read(reader, tt.emptydata, tt.size)

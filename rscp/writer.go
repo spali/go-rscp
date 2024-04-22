@@ -6,8 +6,6 @@ import (
 	"encoding/binary"
 	"hash/crc32"
 	"time"
-
-	log "github.com/sirupsen/logrus"
 )
 
 // Now returns the current local time.
@@ -113,7 +111,7 @@ func writeFrame(messages []Message, useChecksum bool) ([]byte, error) {
 
 // Write writes the messages and returns the encrypted rscp frame.
 func Write(mode *cipher.BlockMode, messages []Message, useChecksum bool) ([]byte, error) {
-	log.Debugf("write %s", messages)
+	Log.Debugf("write %s", messages)
 	var (
 		d   []byte
 		err error
@@ -121,13 +119,13 @@ func Write(mode *cipher.BlockMode, messages []Message, useChecksum bool) ([]byte
 	if d, err = writeFrame(messages, useChecksum); err != nil {
 		return nil, err
 	}
-	log.Tracef("write plain %#v", d)
+	Log.Tracef("write plain %#v", d)
 	// padding
 	if len(d)%int(RSCP_CRYPT_BLOCK_SIZE) != 0 {
 		d = append(d, bytes.Repeat([]byte{RSCP_CRYPT_BLOCK_PADDING}, int(RSCP_CRYPT_BLOCK_SIZE)-len(d)%int(RSCP_CRYPT_BLOCK_SIZE))...)
 	}
 	// encrypt
 	(*mode).CryptBlocks(d, d)
-	log.Tracef("write crypt %#v", d)
+	Log.Tracef("write crypt %#v", d)
 	return d, nil
 }

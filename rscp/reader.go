@@ -9,8 +9,6 @@ import (
 	"math/big"
 	"reflect"
 	"time"
-
-	log "github.com/sirupsen/logrus"
 )
 
 // readHeader reads and checks the header
@@ -94,7 +92,7 @@ func readMessage(buf *bytes.Reader) (*Message, error) {
 		return nil, err
 	}
 	if !m.Tag.IsATag() {
-		log.Warnf("unknown tag 0x%08x received", big.NewInt(int64(m.Tag)))
+		Log.Warnf("unknown tag 0x%08x received", big.NewInt(int64(m.Tag)))
 	}
 	if err := read(buf, &m.DataType, RSCP_DATA_DATATYPE_SIZE); err != nil {
 		return nil, err
@@ -110,7 +108,7 @@ func readMessage(buf *bytes.Reader) (*Message, error) {
 	// test length against known length of data type's
 	if (m.DataType.length() != 0 || m.DataType == None) && m.DataType.length() != l {
 		// print data missed for debugging before returning the error
-		log.DebugFn(func() []interface{} {
+		Log.DebugFn(func() []interface{} {
 			b := make([]byte, l)
 			_ = read(buf, &b, l)
 			return []interface{}{fmt.Sprintf("Could not read data, due length missmatch: %#v", b)}
@@ -156,7 +154,7 @@ func Read(mode *cipher.BlockMode, buf *[]byte, crcFlag *bool, frameSize *uint32,
 		r := bytes.NewReader((*buf)[RSCP_FRAME_HEADER_SIZE:])
 		var m []Message
 		// defer logging to also trace the already read data before the error or panic
-		defer func() { log.Tracef("read plain %#v", *buf); log.Tracef("read %s", m) }()
+		defer func() { Log.Tracef("read plain %#v", *buf); Log.Tracef("read %s", m) }()
 		if err := read(r, &m, *dataSize); err != nil {
 			return nil, err
 		}

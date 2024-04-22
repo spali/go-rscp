@@ -79,10 +79,10 @@ func main() {
 		os.Exit(1)
 	}
 	if conf.debug > 0 {
-		logrus.SetLevel(logrus.Level(conf.debug))
-		logrus.SetOutput(os.Stderr)
+		rscp.Log.SetLevel(logrus.Level(conf.debug))
+		rscp.Log.SetOutput(os.Stderr)
 	} else {
-		logrus.SetLevel(logrus.PanicLevel)
+		rscp.Log.SetLevel(logrus.PanicLevel)
 	}
 	var (
 		rb  []byte
