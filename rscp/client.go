@@ -11,8 +11,10 @@ import (
 	"errors"
 
 	"github.com/azihsoyn/rijndael256"
-	log "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
+
+var Log = logrus.New()
 
 // Client for rscp protocol
 type Client struct {
@@ -102,7 +104,7 @@ func (c *Client) receive() ([]Message, error) {
 
 // connect create connection
 func (c *Client) connect() error {
-	log.Infof("Connecting to %s", c.connectionString)
+	Log.Infof("Connecting to %s", c.connectionString)
 	var (
 		conn net.Conn
 		err  error
@@ -113,31 +115,31 @@ func (c *Client) connect() error {
 	}
 	c.conn = conn
 	c.isConnected = true
-	log.Infof("successfully connected to %s", c.conn.RemoteAddr())
+	Log.Infof("successfully connected to %s", c.conn.RemoteAddr())
 	return nil
 }
 
 // authenticate authenticates the connection
 func (c *Client) authenticate() error {
-	orgLogLevel := log.GetLevel()
+	orgLogLevel := Log.GetLevel()
 	if orgLogLevel < RequiredAuthLogLevel {
-		log.Infof("hiding auth request for security, use debug >= %d to debug authentication", RequiredAuthLogLevel)
-		log.SetLevel(log.Level((math.Min(float64(orgLogLevel), float64(log.InfoLevel)))))
+		Log.Infof("hiding auth request for security, use debug >= %d to debug authentication", RequiredAuthLogLevel)
+		Log.SetLevel(logrus.Level((math.Min(float64(orgLogLevel), float64(logrus.InfoLevel)))))
 	}
 	if msg, err := CreateRequest(RSCP_REQ_AUTHENTICATION,
 		RSCP_AUTHENTICATION_USER, c.config.Username, RSCP_AUTHENTICATION_PASSWORD, c.config.Password); err != nil {
 		if orgLogLevel < RequiredAuthLogLevel {
-			log.SetLevel(orgLogLevel)
+			Log.SetLevel(orgLogLevel)
 		}
 		return err
 	} else if err := c.send([]Message{*msg}); err != nil {
 		if orgLogLevel < RequiredAuthLogLevel {
-			log.SetLevel(orgLogLevel)
+			Log.SetLevel(orgLogLevel)
 		}
 		return err
 	}
 	if orgLogLevel < RequiredAuthLogLevel {
-		log.SetLevel(orgLogLevel)
+		Log.SetLevel(orgLogLevel)
 	}
 	var (
 		messages []Message
@@ -145,7 +147,7 @@ func (c *Client) authenticate() error {
 	)
 	if messages, err = c.receive(); err != nil {
 		if errors.Is(err, io.EOF) {
-			log.Warnf("Hint: EOF during authentification usually is due a wrong rscp key")
+			Log.Warnf("Hint: EOF during authentification usually is due a wrong rscp key")
 		}
 		return fmt.Errorf("authentication error: %w", err)
 	}
@@ -170,7 +172,7 @@ func (c *Client) authenticate() error {
 		}
 	}
 	c.isAuthenticated = true
-	log.Infof("successfully authenticated (level: %s)", AuthLevel(messages[0].Value.(uint8)))
+	Log.Infof("successfully authenticated (level: %s)", AuthLevel(messages[0].Value.(uint8)))
 	return nil
 }
 
@@ -184,7 +186,7 @@ func (c *Client) Disconnect() error {
 			return err
 		}
 	}
-	log.Info("disconnected")
+	Log.Info("disconnected")
 	return nil
 }
 
