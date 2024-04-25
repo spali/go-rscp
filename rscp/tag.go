@@ -313,6 +313,7 @@ const (
 	EMS_SETTINGS_CHANGE_MARKER               Tag = 0x0180008D
 	EMS_REQ_GET_MANUAL_CHARGE                Tag = 0x0100008E
 	EMS_GET_MANUAL_CHARGE                    Tag = 0x0180008E
+	EMS_MANUAL_CHARGE_ENERGY                 Tag = 0x0100003E // Tag does not exist in any known source, name is a guess (@docolli)
 	EMS_MANUAL_CHARGE_START_COUNTER          Tag = 0x01000150
 	EMS_MANUAL_CHARGE_ACTIVE                 Tag = 0x01000151
 	EMS_MANUAL_CHARGE_ENERGY_COUNTER         Tag = 0x01000152

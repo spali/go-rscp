@@ -99,9 +99,10 @@ var dataTypeMap = map[Tag]DataType{
 	EMS_DISCHARGE_START_POWER:                Uint32,
 	EMS_POWERSAVE_ENABLED:                    Bool,
 	EMS_WEATHER_REGULATED_CHARGE_ENABLED:     Bool,
-	EMS_WEATHER_FORECAST_MODE:                Int32, // undocumented
-	EMS_RES_WEATHER_FORECAST_MODE:            Int32, // undocumented
-	EMS_MANUAL_CHARGE_START_COUNTER:          Int64, // documented as Uint32, but got Int64
+	EMS_WEATHER_FORECAST_MODE:                Int32,  // undocumented
+	EMS_RES_WEATHER_FORECAST_MODE:            Int32,  // undocumented
+	EMS_MANUAL_CHARGE_ENERGY:                 Uint32, // undocumented
+	EMS_MANUAL_CHARGE_START_COUNTER:          Int64,  // documented as Uint32, but got Int64
 	EMS_MANUAL_CHARGE_ACTIVE:                 Bool,
 	EMS_MANUAL_CHARGE_ENERGY_COUNTER:         Double64, // documented as Uint32, but got Int64
 	EMS_MANUAL_CHARGE_LASTSTART:              Timestamp,
