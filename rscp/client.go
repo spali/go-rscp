@@ -2,13 +2,12 @@ package rscp
 
 import (
 	"crypto/cipher"
+	"errors"
 	"fmt"
 	"io"
 	"math"
 	"net"
 	"time"
-
-	"errors"
 
 	"github.com/azihsoyn/rijndael256"
 	"github.com/sirupsen/logrus"
@@ -20,7 +19,6 @@ var Log = logrus.New()
 type Client struct {
 	config           ClientConfig
 	connectionString string
-	isConnected      bool
 	isAuthenticated  bool
 	conn             net.Conn
 	encrypter        cipher.BlockMode
@@ -34,15 +32,15 @@ func NewClient(config ClientConfig) (*Client, error) {
 	if err := config.check(); err != nil {
 		return nil, err
 	}
+
 	key := createAESKey(config.Key)
 	initIV := newIV()
 	cipherBlock, _ := rijndael256.NewCipher(key[:]) // implementation does not return an error
+
 	// Intitialize the Client structure.
 	c := &Client{
 		config:           config,
 		connectionString: fmt.Sprintf("%s:%d", config.Address, config.Port),
-		isConnected:      false,
-		isAuthenticated:  false,
 		encrypter:        cipher.NewCBCEncrypter(cipherBlock, initIV[:]),
 		decrypter:        cipher.NewCBCDecrypter(cipherBlock, initIV[:]),
 	}
@@ -54,11 +52,8 @@ func (c *Client) send(messages []Message) error {
 	if err := validateRequests(messages); err != nil {
 		return err
 	}
-	var (
-		msg []byte
-		err error
-	)
-	if msg, err = Write(&c.encrypter, messages, c.config.UseChecksum.(bool)); err != nil {
+	msg, err := Write(&c.encrypter, messages, c.config.UseChecksum.(bool))
+	if err != nil {
 		return err
 	}
 	if err := c.conn.SetWriteDeadline(time.Now().Add(c.config.SendTimeout)); err != nil {
@@ -84,11 +79,13 @@ func (c *Client) receive() ([]Message, error) {
 
 	for i, data := 0, make([]byte, uint32(RSCP_CRYPT_BLOCK_SIZE)*uint32(c.config.ReceiveBufferBlockSize)); ; {
 		var err error
+
 		if i, err = c.conn.Read(data); err != nil {
 			return nil, fmt.Errorf("error during receive response: %w", err)
 		} else if i == 0 {
 			return nil, ErrRscpInvalidFrameLength
 		}
+
 		switch m, err = Read(&c.decrypter, &buf, &crcFlag, &frameSize, &dataSize, data[:i]); {
 		case errors.Is(err, ErrRscpInvalidFrameLength):
 			// frame not complete
@@ -105,17 +102,15 @@ func (c *Client) receive() ([]Message, error) {
 // connect create connection
 func (c *Client) connect() error {
 	Log.Infof("Connecting to %s", c.connectionString)
-	var (
-		conn net.Conn
-		err  error
-	)
-	if conn, err = net.DialTimeout("tcp", c.connectionString, c.config.ConnectionTimeout); err != nil {
-		c.isConnected = false
+
+	conn, err := net.DialTimeout("tcp", c.connectionString, c.config.ConnectionTimeout)
+	if err != nil {
 		return err
 	}
-	c.conn = conn
-	c.isConnected = true
+
 	Log.Infof("successfully connected to %s", c.conn.RemoteAddr())
+	c.conn = conn
+
 	return nil
 }
 
@@ -177,30 +172,27 @@ func (c *Client) authenticate() error {
 }
 
 // Disconnect the client
-func (c *Client) Disconnect() error {
+func (c *Client) Disconnect() (err error) {
 	c.isAuthenticated = false
-	c.isConnected = false
 
-	if c.isConnected && c.conn != nil {
-		if err := c.conn.Close(); err != nil {
-			return err
-		}
+	if c.conn != nil {
+		err = c.conn.Close()
+		c.conn = nil
+		Log.Info("disconnected")
 	}
-	Log.Info("disconnected")
-	return nil
+
+	return err
 }
 
 // Send a message and return the response.
 //
 // connects and authenticates the first time used.
 func (c *Client) Send(request Message) (*Message, error) {
-	var (
-		responses []Message
-		err       error
-	)
-	if responses, err = (c.SendMultiple([]Message{request})); err != nil {
+	responses, err := (c.SendMultiple([]Message{request}))
+	if err != nil {
 		return nil, err
 	}
+
 	return &responses[0], nil
 }
 
@@ -208,7 +200,7 @@ func (c *Client) Send(request Message) (*Message, error) {
 //
 // connects and authenticates the first time used.
 func (c *Client) SendMultiple(requests []Message) ([]Message, error) {
-	if !c.isConnected {
+	if c.conn == nil {
 		if err := c.connect(); err != nil {
 			return nil, err
 		}
@@ -221,12 +213,5 @@ func (c *Client) SendMultiple(requests []Message) ([]Message, error) {
 	if err := c.send(requests); err != nil {
 		return nil, err
 	}
-	var (
-		responses []Message
-		err       error
-	)
-	if responses, err = c.receive(); err != nil {
-		return nil, err
-	}
-	return responses, nil
+	return c.receive()
 }
