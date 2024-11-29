@@ -2,13 +2,12 @@ package rscp
 
 import (
 	"crypto/cipher"
+	"errors"
 	"fmt"
 	"io"
 	"math"
 	"net"
 	"time"
-
-	"errors"
 
 	"github.com/azihsoyn/rijndael256"
 	"github.com/sirupsen/logrus"
@@ -132,7 +131,7 @@ func (c *Client) authenticate() error {
 			Log.SetLevel(orgLogLevel)
 		}
 		return err
-	} else if err := c.send([]Message{*msg}); err != nil {
+	} else if err := c.send([]Message{msg}); err != nil {
 		if orgLogLevel < RequiredAuthLogLevel {
 			Log.SetLevel(orgLogLevel)
 		}
@@ -193,15 +192,12 @@ func (c *Client) Disconnect() error {
 // Send a message and return the response.
 //
 // connects and authenticates the first time used.
-func (c *Client) Send(request Message) (*Message, error) {
-	var (
-		responses []Message
-		err       error
-	)
-	if responses, err = (c.SendMultiple([]Message{request})); err != nil {
-		return nil, err
+func (c *Client) Send(request Message) (Message, error) {
+	responses, err := c.SendMultiple([]Message{request})
+	if err != nil {
+		return Message{}, err
 	}
-	return &responses[0], nil
+	return responses[0], nil
 }
 
 // Send multiple messages in one round-trip and return the response.

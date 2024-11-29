@@ -55,8 +55,8 @@ func run() int {
 			DataType: rscp.None,
 			Value:    nil,
 		}
-		var response *rscp.Message
-		if response, err = c.Send(request); err != nil {
+		response, err := c.Send(request)
+		if err != nil {
 			fmt.Fprintf(os.Stderr, "Send error: %s\n", err)
 			return 1
 		}
@@ -67,7 +67,7 @@ func run() int {
 		//   DataType: rscp.CString,
 		//   Value:    "00:00:00:00:00:00",
 		// }
-		fmt.Printf("%#v\n", *response)
+		fmt.Printf("%#v\n", response)
 	}
 	{
 		//
@@ -78,8 +78,8 @@ func run() int {
 			DataType: rscp.None,
 			Value:    nil,
 		}
-		var response *rscp.Message
-		if response, err = c.Send(request); err != nil {
+		response, err := c.Send(request)
+		if err != nil {
 			fmt.Fprintf(os.Stderr, "Send error: %s\n", err)
 			return 1
 		}
@@ -106,7 +106,7 @@ func run() int {
 		//     },
 		//   },
 		// }
-		fmt.Printf("%#v\n", *response)
+		fmt.Printf("%#v\n", response)
 	}
 	{
 		//
@@ -128,8 +128,8 @@ func run() int {
 				},
 			},
 		}
-		var response *rscp.Message
-		if response, err = c.Send(request); err != nil {
+		response, err := c.Send(request)
+		if err != nil {
 			fmt.Fprintf(os.Stderr, "Send error: %s\n", err)
 			return 1
 		}
@@ -177,7 +177,7 @@ func run() int {
 		//     },
 		//   },
 		// }
-		fmt.Printf("%#v\n", *response)
+		fmt.Printf("%#v\n", response)
 	}
 	{
 		//
