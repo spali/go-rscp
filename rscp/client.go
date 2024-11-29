@@ -188,7 +188,7 @@ func (c *Client) Disconnect() (err error) {
 //
 // connects and authenticates the first time used.
 func (c *Client) Send(request Message) (*Message, error) {
-	responses, err := (c.SendMultiple([]Message{request}))
+	responses, err := c.SendMultiple([]Message{request})
 	if err != nil {
 		return nil, err
 	}
