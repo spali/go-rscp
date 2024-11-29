@@ -136,20 +136,20 @@ func (c *Client) authenticate() error {
 	if orgLogLevel < RequiredAuthLogLevel {
 		Log.SetLevel(orgLogLevel)
 	}
-	var (
-		messages []Message
-		err      error
-	)
-	if messages, err = c.receive(); err != nil {
+
+	messages, err := c.receive()
+	if err != nil {
 		if errors.Is(err, io.EOF) {
 			Log.Warnf("Hint: EOF during authentification usually is due a wrong rscp key")
 		}
 		return fmt.Errorf("authentication error: %w", err)
 	}
+
 	if messages[0].Tag != RSCP_AUTHENTICATION {
 		c.isAuthenticated = false
 		return fmt.Errorf("authentication failed: %+v", messages[0])
 	}
+
 	switch v := messages[0].Value.(type) {
 	default:
 		c.isAuthenticated = false
