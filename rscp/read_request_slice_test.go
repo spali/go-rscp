@@ -9,80 +9,95 @@ import (
 )
 
 func Test_readRequestSlice(t *testing.T) {
+	var zero Message
 	tests := []struct {
 		name    string
 		args    []interface{}
-		want    *Message
+		want    Message
 		wantErr error
 	}{
-		{"nil",
+		{
+			"nil",
 			nil,
-			nil,
+			zero,
 			slicereader.EOS,
 		},
-		{"empty slice",
+		{
+			"empty slice",
 			[]interface{}{},
-			nil,
+			zero,
 			slicereader.EOS,
 		},
-		{"not a tag",
+		{
+			"not a tag",
 			[]interface{}{"not a tag"},
-			nil,
+			zero,
 			ErrValidTag,
 		},
-		{"simple tag",
+		{
+			"simple tag",
 			[]interface{}{INFO_REQ_UTC_TIME},
-			&Message{INFO_REQ_UTC_TIME, INFO_REQ_UTC_TIME.DataType(), nil},
+			Message{INFO_REQ_UTC_TIME, INFO_REQ_UTC_TIME.DataType(), nil},
 			nil,
 		},
-		{"simple tag with additional message ignored",
+		{
+			"simple tag with additional message ignored",
 			[]interface{}{INFO_REQ_UTC_TIME, INFO_REQ_UTC_TIME},
-			&Message{INFO_REQ_UTC_TIME, INFO_REQ_UTC_TIME.DataType(), nil},
+			Message{INFO_REQ_UTC_TIME, INFO_REQ_UTC_TIME.DataType(), nil},
 			nil,
 		},
-		{"tag with value",
+		{
+			"tag with value",
 			[]interface{}{RSCP_REQ_SET_ENCRYPTION_PASSPHRASE, "test"},
-			&Message{RSCP_REQ_SET_ENCRYPTION_PASSPHRASE, RSCP_REQ_SET_ENCRYPTION_PASSPHRASE.DataType(), "test"},
+			Message{RSCP_REQ_SET_ENCRYPTION_PASSPHRASE, RSCP_REQ_SET_ENCRYPTION_PASSPHRASE.DataType(), "test"},
 			nil,
 		},
-		{"tag with tag as value",
+		{
+			"tag with tag as value",
 			[]interface{}{RSCP_REQ_SET_ENCRYPTION_PASSPHRASE, INFO_REQ_UTC_TIME},
-			nil,
+			zero,
 			ErrDataTypeValueMismatch,
 		},
-		{"tag with data type as value",
+		{
+			"tag with data type as value",
 			[]interface{}{RSCP_REQ_SET_ENCRYPTION_PASSPHRASE, Bool},
-			nil,
+			zero,
 			ErrDataTypeValueMismatch,
 		},
-		{"tag with value and additional container ignored",
+		{
+			"tag with value and additional container ignored",
 			[]interface{}{INFO_REQ_UTC_TIME, RSCP_REQ_AUTHENTICATION, RSCP_AUTHENTICATION_USER, "user", RSCP_AUTHENTICATION_PASSWORD, "password"},
-			&Message{INFO_REQ_UTC_TIME, INFO_REQ_UTC_TIME.DataType(), nil},
+			Message{INFO_REQ_UTC_TIME, INFO_REQ_UTC_TIME.DataType(), nil},
 			nil,
 		},
-		{"tag with missing value",
+		{
+			"tag with missing value",
 			[]interface{}{RSCP_REQ_SET_ENCRYPTION_PASSPHRASE},
-			nil,
+			zero,
 			ErrMissingValue,
 		},
-		{"empty container tag",
+		{
+			"empty container tag",
 			[]interface{}{RSCP_REQ_AUTHENTICATION},
-			&Message{RSCP_REQ_AUTHENTICATION, RSCP_REQ_AUTHENTICATION.DataType(), []Message{}},
+			Message{RSCP_REQ_AUTHENTICATION, RSCP_REQ_AUTHENTICATION.DataType(), []Message{}},
 			nil,
 		},
-		{"container tag with values",
+		{
+			"container tag with values",
 			[]interface{}{RSCP_REQ_AUTHENTICATION, RSCP_AUTHENTICATION_USER, "user", RSCP_AUTHENTICATION_PASSWORD, "password"},
-			&Message{RSCP_REQ_AUTHENTICATION, RSCP_REQ_AUTHENTICATION.DataType(), []Message{{RSCP_AUTHENTICATION_USER, RSCP_AUTHENTICATION_USER.DataType(), "user"}, {RSCP_AUTHENTICATION_PASSWORD, RSCP_AUTHENTICATION_PASSWORD.DataType(), "password"}}},
+			Message{RSCP_REQ_AUTHENTICATION, RSCP_REQ_AUTHENTICATION.DataType(), []Message{{RSCP_AUTHENTICATION_USER, RSCP_AUTHENTICATION_USER.DataType(), "user"}, {RSCP_AUTHENTICATION_PASSWORD, RSCP_AUTHENTICATION_PASSWORD.DataType(), "password"}}},
 			nil,
 		},
-		{"unsupported case: container tag with values with additional message ignored",
+		{
+			"unsupported case: container tag with values with additional message ignored",
 			[]interface{}{RSCP_REQ_AUTHENTICATION, RSCP_AUTHENTICATION_USER, "user", RSCP_AUTHENTICATION_PASSWORD, "password", INFO_REQ_UTC_TIME},
-			&Message{RSCP_REQ_AUTHENTICATION, RSCP_REQ_AUTHENTICATION.DataType(), []Message{{RSCP_AUTHENTICATION_USER, RSCP_AUTHENTICATION_USER.DataType(), "user"}, {RSCP_AUTHENTICATION_PASSWORD, RSCP_AUTHENTICATION_PASSWORD.DataType(), "password"}, {INFO_REQ_UTC_TIME, INFO_REQ_UTC_TIME.DataType(), nil}}},
+			Message{RSCP_REQ_AUTHENTICATION, RSCP_REQ_AUTHENTICATION.DataType(), []Message{{RSCP_AUTHENTICATION_USER, RSCP_AUTHENTICATION_USER.DataType(), "user"}, {RSCP_AUTHENTICATION_PASSWORD, RSCP_AUTHENTICATION_PASSWORD.DataType(), "password"}, {INFO_REQ_UTC_TIME, INFO_REQ_UTC_TIME.DataType(), nil}}},
 			nil,
 		},
-		{"container tag with missing value",
+		{
+			"container tag with missing value",
 			[]interface{}{RSCP_REQ_AUTHENTICATION, RSCP_AUTHENTICATION_USER, RSCP_AUTHENTICATION_PASSWORD, "password"},
-			nil,
+			zero,
 			ErrDataTypeValueMismatch,
 		},
 	}
