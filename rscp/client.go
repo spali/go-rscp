@@ -57,9 +57,11 @@ func (c *Client) send(messages []Message) error {
 		return err
 	}
 	if err := c.conn.SetWriteDeadline(time.Now().Add(c.config.SendTimeout)); err != nil {
+		_ = c.Disconnect()
 		return err
 	}
 	if _, err := c.conn.Write(msg); err != nil {
+		_ = c.Disconnect()
 		return err
 	}
 	return nil
@@ -68,6 +70,7 @@ func (c *Client) send(messages []Message) error {
 // receive listens for a response and decodes the response
 func (c *Client) receive() ([]Message, error) {
 	if err := c.conn.SetReadDeadline(time.Now().Add(c.config.ReceiveTimeout)); err != nil {
+		_ = c.Disconnect()
 		return nil, err
 	}
 
@@ -81,7 +84,8 @@ func (c *Client) receive() ([]Message, error) {
 		var err error
 
 		if i, err = c.conn.Read(data); err != nil {
-			return nil, fmt.Errorf("error during receive response: %w", err)
+			_ = c.Disconnect()
+			return nil, err
 		} else if i == 0 {
 			return nil, ErrRscpInvalidFrameLength
 		}
