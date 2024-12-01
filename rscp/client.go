@@ -2,13 +2,12 @@ package rscp
 
 import (
 	"crypto/cipher"
+	"errors"
 	"fmt"
 	"io"
 	"math"
 	"net"
 	"time"
-
-	"errors"
 
 	"github.com/azihsoyn/rijndael256"
 	"github.com/sirupsen/logrus"
@@ -62,9 +61,11 @@ func (c *Client) send(messages []Message) error {
 		return err
 	}
 	if err := c.conn.SetWriteDeadline(time.Now().Add(c.config.SendTimeout)); err != nil {
+		_ = c.Disconnect()
 		return err
 	}
 	if _, err := c.conn.Write(msg); err != nil {
+		_ = c.Disconnect()
 		return err
 	}
 	return nil
@@ -73,6 +74,7 @@ func (c *Client) send(messages []Message) error {
 // receive listens for a response and decodes the response
 func (c *Client) receive() ([]Message, error) {
 	if err := c.conn.SetReadDeadline(time.Now().Add(c.config.ReceiveTimeout)); err != nil {
+		_ = c.Disconnect()
 		return nil, err
 	}
 
@@ -85,6 +87,7 @@ func (c *Client) receive() ([]Message, error) {
 	for i, data := 0, make([]byte, uint32(RSCP_CRYPT_BLOCK_SIZE)*uint32(c.config.ReceiveBufferBlockSize)); ; {
 		var err error
 		if i, err = c.conn.Read(data); err != nil {
+			_ = c.Disconnect()
 			return nil, fmt.Errorf("error during receive response: %w", err)
 		} else if i == 0 {
 			return nil, ErrRscpInvalidFrameLength
