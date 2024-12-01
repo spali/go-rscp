@@ -108,7 +108,7 @@ func (c *Client) connect() error {
 		return err
 	}
 
-	Log.Infof("successfully connected to %s", c.conn.RemoteAddr())
+	Log.Infof("successfully connected to %s", conn.RemoteAddr())
 	c.conn = conn
 
 	return nil
