@@ -1,3 +1,4 @@
+version: 2
 project_name: e3dc
 before:
   hooks:
@@ -38,17 +39,17 @@ archives:
       - goos: windows
         format: zip
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 snapshot:
-  name_template: "{{ .Tag }}-SNAPSHOT-{{.ShortCommit}}"
+  version_template: "{{ .Tag }}-SNAPSHOT-{{.ShortCommit}}"
 changelog:
   sort: asc
   filters:
     exclude:
-      - '^doc:'
-      - '^docs:'
-      - '^test:'
-      - '^dev:'
+      - "^doc:"
+      - "^docs:"
+      - "^test:"
+      - "^dev:"
       - '^chore(\(.*\))?:'
 release:
   prerelease: auto
