@@ -88,7 +88,7 @@ func (c *Client) receive() ([]Message, error) {
 		var err error
 		if i, err = c.conn.Read(data); err != nil {
 			_ = c.Disconnect()
-			return nil, fmt.Errorf("error during receive response: %w", err)
+			return nil, err
 		} else if i == 0 {
 			return nil, ErrRscpInvalidFrameLength
 		}
