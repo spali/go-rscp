@@ -11,8 +11,8 @@ type Message struct {
 }
 
 // NewMessage creates a new message (infer the data type from the tag).
-func NewMessage(tag Tag, value interface{}) *Message {
-	return &Message{Tag: tag, DataType: tag.DataType(), Value: value}
+func NewMessage(tag Tag, value interface{}) Message {
+	return Message{Tag: tag, DataType: tag.DataType(), Value: value}
 }
 
 const secretReplaceString = "********"

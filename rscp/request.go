@@ -32,11 +32,8 @@ func validateRequests(messages []Message) error {
 //	CreateRequest(INFO_REQ_UTC_TIME)
 //	CreateRequest(EMS_REQ_SET_ERROR_BUZZER_ENABLED, true)
 //	CreateRequest(BAT_REQ_DATA, BAT_INDEX, uint16(0), BAT_REQ_DEVICE_STATE, BAT_REQ_RSOC, BAT_REQ_STATUS_CODE)
-func CreateRequest(values ...interface{}) (msg *Message, err error) {
-	if msg, err = readRequestSlice(values); err != nil {
-		return nil, err
-	}
-	return msg, nil
+func CreateRequest(values ...interface{}) (msg Message, err error) {
+	return readRequestSlice(values)
 }
 
 // CreateRequests creates multiple new requests (infer the data type from the tag)
@@ -52,14 +49,11 @@ func CreateRequests(values ...[]interface{}) ([]Message, error) {
 	}
 	msgs := make([]Message, 0)
 	for _, subValues := range values {
-		var (
-			msg *Message
-			err error
-		)
-		if msg, err = CreateRequest(subValues...); err != nil {
+		msg, err := CreateRequest(subValues...)
+		if err != nil {
 			return nil, err
 		}
-		msgs = append(msgs, *msg)
+		msgs = append(msgs, msg)
 	}
 	return msgs, nil
 }

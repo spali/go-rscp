@@ -34,11 +34,11 @@ func run() ([]byte, error) {
 	if conf.splitrequests {
 		rs = make([]rscp.Message, len(ms))
 		for i := range ms {
-			var r *rscp.Message
-			if r, err = c.Send(ms[i]); err != nil {
+			r, err := c.Send(ms[i])
+			if err != nil {
 				return nil, err
 			}
-			rs[i] = *r
+			rs[i] = r
 		}
 	} else if rs, err = c.SendMultiple(ms); err != nil {
 		return nil, err
