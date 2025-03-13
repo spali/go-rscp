@@ -26,7 +26,7 @@ linters:
     - dupl
     - errcheck
     - exhaustive
-    - exportloopref
+    - copyloopvar
     - funlen
     - gochecknoinits
     - goconst
@@ -34,7 +34,7 @@ linters:
     - gocyclo
     - gofmt
     - goimports
-    - gomnd
+    - mnd
     - goprintffuncname
     - gosec
     - gosimple
@@ -72,7 +72,7 @@ issues:
     - path: _test\.go
       linters:
         - funlen
-        - exportloopref
+        - copyloopvar
         - lll
     # enforce ALL_CAPS constant naming for tags
     - linters:

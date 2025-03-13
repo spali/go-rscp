@@ -69,7 +69,7 @@ func parseFlags() (*flag.FlagSet, error) {
 	fs.String(flag.DefaultConfigFlagname, ".config", "path to config file")
 	fs.StringVar(&conf.file, "file", "", "path to request file")
 	fs.StringVar(&conf.host, "host", "", "e3dc server host")
-	fs.UintVar(&conf.port, "port", 5033, "e3dc server host port") //nolint:gomnd
+	fs.UintVar(&conf.port, "port", 5033, "e3dc server host port") //nolint:mnd
 	fs.StringVar(&conf.user, "user", "", "e3dc user")
 	fs.StringVar(&conf.password, "password", "", "e3dc password (consider using a config file or environment variable)")
 	fs.StringVar(&conf.key, "key", "", "rscp key")

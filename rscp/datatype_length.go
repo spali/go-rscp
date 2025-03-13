@@ -2,7 +2,7 @@ package rscp
 
 // defines the expected Length of the data type or 0 for variable length
 //
-//nolint:gomnd
+//nolint:mnd
 var lengthMap = map[DataType]uint16{
 	None:      0,
 	Bool:      1,

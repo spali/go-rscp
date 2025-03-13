@@ -13,7 +13,7 @@ import (
 func run() ([]byte, error) {
 	c, err := rscp.NewClient(rscp.ClientConfig{
 		Address:     conf.host,
-		Port:        uint16(conf.port),
+		Port:        uint16(conf.port), //nolint:gosec
 		Username:    conf.user,
 		Password:    conf.password,
 		Key:         conf.key,
@@ -79,7 +79,7 @@ func main() {
 		os.Exit(1)
 	}
 	if conf.debug > 0 {
-		rscp.Log.SetLevel(logrus.Level(conf.debug))
+		rscp.Log.SetLevel(logrus.Level(conf.debug)) //nolint:gosec
 		rscp.Log.SetOutput(os.Stderr)
 	} else {
 		rscp.Log.SetLevel(logrus.PanicLevel)

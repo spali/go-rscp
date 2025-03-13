@@ -35,7 +35,7 @@ func write(buf *bytes.Buffer, v interface{}) error {
 			// not testable
 			return err
 		}
-		//nolint:gomnd
+		//nolint:gosec,mnd
 		if err := write(buf, int32(v.UnixNano()-(v.Unix()*1e9))); err != nil {
 			// not testable
 			return err

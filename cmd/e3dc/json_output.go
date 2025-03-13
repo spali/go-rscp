@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"sort"
+	"slices"
 	"strings"
 	"time"
 
@@ -61,13 +61,13 @@ func (m JSONMessage) MarshalJSON() ([]byte, error) {
 	buffer := bytes.NewBufferString("{")
 
 	// store the keys sorted to create deterministic json objects and match the default implementation
-	keys := make([]int, len(m))
+	keys := make([]rscp.Tag, len(m))
 	i := 0
 	for k := range m {
-		keys[i] = int(k)
+		keys[i] = k
 		i++
 	}
-	sort.Ints(keys)
+	slices.Sort(keys)
 
 	lastIndex := len(keys) - 1
 	for i, key := range keys {
@@ -75,7 +75,7 @@ func (m JSONMessage) MarshalJSON() ([]byte, error) {
 			b   []byte
 			err error
 		)
-		t := rscp.Tag(key)
+		t := key
 		if b, err = json.Marshal(t); err != nil {
 			return nil, err
 		}

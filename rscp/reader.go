@@ -61,10 +61,10 @@ func read(buf *bytes.Reader, v interface{}, size uint16) error {
 	case *time.Time:
 		var tS int64
 		var tNs int32
-		if err := read(buf, &tS, 8); err != nil { //nolint:gomnd
+		if err := read(buf, &tS, 8); err != nil { //nolint:mnd
 			return err
 		}
-		if err := read(buf, &tNs, 4); err != nil { //nolint:gomnd
+		if err := read(buf, &tNs, 4); err != nil { //nolint:mnd
 			return err
 		}
 		*v = time.Unix(tS, int64(tNs)).UTC()

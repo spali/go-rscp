@@ -34,9 +34,9 @@ func (m *Message) valueSize() uint16 {
 		case nil:
 			return 0
 		case string:
-			return uint16(len(v))
+			return uint16(len(v)) //nolint:gosec // max message size
 		case []byte:
-			return uint16(len(v))
+			return uint16(len(v)) //nolint:gosec // max message size
 		case []Message:
 			return messagesSize(v)
 		}
