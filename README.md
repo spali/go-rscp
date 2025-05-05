@@ -1,6 +1,6 @@
 # go-rscp & e3dc command line utility
 
-[![Build Status](https://github.com/spali/go-rscp/workflows/Build/badge.svg)](https://github.com/spali/go-rscp/actions?query=workflow%3A%22Build%22)
+[![Build Status](https://github.com/spali/go-rscp/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/spali/go-rscp/actions/workflows/build.yml?query=branch%3Amaster)
 [![Coverage Status](https://codecov.io/gh/spali/go-rscp/branch/master/graph/badge.svg)](https://codecov.io/gh/spali/go-rscp)
 [![CodeQL](https://github.com/spali/go-rscp/workflows/CodeQL/badge.svg)](https://github.com/spali/go-rscp/actions?query=workflow%3A%22CodeQL%22)
 [![Go Report Card](https://goreportcard.com/badge/github.com/spali/go-rscp)](https://goreportcard.com/report/github.com/spali/go-rscp)
