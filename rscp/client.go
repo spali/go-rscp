@@ -188,6 +188,27 @@ func (c *Client) Disconnect() (err error) {
 	return err
 }
 
+// Disconnect the client and recreate the client.
+//
+// This is useful if the client is in an invalid state and needs to be reconnected.
+func (c *Client) ResetClient() (err error) {
+	err := c.Disconnect()
+	if err != nil {
+		return nil, err
+	}
+	if c.conn == nil {
+		config := c.config
+		NewClient, err := NewClient(config)
+		if err != nil {
+			return nil, err
+		}
+		c = NewClient
+	}
+	Log.Info("Disconnect and Recreated client")
+	return nil
+}
+
+
 // Send a message and return the response.
 //
 // connects and authenticates the first time used.
