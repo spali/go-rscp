@@ -194,13 +194,13 @@ func (c *Client) Disconnect() (err error) {
 func (c *Client) ResetClient() (err error) {
 	err = c.Disconnect()
 	if err != nil {
-		return nil, err
+		return err
 	}
 	if c.conn == nil {
 		config := c.config
 		NewClient, err := NewClient(config)
 		if err != nil {
-			return nil, err
+			return err
 		}
 		c = NewClient
 	}
