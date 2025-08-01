@@ -192,7 +192,7 @@ func (c *Client) Disconnect() (err error) {
 //
 // This is useful if the client is in an invalid state and needs to be reconnected.
 func (c *Client) ResetClient() (err error) {
-	err := c.Disconnect()
+	err = c.Disconnect()
 	if err != nil {
 		return nil, err
 	}
