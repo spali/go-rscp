@@ -708,6 +708,14 @@ var dataTypeMap = map[Tag]DataType{
 	WB_DEVICE_WORKING:                        Bool,
 	WB_DEVICE_IN_SERVICE:                     Bool,
 	WB_GENERAL_ERROR:                         Error,
+	WB_REQ_SET_MAX_CHARGE_CURRENT:            UChar8,
+	WB_SET_MAX_CHARGE_CURRENT:                None,
+	WB_REQ_SET_ABORT_CHARGING:                Bool,
+	WB_SET_ABORT_CHARGING:                    None,
+	WB_REQ_SET_SUN_MODE_ACTIVE:               Bool,
+	WB_SET_SUN_MODE_ACTIVE:                   None,
+	WB_REQ_SET_NUMBER_PHASES:                 UChar8,
+	WB_SET_NUMBER_PHASES:                     None,
 }
 
 // DataType returns the data type expected for the tag
