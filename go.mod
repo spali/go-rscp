@@ -1,13 +1,13 @@
 module github.com/spali/go-rscp
 
-go 1.24.0
+go 1.25
 
 require (
 	github.com/alvaroloes/enumer v1.1.2
 	github.com/azihsoyn/rijndael256 v0.0.0-20200316065338-d14eefa2b66b
 	github.com/cstockton/go-conv v1.0.0
 	github.com/go-test/deep v1.1.1
-	github.com/jnovack/flag v1.16.0
+	github.com/jnovack/flag v1.25.0
 	github.com/sirupsen/logrus v1.9.4
 	github.com/spali/go-slicereader v0.0.0-20201122145524-8e262e1a5127
 )
