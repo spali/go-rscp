@@ -1,0 +1,38 @@
+name: govulncheck
+
+on:
+  push:
+    branches:
+      - main
+      - build/*
+  pull_request:
+    branches:
+      - main
+  schedule:
+    # daily, so new vulnerabilities show up without a new commit
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  govulncheck:
+    name: govulncheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # fails only if our code calls a vulnerable function (exit code 3);
+      # vulnerabilities in unused code are listed in the log only
+      - name: govulncheck
+        uses: golang/govulncheck-action@v1
+        with:
+          go-version-file: go.mod
+          # override the default 'stable', so go-version-file is used
+          go-version-input: ""
+          check-latest: true
+          go-package: ./...
