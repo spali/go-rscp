@@ -9,6 +9,13 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   lint:
     name: Lint
@@ -17,18 +24,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
       - uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
           check-latest: true
+      - name: Check go.mod and go.sum are tidy
+        run: go mod tidy -diff
       - name: Lint
         uses: golangci/golangci-lint-action@v9
         with:
           # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
           version: v2.15.0
-          args: --timeout 10m
 
   test:
     name: Test
@@ -40,8 +46,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
       - name: "Setup Go"
         uses: actions/setup-go@v7
         with:
