@@ -6,10 +6,18 @@ on:
       - "v[0-9]+.[0-9]+.[0-9]+"
       - "v[0-9]+.[0-9]+.[0-9]+-.*"
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # create the GitHub release and upload the archives
+      id-token: write # sign the attestation (Sigstore)
+      attestations: write # store the attestation
+      artifact-metadata: write # create the artifact storage record
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -27,3 +35,7 @@ jobs:
           args: release --clean --config .github/goreleaser.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Attest build provenance
+        uses: actions/attest@v4
+        with:
+          subject-checksums: dist/checksums.txt

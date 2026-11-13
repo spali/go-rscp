@@ -11,21 +11,25 @@ on:
   schedule:
     - cron: "41 10 * * 0"
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   codeql:
     name: CodeQL
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        language: ["go"]
-
+    permissions:
+      contents: read
+      security-events: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-      # workaround for https://github.com/github/codeql/issues/15647
+      # Install the Go version from go.mod, so CodeQL builds with the same
+      # toolchain as the build workflow instead of the runner's preinstalled Go.
       - uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
@@ -33,7 +37,7 @@ jobs:
       - name: Initialize
         uses: github/codeql-action/init@v4
         with:
-          languages: ${{ matrix.language }}
+          languages: go
       - name: Autobuild
         uses: github/codeql-action/autobuild@v4
       - name: Analysis
