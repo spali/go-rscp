@@ -1,17 +1,28 @@
 {
   "extends": [
     "config:recommended",
-    ":disableDependencyDashboard"
+    ":disableDependencyDashboard",
+    "helpers:pinGitHubActionDigests"
   ],
-  "postUpdateOptions": [
-    "gomodTidy"
-  ],
+  "postUpdateOptions": ["gomodTidy"],
   "packageRules": [
     {
       "description": "Disable updating minimum Go version: https://github.com/renovatebot/renovate/issues/16715",
       "matchManagers": ["gomod"],
       "matchDepTypes": ["golang"],
       "enabled": false
+    },
+    {
+      "description": "Automerge GitHub Actions updates within the same major version (new SHA, minor, patch) once all checks are green",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["digest", "minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "Automerge patch updates of all other dependencies once all checks are green",
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
     }
-  ]
+  ],
+  "platformAutomerge": false
 }
