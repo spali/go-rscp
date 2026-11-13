@@ -10,7 +10,7 @@ import (
 // or the containing value if the interface v does not contain a value.
 func dereferencePtr(v interface{}) interface{} {
 	vv := reflect.ValueOf(v)
-	if vv.Kind() == reflect.Ptr {
+	if vv.Kind() == reflect.Pointer {
 		return vv.Elem().Interface()
 	}
 	return v

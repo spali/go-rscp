@@ -1,6 +1,7 @@
 package rscp
 
 import (
+	"context"
 	"crypto/cipher"
 	"errors"
 	"fmt"
@@ -107,7 +108,8 @@ func (c *Client) receive() ([]Message, error) {
 func (c *Client) connect() error {
 	Log.Infof("Connecting to %s", c.connectionString)
 
-	conn, err := net.DialTimeout("tcp", c.connectionString, c.config.ConnectionTimeout)
+	dialer := net.Dialer{Timeout: c.config.ConnectionTimeout}
+	conn, err := dialer.DialContext(context.Background(), "tcp", c.connectionString)
 	if err != nil {
 		return err
 	}

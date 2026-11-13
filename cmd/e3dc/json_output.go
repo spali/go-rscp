@@ -90,11 +90,11 @@ func (m JSONMessage) MarshalJSON() ([]byte, error) {
 			if v, err = json.Marshal(v); err != nil {
 				return nil, err
 			}
-			buffer.WriteString(fmt.Sprintf("%s:%s", b, v))
+			fmt.Fprintf(buffer, "%s:%s", b, v)
 		case []uint8:
 			// bytearray as json array of numbers
 			va := strings.Join(strings.Fields(fmt.Sprintf("%d", v)), ",")
-			buffer.WriteString(fmt.Sprintf("%s:%s", b, va))
+			fmt.Fprintf(buffer, "%s:%s", b, va)
 		}
 		if i < lastIndex {
 			buffer.WriteString(",")

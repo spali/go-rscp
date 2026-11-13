@@ -4,7 +4,7 @@ type AuthLevel uint8
 
 // all auth levels as constant
 //
-//nolint:revive,stylecheck
+//nolint:revive
 //go:generate go run github.com/alvaroloes/enumer -type=AuthLevel -json
 const (
 	AUTH_LEVEL_NO_AUTH   AuthLevel = 0

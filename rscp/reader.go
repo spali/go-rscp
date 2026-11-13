@@ -120,7 +120,7 @@ func readMessage(buf *bytes.Reader) (*Message, error) {
 	if err := read(buf, v, l); err != nil {
 		return nil, fmt.Errorf("reading message %s: %w", m.Tag, err)
 	}
-	if reflect.ValueOf(v).Kind() == reflect.Ptr {
+	if reflect.ValueOf(v).Kind() == reflect.Pointer {
 		m.Value = reflect.ValueOf(v).Elem().Interface() // dereference pointer value
 	} else {
 		m.Value = v
