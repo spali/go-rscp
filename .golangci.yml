@@ -1,55 +1,33 @@
-linters-settings:
-  lll:
-    line-length: 140
-  depguard:
-    rules:
-      main:
-        files:
-          - "$all"
-          - "!$test"
-        allow:
-          - "$gostd"
-          - github.com/
-      tests:
-        files:
-          - "$test"
-        allow:
-          - "$gostd"
-          - github.com/
+version: "2"
 
 linters:
-  disable-all: true
+  default: none
   enable:
     - bodyclose
+    - copyloopvar
     - depguard
     - dogsled
     - dupl
     - errcheck
     - exhaustive
-    - copyloopvar
     - funlen
     - gochecknoinits
     - goconst
     - gocritic
     - gocyclo
-    - gofmt
-    - goimports
-    - mnd
     - goprintffuncname
     - gosec
-    - gosimple
     - govet
     - ineffassign
     - lll
     - misspell
+    - mnd
     - nakedret
     - noctx
     - nolintlint
     - revive
     - rowserrcheck
     - staticcheck
-    - stylecheck
-    - typecheck
     - unconvert
     - unparam
     - unused
@@ -61,26 +39,57 @@ linters:
   # - gocognit
   # - godot
   # - godox
-  # - goerr113
-  # - maligned
+  # - err113
   # - nestif
   # - prealloc
   # - testpackage
   # - wsl
-issues:
-  exclude-rules:
-    - path: _test\.go
-      linters:
-        - funlen
-        - copyloopvar
-        - lll
-    # enforce ALL_CAPS constant naming for tags
-    - linters:
-        - revive
-      path: rscp/tag.go
-      text: "var-naming: don't use ALL_CAPS in Go names; use CamelCase"
-    # enforce ALL_CAPS constant naming for tags
-    - linters:
-        - stylecheck
-      path: rscp/tag.go
-      text: "ST1003: should not use ALL_CAPS in Go names; use CamelCase instead"
+
+  settings:
+    lll:
+      line-length: 140
+    depguard:
+      rules:
+        main:
+          files:
+            - "$all"
+            - "!$test"
+          allow:
+            - "$gostd"
+            - github.com/
+        tests:
+          files:
+            - "$test"
+          allow:
+            - "$gostd"
+            - github.com/
+
+  exclusions:
+    generated: lax
+    # keep the v1 default exclusions
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - path: _test\.go
+        linters:
+          - funlen
+          - goconst
+          - lll
+      # enforce ALL_CAPS constant naming for tags
+      - path: rscp/tag.go
+        linters:
+          - revive
+        text: "var-naming: don't use ALL_CAPS in Go names; use CamelCase"
+      # enforce ALL_CAPS constant naming for tags
+      - path: rscp/tag.go
+        linters:
+          - staticcheck
+        text: "ST1003: should not use ALL_CAPS in Go names; use CamelCase instead"
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
