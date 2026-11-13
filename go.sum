@@ -6,8 +6,8 @@ github.com/cstockton/go-conv v1.0.0 h1:zj/q/0MpQ/97XfiC9glWiohO8lhgR4TTnHYZifLTv
 github.com/cstockton/go-conv v1.0.0/go.mod h1:HuiHkkRgOA0IoBNPC7ysG7kNpjDYlgM7Kj62yQPxjy4=
 github.com/go-test/deep v1.1.2 h1:JUuyv17rKrqYfLFnP9A4Yh6hw0635ugB93bMg2bwuDQ=
 github.com/go-test/deep v1.1.2/go.mod h1:lwVFiFFWPjydTsV3xGJ/YTQsnWwi8zxBFM+gOVcwINE=
-github.com/jnovack/flag v1.16.0 h1:gJC3JVofq/hNGlNfki4NlIWLOiDkaeLNUOCzznCablU=
-github.com/jnovack/flag v1.16.0/go.mod h1:8g1MmrEr03yquMjIe6CYeXUiIsZ46ssYt+o3X7uEjcg=
+github.com/jnovack/flag v1.27.0 h1:Uvi0GSMTSnylXd3D/LSdpDV4QUEopY1Xu8NhCr1991k=
+github.com/jnovack/flag v1.27.0/go.mod h1:drFZ7xmbmv+XRZLewK26dvMAFRjFFhN4MO0Ic48yHdY=
 github.com/pascaldekloe/name v0.0.0-20180628100202-0fd16699aae1 h1:/I3lTljEEDNYLho3/FUB7iD/oc2cEFgVmbHzV+O0PtU=
 github.com/pascaldekloe/name v0.0.0-20180628100202-0fd16699aae1/go.mod h1:eD5JxqMiuNYyFNmyY9rkJ/slN8y59oEu4Ei7F8OoKWQ=
 github.com/sirupsen/logrus v1.10.2 h1:G2SED73/qrAu6YwbdxOD6peLkCBI3z7L+ykJFTXJBBo=
