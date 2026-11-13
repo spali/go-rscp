@@ -54,7 +54,7 @@ func Test_write(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			buf := bytes.NewBuffer([]byte{})
 			err := write(buf, tt.data)
-			if (err != nil || tt.wantErr != nil) && !(errors.Is(err, tt.wantErr) || err.Error() == tt.wantErr.Error()) {
+			if (err != nil || tt.wantErr != nil) && !errors.Is(err, tt.wantErr) && err.Error() != tt.wantErr.Error() {
 				t.Errorf("write() error = %#v, wantErr %#v", err, tt.wantErr)
 			}
 			if diff := deep.Equal(buf.Bytes(), tt.wantBufBytes); diff != nil {
@@ -94,7 +94,7 @@ func Test_writeFrame(t *testing.T) {
 		Now = testTime
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := writeFrame(tt.messages, tt.useChecksum)
-			if (err != nil || tt.wantErr != nil) && !(errors.Is(err, tt.wantErr) || err.Error() == tt.wantErr.Error()) {
+			if (err != nil || tt.wantErr != nil) && !errors.Is(err, tt.wantErr) && err.Error() != tt.wantErr.Error() {
 				t.Errorf("writeFrame() error = %#v, wantErr %#v", err, tt.wantErr)
 			}
 			if diff := deep.Equal(got, tt.want); diff != nil {
@@ -128,7 +128,7 @@ func TestWrite(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := Write(&tt.mode, tt.messages, tt.useChecksum) // #nosec G601
-			if (err != nil || tt.wantErr != nil) && !(errors.Is(err, tt.wantErr) || err.Error() == tt.wantErr.Error()) {
+			if (err != nil || tt.wantErr != nil) && !errors.Is(err, tt.wantErr) && err.Error() != tt.wantErr.Error() {
 				t.Errorf("Write() error = %#v, wantErr %#v", err, tt.wantErr)
 			}
 			if diff := deep.Equal(got, tt.want); diff != nil {
