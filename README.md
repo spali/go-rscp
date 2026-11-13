@@ -3,9 +3,9 @@
 [![Build Status](https://github.com/spali/go-rscp/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/spali/go-rscp/actions/workflows/build.yml?query=branch%3Amain)
 [![Coverage Status](https://codecov.io/gh/spali/go-rscp/branch/main/graph/badge.svg)](https://codecov.io/gh/spali/go-rscp)
 [![CodeQL](https://github.com/spali/go-rscp/workflows/CodeQL/badge.svg)](https://github.com/spali/go-rscp/actions?query=workflow%3A%22CodeQL%22)
-[![Go Report Card](https://goreportcard.com/badge/github.com/spali/go-rscp)](https://goreportcard.com/report/github.com/spali/go-rscp)
 [![GoDoc](https://godoc.org/github.com/spali/go-rscp?status.svg)](https://pkg.go.dev/github.com/spali/go-rscp)
 [![GitHub license](https://img.shields.io/github/license/spali/go-rscp)](https://github.com/spali/go-rscp/blob/main/LICENSE)
+[![Release](https://img.shields.io/github/v/release/spali/go-rscp.svg)](https://github.com/spali/go-rscp/releases/latest)
 
 Go library (rscp) and command line utility (e3dc) to communicate with a E3DC system implementing the RSCP (Remote Storage Control Protocol).
 
