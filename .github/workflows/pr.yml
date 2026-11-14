@@ -1,0 +1,19 @@
+# Shared release flow, see https://github.com/spali/.github
+# Labels the pull request from its title, checks it, deletes dev builds of closed pull requests.
+name: Pull request
+
+on:
+  pull_request_target:
+    types: [opened, reopened, edited, synchronize, labeled, unlabeled, closed]
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  pr:
+    permissions:
+      contents: write # delete dev pre-releases of closed pull requests
+      pull-requests: write # add labels
+    uses: spali/.github/.github/workflows/pr.yml@43a6be5e4555429445c7b94f2a2a1d78ea951ee8 # v1.1.0
