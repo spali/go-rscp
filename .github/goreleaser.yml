@@ -38,18 +38,9 @@ archives:
     format_overrides:
       - goos: windows
         formats: [zip]
-checksum:
-  name_template: "checksums.txt"
+# Build only: .github/workflows/release.yml runs "release --snapshot" with the
+# version from the shared release flow; checksums and the release are created there.
 snapshot:
-  version_template: "{{ .Tag }}-SNAPSHOT-{{.ShortCommit}}"
-changelog:
-  sort: asc
-  filters:
-    exclude:
-      - "^doc:"
-      - "^docs:"
-      - "^test:"
-      - "^dev:"
-      - '^chore(\(.*\))?:'
-release:
-  prerelease: auto
+  version_template: "{{ .Env.VERSION }}"
+checksum:
+  disable: true
