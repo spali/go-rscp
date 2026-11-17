@@ -32,7 +32,7 @@ jobs:
       contents: write # update the draft release
       pull-requests: read
       actions: read # the tag check waits for the run on main
-    uses: spali/.github/.github/workflows/release-prepare.yml@e84e492fc5ffd204acbebc4dcdb416cb104260e2 # v1.3.0
+    uses: spali/.github/.github/workflows/release-prepare.yml@0e8c32d2fb92805a345829638822ed1a42e2559e # v1.8.0
     with:
       version: ${{ inputs.version }}
 
@@ -78,7 +78,7 @@ jobs:
       id-token: write # sign the attestation
       attestations: write # store the attestation
       artifact-metadata: write # create the artifact storage record
-    uses: spali/.github/.github/workflows/release-publish.yml@e84e492fc5ffd204acbebc4dcdb416cb104260e2 # v1.3.0
+    uses: spali/.github/.github/workflows/release-publish.yml@0e8c32d2fb92805a345829638822ed1a42e2559e # v1.8.0
     with:
       kind: ${{ needs.prepare.outputs.kind }}
       version: ${{ needs.prepare.outputs.version }}
