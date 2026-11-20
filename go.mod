@@ -11,7 +11,7 @@ require (
 	github.com/go-test/deep v1.1.2
 	github.com/jnovack/flag v1.27.0
 	github.com/sirupsen/logrus v1.10.2
-	github.com/spali/go-slicereader v0.0.0-20201122145524-8e262e1a5127
+	github.com/spali/go-slicereader v0.0.1
 )
 
 require (
