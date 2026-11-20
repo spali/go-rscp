@@ -16,4 +16,4 @@ jobs:
     permissions:
       contents: write # delete dev pre-releases of closed pull requests
       pull-requests: write # add labels
-    uses: spali/.github/.github/workflows/pr.yml@78d19e968db42776d2bdf3b6a6de2932456073f8 # v5.2.1
+    uses: spali/.github/.github/workflows/pr.yml@f54c90450877eefcd7b16f5d29f543cde3e24b32 # v5.8.0
