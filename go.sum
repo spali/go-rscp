@@ -12,8 +12,8 @@ github.com/pascaldekloe/name v0.0.0-20180628100202-0fd16699aae1 h1:/I3lTljEEDNYL
 github.com/pascaldekloe/name v0.0.0-20180628100202-0fd16699aae1/go.mod h1:eD5JxqMiuNYyFNmyY9rkJ/slN8y59oEu4Ei7F8OoKWQ=
 github.com/sirupsen/logrus v1.10.2 h1:G2SED73/qrAu6YwbdxOD6peLkCBI3z7L+ykJFTXJBBo=
 github.com/sirupsen/logrus v1.10.2/go.mod h1:SLEg8TqYulVKKfIGHldVp2K2aYz2DKSVBq4g/H5bR7Q=
-github.com/spali/go-slicereader v0.0.0-20201122145524-8e262e1a5127 h1:YDqvwAH/l3S4ZULmKlUYszPyLBjHq73CLuUPU+2jJeE=
-github.com/spali/go-slicereader v0.0.0-20201122145524-8e262e1a5127/go.mod h1:nf5bOq6n8UugtmQiD3l0BzkE5VP4NvyngFZVkH3ZzgM=
+github.com/spali/go-slicereader v0.0.1 h1:P3qWPMZcVc+S3zoElL2Pu1LUsm7YhzbqjPwf9MMS6KE=
+github.com/spali/go-slicereader v0.0.1/go.mod h1:nf5bOq6n8UugtmQiD3l0BzkE5VP4NvyngFZVkH3ZzgM=
 github.com/stretchr/testify v1.12.1 h1:EuwCh5fleGS7H32xRwO3wRGT7DxrDhLAT6FF8MpWDWE=
 github.com/stretchr/testify v1.12.1/go.mod h1:MDEgiDPPsNp5cuIrHPPCyornHKgEVbtFUmoNlxoYthg=
 go.yaml.in/yaml/v3 v3.0.5 h1:N6y/pJk8buWs9NY5ERU2HSMfm+IuD/OtfdAnq6kESPw=
